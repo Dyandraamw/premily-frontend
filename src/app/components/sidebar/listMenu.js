@@ -4,6 +4,7 @@ import { FaFileInvoiceDollar, FaUserGear, FaCircleUser   } from "react-icons/fa6
 import { IoMdListBox } from "react-icons/io";
 import { MdFactCheck } from "react-icons/md";
 import { IoLogOut } from "react-icons/io5";
+import Link from "next/link";
 
 export default function listMenu() {
   return (
@@ -12,13 +13,13 @@ export default function listMenu() {
         {/* Dashboard button */}
         <div className="flex items-center w-full hover:bg-gray-200 p-3 mb-5 text-lg font-semibold rounded-lg">
           <BiSolidDashboard className="mx-5 text-2xl" />
-          Dashboard
+          <Link href={'/'}>Dashboard</Link>
         </div>
 
         {/* Invoice List button */}
         <div className="flex items-center w-full hover:bg-gray-200 p-3 mb-5 text-lg font-semibold rounded-lg">
           <FaFileInvoiceDollar className="mx-5 text-2xl" />
-          Invoice List
+          <Link href={'/invoiceList'}>Invoice List</Link>
         </div>
 
         {/* Statement of Account button */}
