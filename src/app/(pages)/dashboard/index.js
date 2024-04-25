@@ -1,12 +1,10 @@
 import React from "react";
-import Sidebar from "../../app/components/sidebar";
+import Sidebar from "../../components/sidebar";
 import Link from "next/link";
 
 
 export default function Dashboard() {
   return (
-    <main className="flex min-h-screen bg-gray-150">
-      <Sidebar />
       <div className="flex flex-grow flex-col px-10 py-5">
         <div className="mb-5">
           <h1 className="text-4xl text-blue-600 font-bold">Dashboard</h1>
@@ -123,6 +121,5 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-    </main>
   );
 }
