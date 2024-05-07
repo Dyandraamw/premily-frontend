@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { FaUser } from "react-icons/fa";
+import { FaLock } from "react-icons/fa";
 
 export default function Home() {
   return (
