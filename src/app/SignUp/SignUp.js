@@ -35,7 +35,7 @@ export default function SignUp() {
           <label htmlFor="CPassword" className="block text-base mb-2">Confirm Password</label>
           <input type="CPassword" id="CPassword" className="border w-full text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600" placeholder="Enter Confirm Password"></input>
         </div>
-        <div className="mt-24">
+        <div className="mt-8">
           <button type="submit" className="border-2 border-green-700 bg-green-700 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-green-700 font-semibold">Sign Up</button>
         </div>
         <div className="mt-3">
