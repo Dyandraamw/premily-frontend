@@ -6,8 +6,8 @@ import DatePickerMUI from "../../components/datePickerMUI";
 import SumInsuredForm from "@/app/components/sumInsuredForm";
 import InvInstallmentForm from "../../components/invInstallmentForm";
 
-export default function creditNote() {
-  const [creditNote, setCreditNote] = useState({
+export default function debitNote() {
+  const [debitNote, setDebitNote] = useState({
     company_name: "",
     company_address: "",
     company_number: "",
@@ -34,7 +34,7 @@ export default function creditNote() {
   });
 
   const handleTextChange = (e) => {
-    setCreditNote({ ...creditNote, [e.target.id]: e.target.value });
+    setDebitNote({ ...debitNote, [e.target.id]: e.target.value });
   };
 
   const handleSubmit = (e) => {
@@ -60,9 +60,9 @@ export default function creditNote() {
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <div className="mb-2">
-        <h1 className="text-4xl text-green-700 font-bold">Credit Note</h1>
+        <h1 className="text-4xl text-green-800 font-bold">Debit Note</h1>
         <p className="ml-1 font-medium text-gray-600">
-          Create a new Credit Note
+          Create a new Debit Note
         </p>
       </div>
       <div className="bg-white rounded-lg w-min-[1500px] w-max-full mt-5 p-2 h-[1700px]">
@@ -84,21 +84,21 @@ export default function creditNote() {
                   id={"company_name"}
                   placeholder={"insert your company name..."}
                   onChange={handleTextChange}
-                  value={creditNote.company_name}
+                  value={debitNote.company_name}
                 />
                 <Textfield
                   label={"Company Address"}
                   id={"company_address"}
                   placeholder={"insert your company address..."}
                   onChange={handleTextChange}
-                  value={creditNote.company_address}
+                  value={debitNote.company_address}
                 />
                 <Textfield
                   label={"Company Number"}
                   id={"company_number"}
                   placeholder={"insert your company number..."}
                   onChange={handleTextChange}
-                  value={creditNote.company_number}
+                  value={debitNote.company_number}
                 />
               </div>
             </div>
@@ -110,21 +110,21 @@ export default function creditNote() {
                 id={"recipient"}
                 placeholder={"insert recipient..."}
                 onChange={handleTextChange}
-                value={creditNote.recipient}
+                value={debitNote.recipient}
               />
               <Textfield
                 label={"Recipient Address"}
                 id={"recipient_address"}
                 placeholder={"insert address..."}
                 onChange={handleTextChange}
-                value={creditNote.recipient_address}
+                value={debitNote.recipient_address}
               />
               <Textfield
                 label={"Invoice Number"}
                 id={"invoice_id"}
                 placeholder={"insert invoice number..."}
                 onChange={handleTextChange}
-                value={creditNote.invoice_id}
+                value={debitNote.invoice_id}
               />
               {/* currency dropdown */}
               <div>
@@ -162,42 +162,42 @@ export default function creditNote() {
                   id={"net_premium"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
-                  value={creditNote.net_premium}
+                  value={debitNote.net_premium}
                 />
                 <SideTextfield
                   label={"Brokerage :"}
                   id={"brokerage"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
-                  value={creditNote.brokerage}
+                  value={debitNote.brokerage}
                 />
                 <SideTextfield
                   label={"Discount :"}
                   id={"discount"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
-                  value={creditNote.discount}
+                  value={debitNote.discount}
                 />
                 <SideTextfield
                   label={"PPH :"}
                   id={"pph"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
-                  value={creditNote.pph}
+                  value={debitNote.pph}
                 />
                 <SideTextfield
                   label={"Risk Management :"}
                   id={"risk_management"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
-                  value={creditNote.risk_management}
+                  value={debitNote.risk_management}
                 />
                 <SideTextfield
                   label={"Admin Cost :"}
                   id={"admin_cost"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
-                  value={creditNote.admin_cost}
+                  value={debitNote.admin_cost}
                 />
               </div>
             </div>
@@ -209,7 +209,7 @@ export default function creditNote() {
                 id={"total_premium_due"}
                 placeholder={"insert amount..."}
                 onChange={handleTextChange}
-                value={creditNote.total_premium_due}
+                value={debitNote.total_premium_due}
               />
             </div>
           </div>
@@ -225,14 +225,14 @@ export default function creditNote() {
                   id={"policy_number"}
                   placeholder={"insert policy number..."}
                   onChange={handleTextChange}
-                  value={creditNote.policy_number}
+                  value={debitNote.policy_number}
                 />
                 <Textfield
                   label={"Name of Insured"}
                   id={"name_of_insured"}
                   placeholder={"insert name of insured..."}
                   onChange={handleTextChange}
-                  value={creditNote.name_of_insured}
+                  value={debitNote.name_of_insured}
                 />
               </div>
               <div className="">
@@ -241,7 +241,7 @@ export default function creditNote() {
                   id={"address_of_insured"}
                   placeholder={"insert address of insured..."}
                   onChange={handleTextChange}
-                  value={creditNote.address_of_insured}
+                  value={debitNote.address_of_insured}
                 />
               </div>
             </div>
@@ -254,7 +254,7 @@ export default function creditNote() {
                   id={"insurance_type"}
                   placeholder={"insert type of insurance..."}
                   onChange={handleTextChange}
-                  value={creditNote.insurance_type}
+                  value={debitNote.insurance_type}
                 />
               </div>
               <div className="flex justify-between ">
@@ -293,7 +293,7 @@ export default function creditNote() {
                 id={"terms_of_payment"}
                 placeholder={"insert terms of payment..."}
                 onChange={handleTextChange}
-                value={creditNote.terms_of_payment}
+                value={debitNote.terms_of_payment}
               />
             </div>
 
@@ -305,7 +305,7 @@ export default function creditNote() {
                 </label>
 
                 <div className="border-[3px] border-green-700 rounded-xl mt-2 py-4 pl-5">
-                  <InvInstallmentForm/>
+                  <InvInstallmentForm />
                 </div>
               </div>
               <div className="w-full">
@@ -314,16 +314,18 @@ export default function creditNote() {
                   id={"remarks"}
                   placeholder={"insert remarks..."}
                   onChange={handleTextChange}
-                  value={creditNote.remarks}
+                  value={debitNote.remarks}
                 />
               </div>
             </div>
 
             <div className="flex w-full justify-end mt-5">
-                
-                  <button className="p-2 border-[3px] drop-shadow-lg font-bold  bg-white text-black rounded-lg  hover:bg-gray-200 border-green-700 mr-5">Save Template</button>
-                  <button className="p-2 border-[3px] drop-shadow-lg font-bold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">Submit</button>
-                
+              <button className="p-2 border-[3px] drop-shadow-lg font-semibold  bg-white text-black rounded-lg  hover:bg-gray-200 border-green-700 mr-5">
+                Save Template
+              </button>
+              <button className="p-2 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">
+                Submit
+              </button>
             </div>
           </div>
         </form>
