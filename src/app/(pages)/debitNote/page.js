@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import Textfield from "../../components/textfield";
 import SideTextfield from "../../components/sideTextfield";
 import DatePickerMUI from "../../components/datePickerMUI";
-import SumInsuredForm from "@/app/components/sumInsuredForm";
-import InvInstallmentForm from "../../components/invInstallmentForm";
+import SumInsuredForm from "@/app/components/invoiceComponents/sumInsuredForm";
+import InvInstallmentForm from "../../components/invoiceComponents/invInstallmentForm";
 
 export default function debitNote() {
   const [debitNote, setDebitNote] = useState({

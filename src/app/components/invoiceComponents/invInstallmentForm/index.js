@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from "react";
-import Textfield from "../textfield";
-import DatePickerMUI from "../datePickerMUI";
+import Textfield from "../../textfield";
+import DatePickerMUI from "../../datePickerMUI";
 import dayjs from "dayjs";
 
 export default function invInstallmentForm() {
