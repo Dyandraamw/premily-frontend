@@ -13,7 +13,7 @@ export default function sideTextfield({
         {label} 
       </label>
       <input
-        className="drop-shadow-md appearance-none border-[2.5px] border-gray-500 rounded-lg w-2/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        className="drop-shadow-md appearance-none focus:border-[3px] focus:border-green-700 border-[2.5px] border-gray-500 rounded-lg w-2/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id={id}
         type="text"
         placeholder={placeholder}

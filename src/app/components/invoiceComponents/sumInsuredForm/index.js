@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import Textfield from "../../components/textfield";
+import Textfield from "../../textfield";
 
 export default function sumInsuredForm({   }) {
     const [siData, setSiData] = useState([

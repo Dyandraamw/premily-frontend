@@ -10,42 +10,6 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import dayjs from "dayjs";
 
 
-
-function createData(invoice_id, recipient, issued_date, policy_period, amount) {
-  return { invoice_id, recipient, issued_date, policy_period, amount };
-}
-
-const tableData = [
-  createData(
-    "CN-001",
-    "PT. Garuda Indonesia",
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
-    "05/07/2024-06/08/2025",
-    "$100,00"
-  ),
-  createData(
-    "CN-001",
-    "PT. Garuda Indonesia",
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
-    "05/07/2024-06/08/2025",
-    "$100,00"
-  ),
-  createData(
-    "CN-001",
-    "PT. Garuda Indonesia",
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
-    "05/07/2024-06/08/2025",
-    "$100,00"
-  ),
-  createData(
-    "CN-001",
-    "PT. Garuda Indonesia",
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
-    "05/07/2024-06/08/2025",
-    "$100,00"
-  ),
-];
-
 const theme = createTheme({
   components: {
     MuiTableCell: {
