@@ -32,7 +32,7 @@ export default function listMenu() {
         {/* Payment Status button */}
         <div className="flex items-center w-full  hover:bg-green-700 hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold rounded-lg">
           <MdFactCheck className="mx-5 text-2xl" />
-          <Link href={"/"}>Payment Status</Link>
+          <Link href={"/paymentStatus"}>Payment Status</Link>
           
         </div>
       </div>
@@ -41,13 +41,13 @@ export default function listMenu() {
         {/* Staff Access button */}
         <div className="flex items-center w-full  hover:bg-green-700 hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold rounded-lg">
           <FaUserGear className="mx-5 text-2xl" />
-          Staff Access
+          <Link href={"/StaffAccess"}>Staff Access</Link>
         </div>
 
         {/* Profile button */}
         <div className="flex items-center w-full  hover:bg-green-700 hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold rounded-lg">
           <FaCircleUser className="mx-5 text-2xl" />
-          Profile
+          <Link href={"/Profile"}>Profile</Link>
         </div>
 
         {/* Sign Out button */}
