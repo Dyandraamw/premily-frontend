@@ -1,6 +1,6 @@
 "use client";
 import Button from "@/app/components/Button.js/page";
-import TablePaymentStatusDetail from "@/app/components/TablePaymentStatusDetail/page";
+import TablePaymentStatusDetail from "@/app/components/SelectInvoice/page";
 import React, { useState } from "react";
 import dayjs from "dayjs";
 
