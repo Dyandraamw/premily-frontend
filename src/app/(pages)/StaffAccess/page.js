@@ -1,15 +1,8 @@
 "use client";
 import React, { useState } from "react";
 
-import TableMUI from "../../components/invoiceTable";
 import TableStaff from "@/app/components/StaffAccessTable/page";
-import Textfield from "../../components/textfield";
-import SideTextfield from "../../components/sideTextfield";
-import DatePickerMUI from "../../components/datePickerMUI";
-import { FaSearch } from "react-icons/fa";
-import dayjs from "dayjs";
 import TableUser from "@/app/components/StaffAccessTable";
-import Modal from "@/app/components/Modal/Modal";
 
 export default function StaffAcces() {
   const [showModal, setShowModal] = useState(false);

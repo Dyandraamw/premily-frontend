@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import Textfield from "../../components/textfield";
 import DatePickerMUI from "../../components/datePickerMUI";
 import { FaSearch } from "react-icons/fa";
-import TablePaymentStatus from "@/app/components/PaymentStatusTable/page";
 import Link from "next/link";
+import TablePaymentStatus from "@/app/components/paymentStatusComponents/PaymentStatus";
 
 export default function PaymentStatus() {
   function createData(
@@ -36,22 +36,6 @@ export default function PaymentStatus() {
     const searchVal = e.target;
   };
 
-  // const [siData, setSiData] = useState([
-  //   { item: "", sum_insured: "", notes: "" },
-  // ]);
-
-  // const handleAddSiRow = () => {
-  //   setSiData([...siData,{item: "", sum_insured: "", notes: ""}])
-  // };
-
-  // const handleSiChange = (e,i) => {
-  //   const {id,value} = e.target
-  //   const changeValue = [...siData]
-  //   changeValue[i][id] = value
-  //   setSiData(changeValue)
-  // };
-
-  // const handleDeleteSiRow = () => {};
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <div className="mb-2 flex">
@@ -62,11 +46,8 @@ export default function PaymentStatus() {
           </p>
         </div>
         <div className="ml-[690px] m-auto">
-          <Link href={"/paymentStatusDetail"}>
-            <button
-              href="/paymentStatusDetail"
-              className="py-3 w-52 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700 "
-            >
+          <Link href={"/SelectInvoicesPS"}>
+            <button className="py-3 w-52 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700 ">
               Create Payment Status
             </button>
           </Link>

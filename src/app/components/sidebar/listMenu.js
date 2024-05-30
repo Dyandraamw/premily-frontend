@@ -25,7 +25,7 @@ export default function listMenu() {
         {/* Statement of Account button */}
         <div className="flex items-center w-full  hover:bg-green-700 hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold rounded-lg">
           <IoMdListBox className="mx-5 text-3xl" />
-          <Link href={"/"}>Statement of Account</Link>
+          <Link href={"/soaList"}>Statement of Account</Link>
           
         </div>
 

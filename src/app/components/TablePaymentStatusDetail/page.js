@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+
 import dayjs from "dayjs";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import {
@@ -31,16 +32,9 @@ const rows = [
     "05/07/2024-06/08/2025",
     "$100.00"
   ),
-  //   createData(
-  //     "CN-002",
-  //     "PT. Garuda Indonesia",
-  //     dayjs("06/07/2024").format("DD/MM/YYYY"),
-  //     "06/07/2024-07/08/2025",
-  //     "$200.00"
-  //   ),
 ];
 
-export default function TablePaymentStatusDetail({ tableData = rows }) {
+export default function TableSelectInvoice({ tableData = rows }) {
   const [selected, setSelected] = useState([]);
 
   const handleSelectAllClick = (event) => {
