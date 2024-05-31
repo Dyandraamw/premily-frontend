@@ -1,10 +1,8 @@
 "use client";
-import Button from "@/app/components/Button.js/page";
-import TablePaymentStatusDetail from "@/app/components/TablePaymentStatusDetail/page";
 import React, { useState } from "react";
 import dayjs from "dayjs";
 import Link from "next/link";
-import TableSelectInvoice from "@/app/components/TablePaymentStatusDetail/page";
+import TableSelectInvoice from "@/app/components/paymentStatusComponents/TableSelectInvoice/page";
 
 export default function PaymentStatusDetail() {
   const [selectedInvoice, setSelectedInvoice] = useState(null);
@@ -13,14 +11,14 @@ export default function PaymentStatusDetail() {
     setSelectedInvoice(invoice_id);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (selectedInvoice) {
-      console.log("Selected Invoice:", selectedInvoice);
-    } else {
-      console.log("No invoice selected");
-    }
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (selectedInvoice) {
+  //     console.log("Selected Invoice:", selectedInvoice);
+  //   } else {
+  //     console.log("No invoice selected");
+  //   }
+  // };
 
   function createData(
     invoice_id,
@@ -77,7 +75,7 @@ export default function PaymentStatusDetail() {
         <Link href={"/paymentStatusDetail"}>
           <button
             className="py-3 border-[3px] drop-shadow-lg font-semibold w-28 text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
-            onClick={handleSubmit}
+            // onClick={handleSubmit}
           >
             Submit
           </button>

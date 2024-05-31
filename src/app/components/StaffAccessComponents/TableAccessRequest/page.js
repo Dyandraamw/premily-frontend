@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+"use client";
+
+import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,20 +10,13 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import dayjs from "dayjs";
-import Modal from "../Modal/Modal";
 
 function createData(username, email, phone, role) {
   return { username, email, phone, role };
 }
 
 const tableData = [
-  createData(
-    "John_Williams",
-    "John.williams@gmail.com",
-    "081234218765",
-    "Admin"
-  ),
-  createData("Alexander", "G.Alex@gmail.com", "081234218765", "Guest"),
+  createData("John_Williams", "John.williams@gmail.com", "081234218765"),
 ];
 
 const theme = createTheme({
@@ -40,9 +35,7 @@ const theme = createTheme({
   },
 });
 
-export default function TableUser({ tableData }) {
-  const [showModal, setShowModal] = useState(false);
-
+export default function TableStaff({ tableData }) {
   return (
     <ThemeProvider theme={theme}>
       <TableContainer>
@@ -52,7 +45,6 @@ export default function TableUser({ tableData }) {
               <TableCell align="left">Username</TableCell>
               <TableCell align="left">Email</TableCell>
               <TableCell align="left">Phone</TableCell>
-              <TableCell align="left">Role</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -66,27 +58,18 @@ export default function TableUser({ tableData }) {
                 </TableCell>
                 <TableCell align="left">{row.email}</TableCell>
                 <TableCell align="left">{row.phone}</TableCell>
-                <TableCell align="left">{row.role}</TableCell>
                 <TableCell sx={{ borderBottom: "none" }} align="center">
-                  <button
-                    onClick={() => setShowModal(true)}
-                    className="p-2 px-4 border-[3px] mr-3 drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
-                  >
-                    Change Role
+                  <button className="p-2 px-4 border-[3px] mr-3 drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">
+                    Accept
+                  </button>
+                  <button className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600">
+                    Reject
                   </button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-        <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
-          {/* <div className="p-6">
-            <h3 className="text-xl font-semibold text-gray-600 mb-5">
-              Title Modal
-            </h3>
-          </div> */}
-          Modal Modal Modal
-        </Modal>
       </TableContainer>
     </ThemeProvider>
   );

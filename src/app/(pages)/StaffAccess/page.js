@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
-
-import TableStaff from "@/app/components/StaffAccessTable/page";
-import TableUser from "@/app/components/StaffAccessTable";
+import TableUser from "@/app/components/StaffAccessComponents/page";
+import TableStaff from "@/app/components/StaffAccessComponents/TableAccessRequest/page";
 
 export default function StaffAcces() {
   const [showModal, setShowModal] = useState(false);
