@@ -144,7 +144,6 @@ export default function invoiceList() {
           />
         </div>
         <div className="w-1/3 flex justify-between ">
-
           <DatePickerMUI label={"issued date"} />
           <DatePickerMUI label={"policy period"} />
           <select
