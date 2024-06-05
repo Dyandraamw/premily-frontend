@@ -57,11 +57,11 @@ export default function tableMUI({tableData}) {
                 <TableCell align="left">{row.issued_date}</TableCell>
                 <TableCell align="left">{row.policy_period}</TableCell>
                 <TableCell align="left">{row.amount}</TableCell>
-                <TableCell sx={{ borderBottom: "none" }} align="center">
+                {/* <TableCell sx={{ borderBottom: "none" }} align="center">
                   <button className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-black hover:bg-white hover:text-black rounded-lg bg-yellow-500 border-yellow-500">
                     Edit
                   </button>
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             ))}
           </TableBody>

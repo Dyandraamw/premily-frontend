@@ -28,66 +28,51 @@ const style = {
 };
 
 const theme = createTheme({
-    components: {
-      MuiTableCell: {
-        styleOverrides: {
-          root: {
-            fontSize: "1rem",
-            fontFamily: "inherit",
-          },
-          head: {
-            fontWeight: 700,
-          },
+  components: {
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          fontSize: "1rem",
+          fontFamily: "inherit",
+        },
+        head: {
+          fontWeight: 700,
         },
       },
     },
-  });
+  },
+});
 
-function createData(instalment_id,instalment_number, due_date, amount) {
-  return {instalment_id,instalment_number, due_date, amount};
-}
 
-const instalment_data = [
-  createData('INS-001',1, dayjs("04/04/2025").format("DD/MM/YYYY"), 100),
-  createData('INS-002',2, dayjs("01/01/2026").format("DD/MM/YYYY"), 100),
-];
-
-export default function addItemModal({ modalState, handleCloseModal, statementOfAccount, setStatementOfAccount }) {
-//   const [statementOfAccount, setStatementOfAccount] = useState({
-//     invoice_id: selectedValue,
-//     instalment_id: "",
-//     payment_date: "",
-//     payment_amount: 0,
-//   });
+export default function editAdjustmentModal({
+  modalState,
+  handleCloseModal,
+  instalment_data,
+  editAdjustment,
+  setEditAdjustment
+}) {
 
   const handleTextfield = (e) => {
-    setStatementOfAccount({
-      ...statementOfAccount,
-      payment_amount: e.target.value,
+    setEditAdjustment({
+      ...editAdjustment,
+      [e.target.id]: e.target.value,
     });
   };
 
-  const handleDate = (e) => {
-    const dateformat = dayjs(e.$d).format("DD/MM/YYYY")
-    setStatementOfAccount({
-      ...statementOfAccount,
-      payment_date: dateformat,
+  const handleAmount = (e, i) => {
+    let arr = editAdjustment.adjustment_amount;
+    arr[i] = e.target.value;
+    setEditAdjustment({
+      ...editAdjustment,
+      adjustment_amount: arr,
     });
   };
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
   };
 
-  const [insSelectedValue, setInsSelectedValue] = useState(0);
-
-  const handleRadioChange = (e) => {
-    setInsSelectedValue(e.target.value);
-    setStatementOfAccount({...statementOfAccount,instalment_id: e.target.value})
-    // console.log(event.target.value)
-  };
-  //console.log(statementOfAccount)
+  //console.log(editAdjustment);
   return (
     <div>
       <Modal
@@ -107,13 +92,20 @@ export default function addItemModal({ modalState, handleCloseModal, statementOf
             <div className="">
               <div>
                 <h1 className="flex w-full justify-center text-2xl  font-semibold">
-                  Add Item Details
+                  Edit {editAdjustment.adjustment_title}
                 </h1>
                 <p className="flex w-full justify-center font-medium text-md text-gray-500">
-                  Input item details into statement of account
+                  Input adjustment details into statement of account
                 </p>
               </div>
               <div className="mx-5">
+                <Textfield
+                  label={"Adjustment Title"}
+                  id={"adjustment_title"}
+                  placeholder={"Insert adjustment title..."}
+                  onChange={handleTextfield}
+                  value={editAdjustment.adjustment_title}
+                />
                 <p className="text-xl font-bold mt-5">Instalment</p>
                 <div className="  border-2 rounded-lg mt-5 mb-3">
                   <ThemeProvider theme={theme}>
@@ -121,38 +113,30 @@ export default function addItemModal({ modalState, handleCloseModal, statementOf
                       <Table aria-label="simple table">
                         <TableHead>
                           <TableRow>
-                            <TableCell align="left"></TableCell>
                             <TableCell align="left">No.</TableCell>
-                            <TableCell align="left">Due Date</TableCell>
                             <TableCell align="left">Amount</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {instalment_data.map((row) => (
+                          {instalment_data.map((row, i) => (
                             <TableRow
-                              key={row.name}
+                              key={row.instalment_id}
                               sx={{
                                 "&:last-child td, &:last-child th": {
                                   border: 0,
                                 },
                               }}
                             >
-                              <TableCell align="left">
-                                <Radio
-                                  checked={row.instalment_id == insSelectedValue}
-                                  onChange={handleRadioChange}
-                                  value={row.instalment_id}
-                                />
-                                
-                              </TableCell>
                               <TableCell component="th" scope="row">
                                 {row.instalment_number}
                               </TableCell>
                               <TableCell align="left">
-                                {row.due_date}
-                              </TableCell>
-                              <TableCell align="left">
-                                {row.amount}
+                                <Textfield
+                                  id={"adjustment_amount"}
+                                  placeholder={"Insert adjustment amount..."}
+                                  onChange={(e) => handleAmount(e, i)}
+                                  value={editAdjustment.adjustment_amount[i]}
+                                />
                               </TableCell>
                             </TableRow>
                           ))}
@@ -161,26 +145,10 @@ export default function addItemModal({ modalState, handleCloseModal, statementOf
                     </TableContainer>
                   </ThemeProvider>
                 </div>
-                <p className="text-xl font-bold">Payment Details</p>
-                <div className="grid grid-cols-2 ">
-                  <DatePickerMUI
-                    bigLabel={"Payment Date"}
-                    label={"start date"}
-                    onChange={handleDate}
-                  />
-                  <Textfield
-                    label={"Payment Amount"}
-                    id={"payment_amount"}
-                    placeholder={"Insert payment amount..."}
-                    onChange={handleTextfield}
-                    value={statementOfAccount.amount}
-                  />
-                </div>
+
                 <button className=" w-full my-5 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">
                   Submit
                 </button>
-
-                
               </div>
             </div>
           </form>

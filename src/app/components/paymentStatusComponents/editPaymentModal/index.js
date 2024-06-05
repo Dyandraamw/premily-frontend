@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import Textfield from "../../textfield";
 import DatePickerMUI from "../../datePickerMUI";
 import Modal from "@mui/material/Modal";
+import SelectField from "../../selectField";
 import dayjs from "dayjs";
 
 const style = {
@@ -19,40 +20,49 @@ const style = {
   borderRadius: 3,
 };
 
-export default function createSoaModal({ modalState, handleCloseModal }) {
-  const [statementOfAccount, setStatementOfAccount] = useState({
-    soa_id: "SOA-001",
-    name_of_insured: "",
-    period_start: null,
-    period_end: null,
-  });
+export default function editPayment({
+  modalState,
+  handleCloseModal,
+  instalment_data,
+  editPayment,
+  setEditPayment,
+}) {
+  // const [paymentDetails, setPaymentDetails] = useState({
+  //   payment_detail_id: editData.payment_id ,
+  //   instalment_id: instalment_data[0].instalment_id,
+  //   payment_date: editData.payment_date,
+  //   payment_amount: editData.payment_amount,
+  // });
 
   const handleTextfield = (e) => {
-    setStatementOfAccount({
-      ...statementOfAccount,
+    setEditPayment({
+      ...editPayment,
       [e.target.id]: e.target.value,
     });
   };
 
-  const handleDateStart = (e) => {
-    const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
-    setStatementOfAccount({
-      ...statementOfAccount,
-      period_start: dateformat,
+  const handleDate = (e) => {
+    const dateformat = dayjs(e.$d).format('YYYY-MM-DD')
+    // console.log(e)
+    setEditPayment({
+      ...editPayment,
+      payment_date: dateformat,
     });
   };
 
-  const handleDateEnd = (e) => {
-    const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
-    setStatementOfAccount({
-      ...statementOfAccount,
-      period_end: dateformat,
-    });
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
   };
+
+  // const handleSelect = (e) => {
+  //   setPaymentDetails({
+  //       ...paymentDetails,
+  //       instalment_id: e,
+  //     });
+  // };
+
+  console.log(editPayment)
   return (
     <div>
       <Modal
@@ -72,46 +82,29 @@ export default function createSoaModal({ modalState, handleCloseModal }) {
             <div className="">
               <div>
                 <h1 className="flex w-full justify-center text-2xl  font-semibold">
-                  Create a Statement of Account
+                  Edit Payment {editPayment.payment_id}
                 </h1>
                 <p className="flex w-full justify-center font-medium text-md text-gray-500">
-                  Input detail to create a new statement of account
+                Edit selected payment details for payment status
                 </p>
               </div>
               <div className="mx-5">
                 <div className="w-1/2 mt-5">
-                  <Textfield
-                    label={"Statement of Account Number"}
-                    id={"soa_id"}
-                    placeholder={"insert soa number..."}
-                    onChange={handleTextfield}
-                    value={statementOfAccount.soa_id}
-                    disabled={true}
+                  <DatePickerMUI
+                    bigLabel={"Payment Date"}
+                    label={"Input Date"}
+                    onChange={handleDate}
+                    dateValue={dayjs(editPayment.payment_date)}
                   />
                   <Textfield
-                    label={"Name of Insured"}
-                    id={"name_of_insured"}
-                    placeholder={"Insert name of insured..."}
+                    label={"Payment Amount"}
+                    id={"payment_amount"}
+                    placeholder={"Insert payment amount..."}
                     onChange={handleTextfield}
-                    value={statementOfAccount.name_of_insured}
+                    value={editPayment.payment_amount}
                   />
                 </div>
-                <div className="flex justify-between ">
-                  <DatePickerMUI
-                    bigLabel={"Period of Policy"}
-                    label={"start date"}
-                    onChange={handleDateStart}
-                  />
 
-                  <p className="flex justify-center mt-10 text-black text-lg font-bold w-1/3">
-                    to
-                  </p>
-                  <DatePickerMUI
-                    bigLabel={<p>&nbsp;</p>}
-                    label={"end date"}
-                    onChange={handleDateEnd}
-                  />
-                </div>
                 <button className=" w-full my-5 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">
                   Submit
                 </button>

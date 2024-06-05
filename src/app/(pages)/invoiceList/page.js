@@ -28,87 +28,124 @@ export default function invoiceList() {
       "$100,00"
     ),
     createData(
-      "CN-001",
+      "DN-001",
       "PT. Garuda Indonesia",
       dayjs("05/07/2024").format("DD/MM/YYYY"),
       "05/07/2024-06/08/2025",
       "$100,00"
     ),
     createData(
-      "CN-001",
+      "CN-002",
       "PT. Garuda Indonesia",
       dayjs("05/07/2024").format("DD/MM/YYYY"),
       "05/07/2024-06/08/2025",
       "$100,00"
     ),
     createData(
-      "CN-001",
+      "CN-003",
       "PT. Garuda Indonesia",
       dayjs("05/07/2024").format("DD/MM/YYYY"),
       "05/07/2024-06/08/2025",
       "$100,00"
     ),
     createData(
-      "CN-001",
+      "DN-002",
       "PT. Garuda Indonesia",
       dayjs("05/07/2024").format("DD/MM/YYYY"),
       "05/07/2024-06/08/2025",
       "$100,00"
     ),
     createData(
-      "CN-001",
+      "CN-004",
       "PT. Garuda Indonesia",
       dayjs("05/07/2024").format("DD/MM/YYYY"),
       "05/07/2024-06/08/2025",
       "$100,00"
     ),
     createData(
-      "CN-001",
+      "DN-003",
       "PT. Garuda Indonesia",
       dayjs("05/07/2024").format("DD/MM/YYYY"),
       "05/07/2024-06/08/2025",
       "$100,00"
     ),
     createData(
-      "CN-001",
+      "DN-004",
       "PT. Garuda Indonesia",
       dayjs("05/07/2024").format("DD/MM/YYYY"),
       "05/07/2024-06/08/2025",
       "$100,00"
     ),
     createData(
-      "CN-001",
+      "DN-005",
       "PT. Garuda Indonesia",
       dayjs("05/07/2024").format("DD/MM/YYYY"),
       "05/07/2024-06/08/2025",
       "$100,00"
     ),
     createData(
-      "CN-001",
+      "DN-006",
       "PT. Garuda Indonesia",
       dayjs("05/07/2024").format("DD/MM/YYYY"),
       "05/07/2024-06/08/2025",
       "$100,00"
     ),
     createData(
-      "CN-001",
+      "CN-005",
       "PT. Garuda Indonesia",
       dayjs("05/07/2024").format("DD/MM/YYYY"),
       "05/07/2024-06/08/2025",
       "$100,00"
     ),
     createData(
-      "CN-001",
-      "PT. Garuda Indonesia",
+      "CN-006",
+      "PT. Alda Air",
       dayjs("05/07/2024").format("DD/MM/YYYY"),
       "05/07/2024-06/08/2025",
-      "$100,00"
+      "$200,00"
     ),
   ];
 
+  // const handleSearch = (e) => {
+  //   const searchVal = e.target;
+  // };
+
+  const [query, setQuery] = useState("");
+  const [filteredData, setFilteredData] = useState(invoices);
+
   const handleSearch = (e) => {
-    const searchVal = e.target;
+    const searchQuery = e.target.value;
+    //console.log(e.target.value)
+    setQuery(searchQuery);
+
+    const filteredInvoice = invoices.filter(
+      (data) =>
+        data.invoice_id.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
+        data.recipient.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.issued_date.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.policy_period.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.amount.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredData(filteredInvoice);
   };
+
+  const handleSort = (e) => {
+    const searchQuery = e.target.value;
+    //console.log(e.target.value)
+    setQuery(searchQuery);
+
+    const filteredInvoice = invoices.filter(
+      (data) =>
+        data.invoice_id.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
+        data.recipient.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.issued_date.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.policy_period.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.amount.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredData(filteredInvoice);
+  };
+
+  //const searchedData = handleSearch(invoices)
 
   // const [siData, setSiData] = useState([
   //   { item: "", sum_insured: "", notes: "" },
@@ -144,23 +181,25 @@ export default function invoiceList() {
           />
         </div>
         <div className="w-1/3 flex justify-between ">
-          <DatePickerMUI label={"issued date"} />
-          <DatePickerMUI label={"policy period"} />
           <select
             id="currency"
             name="currency"
             className="drop-shadow-md focus:border-green-700 focus:border-[3px] border-[2.5px] border-gray-500 rounded-lg  h-[40px]  text-gray-700  focus:outline-none focus:shadow-outline mt-2"
-            placeholder='sort'
+            placeholder="sort"
           >
-            <option value="" selected disabled>Sort</option>
-            <option value="invoice_id">Invoice Number</option>
-            <option value="issued_date">Issued Date</option>
+            <option value="" selected disabled>
+              Sort
+            </option>
+            <option value="invoice_id">Asc Invoice Number</option>
+            <option value="invoice_id">Des Invoice Number</option>
+            <option value="issued_date">Newest Issued Date</option>
+            <option value="issued_date">Oldest Issued Date</option>
             <option value="amount">Amount</option>
           </select>
         </div>
       </div>
       <div className="bg-white rounded-lg w-min-[1500px] w-max-full mt-5 p-5 h-[900px] overflow-y-auto">
-        <TableMUI tableData={invoices} />
+        <TableMUI tableData={filteredData} />
       </div>
     </div>
   );

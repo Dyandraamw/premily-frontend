@@ -1,9 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import dayjs from "dayjs";
+import Link from "next/link";
 
-export default function creditNoteDetail({ params }) {
-  const [creditNote, setCreditNote] = useState({
+export default function invoiceDetail({ params }) {
+  const invoice_data = ({
+    invoice_type: 'credit',
     company_name: "PT. Lead Insurance Broker",
     company_address:
       "AD Premier Office Park 17th Floor Suite 6 Jl.TB Simatupang No. 5, Jakarta Selatan 12550, Indonesia",
@@ -40,27 +42,27 @@ export default function creditNoteDetail({ params }) {
       {
         instalment_id: "INS-001",
         instalment_number: 1,
-        due_date: dayjs("7/31/2024").format("DD/MM/YYYY"),
+        due_date: dayjs('2024-07-31').toISOString(),
         amount: 30000,
       },
       {
         instalment_id: "INS-002",
         instalment_number: 2,
-        due_date: dayjs("10/31/2024").format("DD/MM/YYYY"),
+        due_date: dayjs('2024-10-31').toISOString(),
         amount: 30000,
       },
       {
         instalment_id: "INS-003",
         instalment_number: 3,
-        due_date: dayjs("12/31/2024").format("DD/MM/YYYY"),
+        due_date: dayjs('2024-12-31').toISOString(),
         amount: 30000,
       },
     ],
   });
 
-  const handleTextChange = (e) => {
-    setCreditNote({ ...creditNote, [e.target.id]: e.target.value });
-  };
+  // const handleTextChange = (e) => {
+  //   setCreditNote({ ...creditNote, [e.target.id]: e.target.value });
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -79,7 +81,7 @@ export default function creditNoteDetail({ params }) {
         <form onSubmit={handleSubmit} className="p-5 ">
           {/* top half */}
           <div>
-            <h1 className="text-3xl text-black font-bold mb-2">Credit Note</h1>
+            <h1 className="text-3xl text-black font-bold mb-2">{params.invoiceId.includes('CN')?'Credit ': 'Debit '}Note</h1>
             {/* company details */}
             <div className="flex justify-between">
               <div className="w-[200px] border-2 border-black h-[200px]">
@@ -93,23 +95,23 @@ export default function creditNoteDetail({ params }) {
                 <div className="flex">
                   <b>FROM:&emsp;</b>
                   <div>
-                    <p className="font-semibold">{creditNote.company_name}</p>
-                    <p className="text-justify">{creditNote.company_address}</p>
-                    <p className="text-justify">{creditNote.company_number}</p>
+                    <p className="font-semibold">{invoice_data.company_name}</p>
+                    <p className="text-justify">{invoice_data.company_address}</p>
+                    <p className="text-justify">{invoice_data.company_number}</p>
                   </div>
                 </div>
               </div>
               <div className="">
                 <p className="flex">
                   <b>NO:&emsp;</b>
-                  {creditNote.invoice_id}
+                  {invoice_data.invoice_id}
                 </p>
                 <div className="flex">
                   <b>TO:&emsp;</b>
                   <div>
-                    <p className="font-semibold">{creditNote.recipient}</p>
+                    <p className="font-semibold">{invoice_data.recipient}</p>
                     <p className="text-justify">
-                      {creditNote.recipient_address}
+                      {invoice_data.recipient_address}
                     </p>
                   </div>
                 </div>
@@ -146,22 +148,22 @@ export default function creditNoteDetail({ params }) {
                 <div className="flex justify-center font-bold py-2">AMOUNT</div>
                 <div className="px-3">
                   <b>
-                    {creditNote.currency} &emsp;{creditNote.net_premium.toLocaleString()}
+                    {invoice_data.currency} &emsp;{invoice_data.net_premium.toLocaleString()}
                   </b>
                   <p>
-                    {creditNote.currency} &emsp;{creditNote.brokerage.toLocaleString()}
+                    {invoice_data.currency} &emsp;{invoice_data.brokerage.toLocaleString()}
                   </p>
                   <p>
-                    {creditNote.currency} &emsp;{creditNote.discount.toLocaleString()}
+                    {invoice_data.currency} &emsp;{invoice_data.discount.toLocaleString()}
                   </p>
                   <p>
-                    {creditNote.currency} &emsp;{creditNote.pph.toLocaleString()}
+                    {invoice_data.currency} &emsp;{invoice_data.pph.toLocaleString()}
                   </p>
                   <p>
-                    {creditNote.currency} &emsp;{creditNote.risk_management.toLocaleString()}
+                    {invoice_data.currency} &emsp;{invoice_data.risk_management.toLocaleString()}
                   </p>
                   <p>
-                    {creditNote.currency} &emsp;{creditNote.admin_cost.toLocaleString()}
+                    {invoice_data.currency} &emsp;{invoice_data.admin_cost.toLocaleString()}
                   </p>
                 </div>
               </div>
@@ -171,13 +173,13 @@ export default function creditNoteDetail({ params }) {
             <div class="grid grid-cols-7 divide-x-[2.5px] border-t-0 border-[3px] border-black divide-black">
               <div class="col-span-5 grid grid-cols-1 divide-y-[2.5px]  divide-black">
                 <div className="flex justify-center font-bold py-2">
-                  TOTAL PREMIUM DUE TO YOU
+                {params.invoiceId.includes('CN')?'TOTAL PREMIUM DUE TO YOU': 'TOTAL PREMIUM DUE TO US'}
                 </div>
               </div>
               <div class="col-span-2 grid grid-cols-1 divide-y-[2.5px] divide-black">
                 <div className="font-bold py-2 px-3">
                   <b>
-                    {creditNote.currency} &emsp;{creditNote.total_premium_due.toLocaleString()}
+                    {invoice_data.currency} &emsp;{invoice_data.total_premium_due.toLocaleString()}
                   </b>
                 </div>
               </div>
@@ -187,25 +189,25 @@ export default function creditNoteDetail({ params }) {
           <div className="border-t-0 border-[3px] border-black p-3">
             <div className="grid grid-cols-7 p-2 ">
               <b className="col-span-2">Policy No</b>
-              <p className="col-span-5">: &emsp;{creditNote.policy_number}</p>
+              <p className="col-span-5">: &emsp;{invoice_data.policy_number}</p>
             </div>
 
             <div className="grid grid-cols-7 p-2">
               <b className="col-span-2 ">Name of Insured</b>
-              <p className="col-span-5">: &emsp;{creditNote.name_of_insured}</p>
+              <p className="col-span-5">: &emsp;{invoice_data.name_of_insured}</p>
             </div>
 
             <div className="grid grid-cols-7 p-2">
               <b className="col-span-2 ">Address of Insured</b>
               <div className="col-span-5 flex">
-                : &emsp;<p>{creditNote.address_of_insured}</p>
+                : &emsp;<p>{invoice_data.address_of_insured}</p>
               </div>
             </div>
 
             <div className="grid grid-cols-7 p-2">
               <b className="col-span-2 ">Type of insurance</b>
               <div className="col-span-5 flex">
-                : &emsp;<b>{creditNote.insurance_type}</b>
+                : &emsp;<b>{invoice_data.insurance_type}</b>
               </div>
             </div>
 
@@ -214,7 +216,7 @@ export default function creditNoteDetail({ params }) {
               <div className="col-span-5 flex">
                 : &emsp;
                 <p>
-                  {creditNote.start_date} up to {creditNote.end_date}
+                  {invoice_data.start_date} up to {invoice_data.end_date}
                 </p>
               </div>
             </div>
@@ -233,14 +235,14 @@ export default function creditNoteDetail({ params }) {
                     </tr>
                   </tbody>
                   <tbody>
-                    {creditNote.sum_insured_detail.map((data, key) => {
+                    {invoice_data.sum_insured_detail.map((data, key) => {
                       return (
                         <tr key={key}>
                           <td className="border-2 border-black px-1 ">
                             {data.item}
                           </td>
                           <td className="border-2 border-black px-1 ">
-                            {creditNote.currency}&emsp;{data.sum_insured.toLocaleString()}
+                            {invoice_data.currency}&emsp;{data.sum_insured.toLocaleString()}
                           </td>
                           <td className="border-2 border-black px-1 ">
                             {data.note}
@@ -260,10 +262,10 @@ export default function creditNoteDetail({ params }) {
                 : &emsp;
                 <div className="w-full">
                   <p>
-                    {creditNote.remarks}
+                    {invoice_data.remarks}
                   </p>
                   <p>
-                    Terms of Payment {creditNote.terms_of_payment}
+                    Terms of Payment {invoice_data.terms_of_payment}
                   </p>
                   <table className="border-2 border-black w-full">
                     <tbody>
@@ -273,14 +275,14 @@ export default function creditNoteDetail({ params }) {
                       </tr>
                     </tbody>
                     <tbody>
-                      {creditNote.instalments_detail.map((data, key) => {
+                      {invoice_data.instalments_detail.map((data, key) => {
                         return (
                           <tr key={key}>
                             <td className="border-2 border-black px-1 font-semibold ">
                               {key+1}
                             </td>
                             <td className="border-2 border-black px-1 ">
-                              {creditNote.currency}&emsp;{data.amount.toLocaleString()}
+                              {invoice_data.currency}&emsp;{data.amount.toLocaleString()}
                             </td>
                             <td className="border-2 border-black px-1 font-semibold">
                               {data.due_date}
@@ -290,7 +292,7 @@ export default function creditNoteDetail({ params }) {
                       })}
                       <tr className="border-2 border-black ">
                         <td  className="border-2 border-black font-bold ">TOTAL</td>
-                        <td className="border-2 border-black font-bold">{creditNote.currency}&emsp;{creditNote.total_premium_due}</td>
+                        <td className="border-2 border-black font-bold">{invoice_data.currency}&emsp;{invoice_data.total_premium_due}</td>
                         <td  className="border-2 border-black "></td>
                       </tr>
                     </tbody>
@@ -302,6 +304,9 @@ export default function creditNoteDetail({ params }) {
           {/* bottom half */}
           <div>
             <div className="flex w-full justify-end mt-5">
+            <button className="p-2 border-[3px] mr-3 drop-shadow-lg font-bold text-white hover:bg-white hover:text-black rounded-lg bg-yellow-600 border-yellow-600">
+                 <Link href={params.invoiceId+'/editInvoice'} state={invoice_data} >Edit</Link>
+              </button>
               <button className="p-2 border-[3px] drop-shadow-lg font-bold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">
                 Generate PDF
               </button>

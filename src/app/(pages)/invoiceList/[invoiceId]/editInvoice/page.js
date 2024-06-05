@@ -1,62 +1,88 @@
 "use client";
 import React, { useState } from "react";
-import Textfield from "../../components/textfield";
-import SideTextfield from "../../components/sideTextfield";
-import DatePickerMUI from "../../components/datePickerMUI";
-import SumInsuredForm from "@/app/components/invoiceComponents/sumInsuredForm";
-import InvInstallmentForm from "../../components/invoiceComponents/invInstallmentForm";
+import Textfield from "../../../../components/textfield";
+import SideTextfield from "../../../../components/sideTextfield";
+import DatePickerMUI from "../../../../components/datePickerMUI";
+import SumInsuredForm from "../../../../components/invoiceComponents/editSumInsuredForm";
+import InvInstallmentForm from "../../../../components/invoiceComponents/editInvInstallmentForm";
+import dayjs from "dayjs";
 
-export default function creditNote() {
-  const [creditNote, setCreditNote] = useState({
-    company_name: "",
-    company_address: "",
-    company_number: "",
-    recipient: "",
-    recipient_address: "",
-    invoice_id: "DN-001",
-    currency: "",
-    net_premium: "",
-    brokerage: "",
-    discount: "",
-    pph: "",
-    risk_management: "",
-    admin_cost: "",
-    total_premium_due: "",
-    policy_number: "",
-    name_of_insured: "",
-    address_of_insured: "",
-    insurance_type: "",
-    // start_date:"",
-    // end_date:"",
-    // sum_insured_form:[],
-    terms_of_payment: "",
-    remarks: "",
+export default function editInvoice({ params }) {
+  const [invoiceData, setinvoiceData] = useState({
+    invoice_type: "credit",
+    company_name: "PT. Lead Insurance Broker",
+    company_address:
+      "AD Premier Office Park 17th Floor Suite 6 Jl.TB Simatupang No. 5, Jakarta Selatan 12550, Indonesia",
+    company_number: "+62 821809246",
+    recipient: "PT. Garuda Indonesia",
+    recipient_address:
+      "Jl. Dewi Sartika, Sentani Kota Sentani, Cawang,Jakarta 99352, Indonesia",
+    invoice_id: params.invoiceId,
+    currency: "USD",
+    net_premium: 100000,
+    brokerage: 100,
+    discount: 50,
+    pph: 50,
+    risk_management: 10,
+    admin_cost: 3,
+    total_premium_due: 90000,
+    policy_number: "70.301.50.2023.0011-0",
+    name_of_insured: "PT. Alda Air",
+    address_of_insured:
+      "Jl. Telkom, Sentani Kota Sentani, Jayapura Regency,Papua 99352, Indonesia",
+    insurance_type:
+      "AVIATION HULL & SPARES ALL RISKS, THIRDPARTY AND PASSENGER LIABILITY, HULL WAR, PERSONAL ACCIDENT",
+    start_date: dayjs("2024-05-31").toISOString(),
+    end_date: dayjs("2024-12-314").toISOString(),
+    sum_insured_detail: [
+      { item: "Cessna Grand Caravan EX", sum_insured: 2580, note: "PK DLT" },
+      { item: "Cessna Grand Caravan EX", sum_insured: 2700, note: "PK DLY" },
+      { item: "Cessna Grand Caravan EX", sum_insured: 2600, note: "PK DLA" },
+    ],
+
+    terms_of_payment: "based on AVN 6A.",
+    remarks: "sample of remarks",
+    instalments_detail: [
+      {
+        instalment_id: "INS-001",
+        instalment_number: 1,
+        due_date: dayjs("2024-07-31").toISOString(),
+        amount: 30000,
+      },
+      {
+        instalment_id: "INS-002",
+        instalment_number: 2,
+        due_date: dayjs("2024-10-31").toISOString(),
+        amount: 30000,
+      },
+      {
+        instalment_id: "INS-003",
+        instalment_number: 3,
+        due_date: dayjs("2024-12-31").toISOString(),
+        amount: 30000,
+      },
+    ],
   });
 
   const handleTextChange = (e) => {
-    setCreditNote({ ...creditNote, [e.target.id]: e.target.value });
+    setinvoiceData({ ...invoiceData, [e.target.id]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
   };
 
-  // const [siData, setSiData] = useState([
-  //   { item: "", sum_insured: "", notes: "" },
-  // ]);
+  const handleStartDate = (e) => {
+    const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
+    setinvoiceData({ ...invoiceData, start_date: dateformat });
+  };
 
-  // const handleAddSiRow = () => {
-  //   setSiData([...siData,{item: "", sum_insured: "", notes: ""}])
-  // };
+  const handleEndDate = (e) => {
+    const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
+    setinvoiceData({ ...invoiceData, end_date: dateformat });
+  };
+  
 
-  // const handleSiChange = (e,i) => {
-  //   const {id,value} = e.target
-  //   const changeValue = [...siData]
-  //   changeValue[i][id] = value
-  //   setSiData(changeValue)
-  // };
-
-  // const handleDeleteSiRow = () => {};
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <div className="mb-2">
@@ -84,21 +110,21 @@ export default function creditNote() {
                   id={"company_name"}
                   placeholder={"insert your company name..."}
                   onChange={handleTextChange}
-                  value={creditNote.company_name}
+                  value={invoiceData.company_name}
                 />
                 <Textfield
                   label={"Company Address"}
                   id={"company_address"}
                   placeholder={"insert your company address..."}
                   onChange={handleTextChange}
-                  value={creditNote.company_address}
+                  value={invoiceData.company_address}
                 />
                 <Textfield
                   label={"Company Number"}
                   id={"company_number"}
                   placeholder={"insert your company number..."}
                   onChange={handleTextChange}
-                  value={creditNote.company_number}
+                  value={invoiceData.company_number}
                 />
               </div>
             </div>
@@ -110,21 +136,21 @@ export default function creditNote() {
                 id={"recipient"}
                 placeholder={"insert recipient..."}
                 onChange={handleTextChange}
-                value={creditNote.recipient}
+                value={invoiceData.recipient}
               />
               <Textfield
                 label={"Recipient Address"}
                 id={"recipient_address"}
                 placeholder={"insert address..."}
                 onChange={handleTextChange}
-                value={creditNote.recipient_address}
+                value={invoiceData.recipient_address}
               />
               <Textfield
                 label={"Invoice Number"}
                 id={"invoice_id"}
                 placeholder={"insert invoice number..."}
                 onChange={handleTextChange}
-                value={creditNote.invoice_id}
+                value={invoiceData.invoice_id}
                 disabled={true}
               />
               {/* currency dropdown */}
@@ -163,42 +189,42 @@ export default function creditNote() {
                   id={"net_premium"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
-                  value={creditNote.net_premium}
+                  value={invoiceData.net_premium}
                 />
                 <SideTextfield
                   label={"Brokerage :"}
                   id={"brokerage"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
-                  value={creditNote.brokerage}
+                  value={invoiceData.brokerage}
                 />
                 <SideTextfield
                   label={"Discount :"}
                   id={"discount"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
-                  value={creditNote.discount}
+                  value={invoiceData.discount}
                 />
                 <SideTextfield
                   label={"PPH :"}
                   id={"pph"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
-                  value={creditNote.pph}
+                  value={invoiceData.pph}
                 />
                 <SideTextfield
                   label={"Risk Management :"}
                   id={"risk_management"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
-                  value={creditNote.risk_management}
+                  value={invoiceData.risk_management}
                 />
                 <SideTextfield
                   label={"Admin Cost :"}
                   id={"admin_cost"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
-                  value={creditNote.admin_cost}
+                  value={invoiceData.admin_cost}
                 />
               </div>
             </div>
@@ -210,7 +236,7 @@ export default function creditNote() {
                 id={"total_premium_due"}
                 placeholder={"insert amount..."}
                 onChange={handleTextChange}
-                value={creditNote.total_premium_due}
+                value={invoiceData.total_premium_due}
               />
             </div>
           </div>
@@ -226,14 +252,14 @@ export default function creditNote() {
                   id={"policy_number"}
                   placeholder={"insert policy number..."}
                   onChange={handleTextChange}
-                  value={creditNote.policy_number}
+                  value={invoiceData.policy_number}
                 />
                 <Textfield
                   label={"Name of Insured"}
                   id={"name_of_insured"}
                   placeholder={"insert name of insured..."}
                   onChange={handleTextChange}
-                  value={creditNote.name_of_insured}
+                  value={invoiceData.name_of_insured}
                 />
               </div>
               <div className="">
@@ -242,7 +268,7 @@ export default function creditNote() {
                   id={"address_of_insured"}
                   placeholder={"insert address of insured..."}
                   onChange={handleTextChange}
-                  value={creditNote.address_of_insured}
+                  value={invoiceData.address_of_insured}
                 />
               </div>
             </div>
@@ -255,19 +281,26 @@ export default function creditNote() {
                   id={"insurance_type"}
                   placeholder={"insert type of insurance..."}
                   onChange={handleTextChange}
-                  value={creditNote.insurance_type}
+                  value={invoiceData.insurance_type}
                 />
               </div>
               <div className="flex justify-between ">
                 <DatePickerMUI
                   bigLabel={"Period of Policy"}
                   label={"start date"}
+                  onChange={handleStartDate}
+                  dateValue={dayjs(invoiceData.start_date)}
                 />
 
                 <p className="flex justify-center mt-10 text-black text-lg font-bold w-1/3">
                   to
                 </p>
-                <DatePickerMUI bigLabel={<p>&nbsp;</p>} label={"end date"} />
+                <DatePickerMUI
+                  bigLabel={<p>&nbsp;</p>}
+                  label={"end date"}
+                  onChange={handleEndDate}
+                  dateValue={dayjs(invoiceData.end_date)}
+                />
               </div>
             </div>
 
@@ -279,10 +312,7 @@ export default function creditNote() {
 
               <div className="border-[3px] border-green-700 rounded-xl mt-5 py-4 pl-5">
                 <SumInsuredForm
-                // siData={siData}
-                // handleChange={handleSiChange}
-                // handleClick={handleAddSiRow}
-                // handleDeleteRow={handleDeleteSiRow}
+                  invoiceData={invoiceData.sum_insured_detail}
                 />
               </div>
             </div>
@@ -294,7 +324,7 @@ export default function creditNote() {
                 id={"terms_of_payment"}
                 placeholder={"insert terms of payment..."}
                 onChange={handleTextChange}
-                value={creditNote.terms_of_payment}
+                value={invoiceData.terms_of_payment}
               />
             </div>
 
@@ -306,7 +336,9 @@ export default function creditNote() {
                 </label>
 
                 <div className="border-[3px] border-green-700 rounded-xl mt-2 py-4 pl-5">
-                  <InvInstallmentForm />
+                  <InvInstallmentForm
+                    invoiceData={invoiceData.instalments_detail}
+                  />
                 </div>
               </div>
               <div className="w-full">
@@ -315,7 +347,7 @@ export default function creditNote() {
                   id={"remarks"}
                   placeholder={"insert remarks..."}
                   onChange={handleTextChange}
-                  value={creditNote.remarks}
+                  value={invoiceData.remarks}
                 />
               </div>
             </div>

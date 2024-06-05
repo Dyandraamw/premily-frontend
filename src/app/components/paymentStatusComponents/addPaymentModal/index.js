@@ -28,7 +28,7 @@ export default function addPayment({
   const [paymentDetails, setPaymentDetails] = useState({
     payment_detail_id: "PD-001",
     instalment_id: instalment_data[0].instalment_id,
-    payment_date: "",
+    payment_date: null,
     payment_amount: 0,
   });
 
@@ -59,7 +59,7 @@ export default function addPayment({
       });
   };
 
-  console.log(paymentDetails)
+  // console.log(paymentDetails)
   return (
     <div>
       <Modal
@@ -109,6 +109,7 @@ export default function addPayment({
                     bigLabel={"Payment Date"}
                     label={"Input Date"}
                     onChange={handleDate}
+                    // dateValue={dayjs(paymentDetails.)}
                   />
                   <Textfield
                     label={"Payment Amount"}

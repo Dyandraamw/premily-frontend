@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 
 
 
-export default function datePickerMUI({ id, bigLabel, label, onChange }) {
+export default function datePickerMUI({ id, bigLabel, label, onChange, dateValue }) {
   return (
     <div>
       <label className="block text-black text-lg font-bold mb-2">
@@ -45,7 +45,7 @@ export default function datePickerMUI({ id, bigLabel, label, onChange }) {
             "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
               { border: "3px solid green" }, //focus style
           }}
-          // value={value}
+          value={dateValue}
           onChange={onChange}
           
         />  

@@ -125,6 +125,7 @@ export default function debitNote() {
                 placeholder={"insert invoice number..."}
                 onChange={handleTextChange}
                 value={debitNote.invoice_id}
+                disabled={true}
               />
               {/* currency dropdown */}
               <div>
@@ -320,9 +321,6 @@ export default function debitNote() {
             </div>
 
             <div className="flex w-full justify-end mt-5">
-              <button className="p-2 border-[3px] drop-shadow-lg font-semibold  bg-white text-black rounded-lg  hover:bg-gray-200 border-green-700 mr-5">
-                Save Template
-              </button>
               <button className="p-2 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">
                 Submit
               </button>

@@ -11,7 +11,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp, MdEdit } from "react-icons/md";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import dayjs from "dayjs";
 
@@ -30,7 +31,6 @@ const theme = createTheme({
     },
   },
 });
-
 
 function Row(props) {
   const { row } = props;
@@ -52,8 +52,15 @@ function Row(props) {
           <TableCell component="th" scope="row">
             {row.instalment_number}
           </TableCell>
-          <TableCell align="left">{row.due_date}</TableCell>
+          <TableCell align="left">
+            {dayjs(row.due_date).format("DD/MM/YYYY")}
+          </TableCell>
           <TableCell align="left">{row.premium_inception}</TableCell>
+          {props.adjustment_data.map((data) => (
+            <TableCell align="left">
+              {data.adjustment_amount[props.rowIndex]}
+            </TableCell>
+          ))}
           <TableCell align="left">{row.total}</TableCell>
           <TableCell align="left">
             <div
@@ -68,11 +75,6 @@ function Row(props) {
             >
               {row.status}
             </div>
-          </TableCell>
-          <TableCell align="center">
-            <button className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-black hover:bg-white hover:text-black rounded-lg bg-yellow-500 border-yellow-500">
-              Edit
-            </button>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -94,7 +96,11 @@ function Row(props) {
                       {props.payment_data.map((nestedrow) =>
                         nestedrow.instalment_id == row.instalment_id ? (
                           <TableRow key={nestedrow.payment_id}>
-                            <TableCell>{nestedrow.payment_date}</TableCell>
+                            <TableCell>
+                              {dayjs(nestedrow.payment_date).format(
+                                "DD/MM/YYYY"
+                              )}
+                            </TableCell>
                             <TableCell align="left">
                               {nestedrow.payment_amount}
                             </TableCell>
@@ -105,7 +111,17 @@ function Row(props) {
                               {nestedrow.balance}
                             </TableCell>
                             <TableCell align="right">
-                              <button className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-black hover:bg-white hover:text-black rounded-lg bg-yellow-500 border-yellow-500">
+                              <button
+                                onClick={(e) =>
+                                  props.handleOpenEditPaymentModal([
+                                    nestedrow.payment_id,
+                                    nestedrow.instalment_id,
+                                    nestedrow.payment_date,
+                                    nestedrow.payment_amount,
+                                  ])
+                                }
+                                className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-black hover:bg-white hover:text-black rounded-lg bg-yellow-500 border-yellow-500"
+                              >
                                 Edit
                               </button>
                             </TableCell>
@@ -124,8 +140,13 @@ function Row(props) {
   );
 }
 
-
-export default function paymentStatusDetailTable({instalment_data, payment_data}) {
+export default function paymentStatusDetailTable({
+  instalment_data,
+  payment_data,
+  adjustment_data,
+  handleOpenEditPaymentModal,
+  handleOpenEditAdjustmentModal,
+}) {
   return (
     <ThemeProvider theme={theme}>
       <TableContainer>
@@ -136,14 +157,35 @@ export default function paymentStatusDetailTable({instalment_data, payment_data}
               <TableCell>Instalment</TableCell>
               <TableCell align="left">Due Date</TableCell>
               <TableCell align="left">Premium Inception (USD)</TableCell>
+              {adjustment_data.map((data) => (
+                <TableCell align="left">
+                  <div className="flex items-center">
+                    {data.adjustment_title}
+                    <FaEdit
+                      className="text-yellow-600 hover:text-green-700 ml-2 text-2xl"
+                      onClick={(e) => handleOpenEditAdjustmentModal([data.payment_status_id,
+                        data.adjustment_id,
+                        data.adjustment_title,
+                        data.adjustment_amount])}
+                    />
+                  </div>
+                </TableCell>
+              ))}
               <TableCell align="left">Total (USD)</TableCell>
               <TableCell align="left">Status</TableCell>
               <TableCell align="left"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {instalment_data.map((row) => (
-              <Row key={row.name} row={row} payment_data={payment_data} />
+            {instalment_data.map((data, index) => (
+              <Row
+                key={data.name}
+                row={data}
+                rowIndex={index}
+                payment_data={payment_data}
+                adjustment_data={adjustment_data}
+                handleOpenEditPaymentModal={handleOpenEditPaymentModal}
+              />
             ))}
           </TableBody>
         </Table>
