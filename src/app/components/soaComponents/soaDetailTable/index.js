@@ -25,7 +25,7 @@ const theme = createTheme({
   },
 });
 
-export default function tableMUI({ tableData }) {
+export default function tableMUI({ tableData, handleOpenModal }) {
   return (
     <ThemeProvider theme={theme}>
       <TableContainer>
@@ -60,7 +60,7 @@ export default function tableMUI({ tableData }) {
                   {row.invoice_id}
                 </TableCell>
                 <TableCell align="left">{row.recipient}</TableCell>
-                <TableCell align="left">{row.instalment}</TableCell>
+                <TableCell align="left">{row.instalment_number}</TableCell>
                 <TableCell align="left">{row.due_date}</TableCell>
                 <TableCell align="left">{row.currency}</TableCell>
                 <TableCell align="left">{row.amount}</TableCell>
@@ -79,7 +79,8 @@ export default function tableMUI({ tableData }) {
                         ? "bg-green-700"
                         : row.payment_status == "Outstanding"
                         ? "bg-yellow-600"
-                        : "bg-red-700") + " flex justify-center rounded-2xl p-2 text-white "
+                        : "bg-red-700") +
+                      " flex justify-center rounded-2xl p-2 text-white "
                     }
                   >
                     {row.payment_status}
@@ -87,7 +88,18 @@ export default function tableMUI({ tableData }) {
                 </TableCell>
                 <TableCell align="left">{row.aging}</TableCell>
                 <TableCell align="center">
-                  <button className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-black hover:bg-white hover:text-black rounded-lg bg-yellow-500 border-yellow-500">
+                  <button
+                    onClick={(e) =>
+                      handleOpenModal([
+                        row.soa_id_details,
+                        row.invoice_id,
+                        row.instalment_id,
+                        row.payment_date,
+                        row.payment_amount,
+                      ])
+                    }
+                    className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-black hover:bg-white hover:text-black rounded-lg bg-yellow-500 border-yellow-500"
+                  >
                     Edit
                   </button>
                 </TableCell>

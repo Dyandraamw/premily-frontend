@@ -154,15 +154,14 @@ const soaData = [
   ),
 ];
 export default function statementOfAccount() {
-  const handleSearch = (e) => {
-    const searchVal = e.target;
-  };
+  
 
   const [modalState, setModalState] = useState(false);
   const handleOpenModal = () => setModalState(true);
   const handleCloseModal = () => setModalState(false);
 
   
+
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <CreateSoaModal

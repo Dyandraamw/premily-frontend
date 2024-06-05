@@ -4,8 +4,8 @@ import Textfield from "../../textfield";
 import DatePickerMUI from "../../datePickerMUI";
 import dayjs from "dayjs";
 
-export default function invInstallmentForm({  }) {
-  const [insData, setInsData] = useState([{ due_date: null, amount: "" }]);
+export default function editInvInstallmentForm({ invoiceData }) {
+  const [insData, setInsData] = useState(invoiceData);
 
   const handleClick = () => {
     setInsData([
@@ -57,7 +57,7 @@ export default function invInstallmentForm({  }) {
                 id={"due_date"}
                 onChange={(e) => handleDateChange(e, i)}
                 // value={val.due_date}
-                // dateValue={dayjs(val.due_date)}
+                dateValue={dayjs(val.due_date)}
               />
             </div>
 

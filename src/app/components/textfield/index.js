@@ -9,6 +9,7 @@ export default function textfield({
   onChange,
   value,
   icon,
+  disabled
 }) {
   return (
     <div className="mb-4 w-full">
@@ -23,6 +24,7 @@ export default function textfield({
           placeholder={placeholder}
           onChange={onChange}
           value={value}
+          disabled={disabled}
         />
         <div className="absolute bg-white mr-1 px-2">{icon}</div>
       </div>

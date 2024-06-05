@@ -8,11 +8,14 @@ import { FaSearch } from "react-icons/fa";
 import dayjs from "dayjs";
 import Link from "next/link";
 import CreateSoaModal from "../../../components/soaComponents/createSoaModal";
+import EditItemModal from "../../../components/soaComponents/editItemModal";
 
 function createData(
+  soa_id_details,
   invoice_id,
   recipient,
-  instalment,
+  instalment_id,
+  instalment_number,
   due_date,
   currency,
   amount,
@@ -24,9 +27,11 @@ function createData(
   aging
 ) {
   return {
+    soa_id_details,
     invoice_id,
     recipient,
-    instalment,
+    instalment_id,
+  instalment_number,
     due_date,
     currency,
     amount,
@@ -41,8 +46,10 @@ function createData(
 
 const soaData = [
   createData(
+    "SOAD-001",
     "DN-001",
     "PT. Garuda Indonesia",
+    'INS-001',
     1,
     dayjs("05/07/2024").format("DD/MM/YYYY"),
     "USD",
@@ -55,8 +62,10 @@ const soaData = [
     0
   ),
   createData(
+    "SOAD-002",
     "CN-001",
     "PT. Garuda Indonesia",
+    'INS-002',
     2,
     dayjs("05/07/2024").format("DD/MM/YYYY"),
     "USD",
@@ -69,8 +78,10 @@ const soaData = [
     0
   ),
   createData(
+    "SOAD-003",
     "DN-001",
     "PT. Garuda Indonesia",
+    'INS-001',
     1,
     dayjs("05/07/2024").format("DD/MM/YYYY"),
     "USD",
@@ -83,8 +94,10 @@ const soaData = [
     0
   ),
   createData(
+    "SOAD-004",
     "CN-001",
     "PT. Garuda Indonesia",
+    'INS-002',
     2,
     dayjs("05/07/2024").format("DD/MM/YYYY"),
     "USD",
@@ -97,8 +110,10 @@ const soaData = [
     0
   ),
   createData(
+    "SOAD-005",
     "DN-001",
     "PT. Garuda Indonesia",
+    'INS-001',
     1,
     dayjs("05/07/2024").format("DD/MM/YYYY"),
     "USD",
@@ -111,8 +126,10 @@ const soaData = [
     0
   ),
   createData(
+    "SOAD-006",
     "CN-001",
     "PT. Garuda Indonesia",
+    'INS-002',
     2,
     dayjs("05/07/2024").format("DD/MM/YYYY"),
     "USD",
@@ -125,8 +142,10 @@ const soaData = [
     0
   ),
   createData(
+    "SOAD-007",
     "DN-001",
     "PT. Garuda Indonesia",
+    'INS-001',
     1,
     dayjs("05/07/2024").format("DD/MM/YYYY"),
     "USD",
@@ -139,8 +158,10 @@ const soaData = [
     0
   ),
   createData(
+    "SOAD-008",
     "CN-001",
     "PT. Garuda Indonesia",
+    'INS-002',
     2,
     dayjs("05/07/2024").format("DD/MM/YYYY"),
     "USD",
@@ -153,17 +174,41 @@ const soaData = [
     0
   ),
 ];
-export default function statementOfAccount({params}) {
+export default function statementOfAccount({ params }) {
   const handleSearch = (e) => {
     const searchVal = e.target;
   };
 
   const [modalState, setModalState] = useState(false);
-  const handleOpenModal = () => setModalState(true);
+  const [editSoaItem, setEditSoaItem] = useState({
+    soa_id_details: '',
+    invoice_id: '',
+    instalment_id: '',
+    payment_date: null,
+    payment_amount: 0,
+  });
+  const handleOpenModal = (data) => {
+    setModalState(true);
+    setEditSoaItem({ ...editSoaItem,
+      soa_id_details: data[0],
+      invoice_id: data[1],
+      instalment_id: data[2],
+      payment_date: data[3],
+      payment_amount: data[4],
+    })
+  };
   const handleCloseModal = () => setModalState(false);
 
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
+      <EditItemModal
+        modalState={modalState}
+        handleCloseModal={handleCloseModal}
+        editSoaItem={editSoaItem}
+        setEditSoaItem={setEditSoaItem}
+        // statementOfAccount={statementOfAccount}
+        // setStatementOfAccount={setEditStatementOfAccount}
+      />
       <div className="flex justify-between mb-2">
         <div className="">
           <h1 className="text-4xl text-green-700 font-bold">
@@ -174,11 +219,8 @@ export default function statementOfAccount({params}) {
           </p>
         </div>
         <div>
-          <button
-            className="p-2 px-4 border-[3px] mt-2 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
-          >
-            <Link href={params.soaId+'/soaAddItem'}>
-            Add Item</Link>
+          <button className="p-2 px-4 border-[3px] mt-2 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">
+            <Link href={params.soaId + "/soaAddItem"}>Add Item</Link>
           </button>
         </div>
       </div>
@@ -227,7 +269,7 @@ export default function statementOfAccount({params}) {
             <p>:&emsp;{dayjs().format("DD/MM/YYYY")}</p>
           </div>
         </div>
-        <TableMUI tableData={soaData} />
+        <TableMUI tableData={soaData} handleOpenModal={handleOpenModal} />
       </div>
     </div>
   );

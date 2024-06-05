@@ -2,10 +2,8 @@
 import React, { useState } from "react";
 import Textfield from "../../textfield";
 
-export default function sumInsuredForm({ invoiceData  }) {
-    const [siData, setSiData] = useState([
-        { item: "", sum_insured: "", notes: "" },
-      ]);
+export default function EditSumInsuredForm({ invoiceData  }) {
+    const [siData, setSiData] = useState(invoiceData);
     
       const handleClick = () => {
         setSiData([...siData,{item: "", sum_insured: "", notes: ""}])

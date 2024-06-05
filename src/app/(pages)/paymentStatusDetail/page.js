@@ -9,7 +9,9 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import CreateSoaModal from "../../components/soaComponents/createSoaModal";
 import AddPaymentModal from "../../components/paymentStatusComponents/addPaymentModal";
+import EditPaymentModal from "../../components/paymentStatusComponents/editPaymentModal";
 import AddAdjustmentModal from "../../components/paymentStatusComponents/addAdjustmentModal";
+import EditAdjustmentModal from "../../components/paymentStatusComponents/editAdjustmentModal";
 
 function createInstalment(
   instalment_id,
@@ -47,11 +49,30 @@ function createPayment(
   };
 }
 
+function createAdjustment(
+  payment_status_id,
+  adjustment_id,
+  adjustment_title,
+  adjustment_amount
+) {
+  return {
+    payment_status_id,
+    adjustment_id,
+    adjustment_title,
+    adjustment_amount,
+  };
+}
+
+const adjustment_data = [
+  createAdjustment("PS-001", "ADJ-001", "1st Adjustment", [100, 200, 300]),
+  createAdjustment("PS-001", "ADJ-002", "2nd Adjustment", [150, 250, 350]),
+];
+
 const instalment_data = [
   createInstalment(
     "INS-001",
     1,
-    dayjs("05/06/2024").format("DD/MM/YYYY"),
+    dayjs("2024-05-31").toISOString(),
     1000,
     1000,
     "Paid"
@@ -59,7 +80,15 @@ const instalment_data = [
   createInstalment(
     "INS-002",
     2,
-    dayjs("05/06/2024").format("DD/MM/YYYY"),
+    dayjs("2024-08-31").toISOString(),
+    1000,
+    1000,
+    "Paid"
+  ),
+  createInstalment(
+    "INS-003",
+    3,
+    dayjs("2024-12-31").toISOString(),
     1000,
     1000,
     "Paid"
@@ -70,7 +99,7 @@ const payment_data = [
   createPayment(
     "PAY-001",
     "INS-001",
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
+    dayjs("2024-05-15").toISOString(),
     500,
     500,
     -500
@@ -78,7 +107,7 @@ const payment_data = [
   createPayment(
     "PAY-002",
     "INS-001",
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
+    dayjs("2024-07-31").toISOString(),
     500,
     500,
     0
@@ -86,7 +115,7 @@ const payment_data = [
   createPayment(
     "PAY-003",
     "INS-002",
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
+    dayjs("2024-05-31").toISOString(),
     500,
     500,
     -500
@@ -94,7 +123,15 @@ const payment_data = [
   createPayment(
     "PAY-004",
     "INS-002",
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
+    dayjs("2024-05-31").toISOString(),
+    500,
+    500,
+    0
+  ),
+  createPayment(
+    "PAY-005",
+    "INS-003",
+    dayjs("2024-05-31").toISOString(),
     500,
     500,
     0
@@ -106,9 +143,51 @@ export default function paymentStatusDetail({ params }) {
   const handleOpenPaymentModal = () => setPaymentModalState(true);
   const handleClosePaymentModal = () => setPaymentModalState(false);
 
+  const [editPaymentModal, setEditPaymentModal] = useState(false);
+  const [editPayment, setEditPayment] = useState({
+    payment_id: "",
+    instalment_id: "",
+    payment_date: null,
+    payment_amount: "",
+  });
+
+  const handleOpenEditPaymentModal = (data) => {
+    setEditPaymentModal(true);
+    // console.log(data)
+    setEditPayment({
+      ...editPayment,
+      payment_id: data[0],
+      instalment_id: data[1],
+      payment_date: data[2],
+      payment_amount: data[3],
+    });
+  };
+  const handleCloseEditPaymentModal = () => setEditPaymentModal(false);
+
   const [adjustmentModalState, setAdjustmentModalState] = useState(false);
   const handleOpenAdjustmentModal = () => setAdjustmentModalState(true);
   const handleCloseAdjustmentModal = () => setAdjustmentModalState(false);
+
+  const [editAdjustmentModal, setEditAdjustmentModal] = useState(false);
+  const [editAdjustment, setEditAdjustment] = useState({
+    payment_status_id: "",
+    adjustment_id: "",
+    adjustment_title: "",
+    adjustment_amount: new Array(instalment_data.length).fill(0),
+  });
+
+  const handleOpenEditAdjustmentModal = (data) => {
+    setEditAdjustmentModal(true);
+    console.log(data);
+    setEditAdjustment({
+      ...editAdjustment,
+      payment_status_id: data[0],
+      adjustment_id: data[1],
+      adjustment_title: data[2],
+      adjustment_amount: data[3],
+    });
+  };
+  const handleCloseEditAdjustmentModal = () => setEditAdjustmentModal(false);
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <AddPaymentModal
@@ -116,10 +195,25 @@ export default function paymentStatusDetail({ params }) {
         handleCloseModal={handleClosePaymentModal}
         instalment_data={instalment_data}
       />
+      <EditPaymentModal
+        modalState={editPaymentModal}
+        handleCloseModal={handleCloseEditPaymentModal}
+        instalment_data={instalment_data}
+        editPayment={editPayment}
+        setEditPayment={setEditPayment}
+      />
       <AddAdjustmentModal
         modalState={adjustmentModalState}
         handleCloseModal={handleCloseAdjustmentModal}
         instalment_data={instalment_data}
+        
+      />
+      <EditAdjustmentModal
+        modalState={editAdjustmentModal}
+        handleCloseModal={handleCloseEditAdjustmentModal}
+        instalment_data={instalment_data}
+        editAdjustment={editAdjustment}
+        setEditAdjustment={setEditAdjustment}
       />
       <div className="flex justify-between mb-2">
         <div className="">
@@ -164,6 +258,9 @@ export default function paymentStatusDetail({ params }) {
         <TableMUI
           instalment_data={instalment_data}
           payment_data={payment_data}
+          adjustment_data={adjustment_data}
+          handleOpenEditPaymentModal={handleOpenEditPaymentModal}
+          handleOpenEditAdjustmentModal={handleOpenEditAdjustmentModal}
         />
       </div>
 

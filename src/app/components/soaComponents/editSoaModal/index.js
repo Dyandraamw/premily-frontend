@@ -19,33 +19,32 @@ const style = {
   borderRadius: 3,
 };
 
-export default function createSoaModal({ modalState, handleCloseModal }) {
-  const [statementOfAccount, setStatementOfAccount] = useState({
-    soa_id: "SOA-001",
-    name_of_insured: "",
-    period_start: null,
-    period_end: null,
-  });
+export default function editSoaModal({
+  editSoaModal,
+  handleCloseEditSoaModal,
+  editStatementOfAccount,
+  setEditStatementOfAccount,
+}) {
 
   const handleTextfield = (e) => {
-    setStatementOfAccount({
-      ...statementOfAccount,
+    setEditStatementOfAccount({
+      ...editStatementOfAccount,
       [e.target.id]: e.target.value,
     });
   };
 
   const handleDateStart = (e) => {
     const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
-    setStatementOfAccount({
-      ...statementOfAccount,
+    setEditStatementOfAccount({
+      ...editStatementOfAccount,
       period_start: dateformat,
     });
   };
 
   const handleDateEnd = (e) => {
     const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
-    setStatementOfAccount({
-      ...statementOfAccount,
+    setEditStatementOfAccount({
+      ...editStatementOfAccount,
       period_end: dateformat,
     });
   };
@@ -53,10 +52,12 @@ export default function createSoaModal({ modalState, handleCloseModal }) {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
+
+  // console.log(editStatementOfAccount.payment_start)
   return (
     <div>
       <Modal
-        open={modalState}
+        open={editSoaModal}
         // onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -64,7 +65,7 @@ export default function createSoaModal({ modalState, handleCloseModal }) {
         <Box sx={style}>
           <form onSubmit={handleSubmit}>
             <button
-              onClick={handleCloseModal}
+              onClick={handleCloseEditSoaModal}
               className="flex justify-end w-full text-xl font-bold  hover:text-green-700"
             >
               X
@@ -72,10 +73,10 @@ export default function createSoaModal({ modalState, handleCloseModal }) {
             <div className="">
               <div>
                 <h1 className="flex w-full justify-center text-2xl  font-semibold">
-                  Create a Statement of Account
+                  Edit a Statement of Account
                 </h1>
                 <p className="flex w-full justify-center font-medium text-md text-gray-500">
-                  Input detail to create a new statement of account
+                  Edit the details of existing Statement of Account
                 </p>
               </div>
               <div className="mx-5">
@@ -84,16 +85,16 @@ export default function createSoaModal({ modalState, handleCloseModal }) {
                     label={"Statement of Account Number"}
                     id={"soa_id"}
                     placeholder={"insert soa number..."}
-                    onChange={handleTextfield}
-                    value={statementOfAccount.soa_id}
                     disabled={true}
+                    onChange={handleTextfield}
+                    value={editStatementOfAccount.soa_id}
                   />
                   <Textfield
                     label={"Name of Insured"}
                     id={"name_of_insured"}
                     placeholder={"Insert name of insured..."}
                     onChange={handleTextfield}
-                    value={statementOfAccount.name_of_insured}
+                    value={editStatementOfAccount.name_of_insured}
                   />
                 </div>
                 <div className="flex justify-between ">
@@ -101,6 +102,7 @@ export default function createSoaModal({ modalState, handleCloseModal }) {
                     bigLabel={"Period of Policy"}
                     label={"start date"}
                     onChange={handleDateStart}
+                    dateValue={dayjs(editStatementOfAccount.period_start)}
                   />
 
                   <p className="flex justify-center mt-10 text-black text-lg font-bold w-1/3">
@@ -110,6 +112,7 @@ export default function createSoaModal({ modalState, handleCloseModal }) {
                     bigLabel={<p>&nbsp;</p>}
                     label={"end date"}
                     onChange={handleDateEnd}
+                    dateValue={dayjs(editStatementOfAccount.period_end)}
                   />
                 </div>
                 <button className=" w-full my-5 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">

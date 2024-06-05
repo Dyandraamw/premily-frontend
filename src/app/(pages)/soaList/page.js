@@ -9,91 +9,116 @@ import { FaSearch } from "react-icons/fa";
 import dayjs from "dayjs";
 import Link from "next/link";
 import CreateSoaModal from "../../components/soaComponents/createSoaModal";
+import EditSoaModal from "../../components/soaComponents/editSoaModal";
 
 function createData(soa_id, name_of_insured, period_start, period_end) {
-    return { soa_id, name_of_insured, period_start, period_end };
-  }
+  return { soa_id, name_of_insured, period_start, period_end };
+}
 
-  const soaData = [
-    createData(
-      "SOA-001",
-      "PT. Garuda Indonesia",
-      dayjs("05/07/2024").format("DD/MM/YYYY"),
-      dayjs("06/07/2026").format("DD/MM/YYYY")
-    ),
-    createData(
-      "SOA-002",
-      "PT. Garuda Indonesia",
-      dayjs("05/07/2024").format("DD/MM/YYYY"),
-      dayjs("06/07/2026").format("DD/MM/YYYY")
-    ),
-    createData(
-      "SOA-003",
-      "PT. Garuda Indonesia",
-      dayjs("05/07/2024").format("DD/MM/YYYY"),
-      dayjs("06/07/2026").format("DD/MM/YYYY")
-    ),
-    createData(
-      "SOA-004",
-      "PT. Garuda Indonesia",
-      dayjs("05/07/2024").format("DD/MM/YYYY"),
-      dayjs("06/07/2026").format("DD/MM/YYYY")
-    ),
-    createData(
-      "SOA-005",
-      "PT. Garuda Indonesia",
-      dayjs("05/07/2024").format("DD/MM/YYYY"),
-      dayjs("06/07/2026").format("DD/MM/YYYY")
-    ),
-    createData(
-      "SOA-001",
-      "PT. Garuda Indonesia",
-      dayjs("05/07/2024").format("DD/MM/YYYY"),
-      dayjs("06/07/2026").format("DD/MM/YYYY")
-    ),
-    createData(
-      "SOA-001",
-      "PT. Garuda Indonesia",
-      dayjs("05/07/2024").format("DD/MM/YYYY"),
-      dayjs("06/07/2026").format("DD/MM/YYYY")
-    ),
-    createData(
-      "SOA-001",
-      "PT. Garuda Indonesia",
-      dayjs("05/07/2024").format("DD/MM/YYYY"),
-      dayjs("06/07/2026").format("DD/MM/YYYY")
-    ),
-  ];
+const soaData = [
+  createData(
+    "SOA-001",
+    "PT. Garuda Indonesia",
+    dayjs("2024-05-07").toISOString(),
+    dayjs("2026-06-08").toISOString()
+  ),
+  createData(
+    "SOA-002",
+    "PT. Sriwijaya",
+    dayjs("2024-04-10").toISOString(),
+    dayjs("2025-05-05").toISOString()
+  ),
+  createData(
+    "SOA-003",
+    "PT. Alda Air",
+    dayjs("2024-12-30").toISOString(),
+    dayjs("2026-07-12").toISOString()
+  ),
+  createData(
+    "SOA-004",
+    "PT. Citilink",
+    dayjs("2023-02-05").toISOString(),
+    dayjs("2024-06-11").toISOString()
+  ),
+  createData(
+    "SOA-005",
+    "PT. Air Asia",
+    dayjs("2022-02-02").toISOString(),
+    dayjs("2023-03-03").toISOString()
+  ),
+  createData(
+    "SOA-006",
+    "PT. Lion Air",
+    dayjs("2024-11-20").toISOString(),
+    dayjs("2026-10-19").toISOString()
+  ),
+  createData(
+    "SOA-007",
+    "PT. Garuda Indonesia",
+    dayjs("2024-04-04").toISOString(),
+    dayjs("2026-06-06").toISOString()
+  ),
+  createData(
+    "SOA-008",
+    "PT. Garuda Indonesia",
+    dayjs("2024-09-16").toISOString(),
+    dayjs("2026-11-20").toISOString()
+  ),
+];
 export default function soaList() {
-  
+  const [query, setQuery] = useState("");
+  const [filteredData, setFilteredData] = useState(soaData);
 
   const handleSearch = (e) => {
-    const searchVal = e.target;
+    const searchQuery = e.target.value;
+    //console.log(e.target.value)
+    setQuery(searchQuery);
+
+    const filteredSoa = soaData.filter(
+      (data) =>
+        data.soa_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.name_of_insured.toLowerCase().includes(searchQuery.toLowerCase())
+      // data.period_start.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      // data.period_end.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredData(filteredSoa);
   };
 
   const [modalState, setModalState] = useState(false);
   const handleOpenModal = () => setModalState(true);
   const handleCloseModal = () => setModalState(false);
 
-  // const [siData, setSiData] = useState([
-  //   { item: "", sum_insured: "", notes: "" },
-  // ]);
+  const [editStatementOfAccount, setEditStatementOfAccount] = useState({
+    soa_id: "",
+    name_of_insured: "",
+    period_start: null,
+    period_end: null,
+  });
+  const [editSoaModal, setEditSoaModal] = useState(false);
+  const handleOpenEditSoaModal = (data) => {
+    setEditSoaModal(true);
+    setEditStatementOfAccount({
+      ...editStatementOfAccount,
+      soa_id: data[0],
+      name_of_insured: data[1],
+      period_start: data[2],
+      period_end: data[3],
+    });
+  };
+  const handleCloseEditSoaModal = () => setEditSoaModal(false);
 
-  // const handleAddSiRow = () => {
-  //   setSiData([...siData,{item: "", sum_insured: "", notes: ""}])
-  // };
-
-  // const handleSiChange = (e,i) => {
-  //   const {id,value} = e.target
-  //   const changeValue = [...siData]
-  //   changeValue[i][id] = value
-  //   setSiData(changeValue)
-  // };
-
-  // const handleDeleteSiRow = () => {};
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
-      <CreateSoaModal modalState={modalState} handleCloseModal={handleCloseModal} />
+      <CreateSoaModal
+        modalState={modalState}
+        handleCloseModal={handleCloseModal}
+      />
+      <EditSoaModal
+        editSoaModal={editSoaModal}
+        handleCloseModal={handleCloseEditSoaModal}
+        editStatementOfAccount={editStatementOfAccount}
+        setEditStatementOfAccount={setEditStatementOfAccount}
+      />
       <div className="flex justify-between mb-2">
         <div className="">
           <h1 className="text-4xl text-green-700 font-bold">
@@ -104,7 +129,10 @@ export default function soaList() {
           </p>
         </div>
         <div>
-          <button onClick={handleOpenModal} className="p-2 px-4 border-[3px] mt-2 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">
+          <button
+            onClick={handleOpenModal}
+            className="p-2 px-4 border-[3px] mt-2 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
+          >
             Create Statement of Account
           </button>
         </div>
@@ -119,7 +147,6 @@ export default function soaList() {
           />
         </div>
         <div className="w-1/3 flex justify-between ">
-          <DatePickerMUI label={"policy period"} />
           <select
             id="currency"
             name="currency"
@@ -136,7 +163,10 @@ export default function soaList() {
         </div>
       </div>
       <div className="bg-white rounded-lg w-min-[1500px] w-max-full mt-5 p-5 h-[900px] overflow-y-auto">
-        <TableMUI tableData={soaData} />
+        <TableMUI
+          tableData={filteredData}
+          handleOpenEditSoaModal={handleOpenEditSoaModal}
+        />
       </div>
     </div>
   );
