@@ -11,7 +11,6 @@ import CreateSoaModal from "../../components/soaComponents/createSoaModal";
 import AddPaymentModal from "../../components/paymentStatusComponents/addPaymentModal";
 import AddAdjustmentModal from "../../components/paymentStatusComponents/addAdjustmentModal";
 
-
 function createInstalment(
   instalment_id,
   instalment_number,
@@ -130,10 +129,16 @@ export default function paymentStatusDetail({ params }) {
           </p>
         </div>
         <div>
-          <button onClick={handleOpenPaymentModal} className="p-2 px-4 border-[3px] mt-2 mr-5 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">
+          <button
+            onClick={handleOpenPaymentModal}
+            className="p-2 px-4 border-[3px] mt-2 mr-5 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
+          >
             Add Payment
           </button>
-          <button onClick={handleOpenAdjustmentModal} className="p-2 px-4 border-[3px] mt-2 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">
+          <button
+            onClick={handleOpenAdjustmentModal}
+            className="p-2 px-4 border-[3px] mt-2 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
+          >
             Add Adjustment
           </button>
         </div>
