@@ -175,8 +175,22 @@ const soaData = [
   ),
 ];
 export default function statementOfAccount({ params }) {
+  const [query, setQuery] = useState("");
+  const [filteredData, setFilteredData] = useState(soaData);
+
   const handleSearch = (e) => {
-    const searchVal = e.target;
+    const searchQuery = e.target.value;
+    //console.log(e.target.value)
+    setQuery(searchQuery);
+
+    const filteredSoa = soaData.filter(
+      (data) =>
+        data.invoice_id.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
+        data.recipient.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.payment_status.toLowerCase().includes(searchQuery.toLowerCase()) 
+      // data.period_end.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredData(filteredSoa);
   };
 
   const [modalState, setModalState] = useState(false);
@@ -230,13 +244,13 @@ export default function statementOfAccount({ params }) {
         <div className="w-1/3">
           <Textfield
             id={"search_bar"}
-            placeholder={"search invoice number, recipient..."}
+            placeholder={"search invoice number, recipient, status..."}
             onChange={handleSearch}
             icon={<FaSearch />}
           />
         </div>
-        <div className="w-1/3 flex justify-between ">
-          <DatePickerMUI label={"Due Date"} />
+        <div className="w-1/3 flex justify-end ">
+          
           <select
             id="currency"
             name="currency"
@@ -269,7 +283,7 @@ export default function statementOfAccount({ params }) {
             <p>:&emsp;{dayjs().format("DD/MM/YYYY")}</p>
           </div>
         </div>
-        <TableMUI tableData={soaData} handleOpenModal={handleOpenModal} />
+        <TableMUI tableData={filteredData} handleOpenModal={handleOpenModal} />
       </div>
     </div>
   );

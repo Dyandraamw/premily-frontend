@@ -9,7 +9,7 @@ import { FaSearch } from "react-icons/fa";
 import dayjs from "dayjs";
 import Link from "next/link";
 import CreateSoaModal from "../../components/soaComponents/createSoaModal";
-import EditSoaModal from "../../components/soaComponents/editSoaModal";
+import EditSoaModal from "../../components/soaComponents/deleteSoaModal";
 
 function createData(soa_id, name_of_insured, period_start, period_end) {
   return { soa_id, name_of_insured, period_start, period_end };
@@ -68,7 +68,9 @@ const soaData = [
 export default function soaList() {
   const [query, setQuery] = useState("");
   const [filteredData, setFilteredData] = useState(soaData);
+  const [sortQuery, setSortQuery] = useState("");
 
+  // filter control
   const handleSearch = (e) => {
     const searchQuery = e.target.value;
     //console.log(e.target.value)
@@ -84,29 +86,72 @@ export default function soaList() {
     setFilteredData(filteredSoa);
   };
 
+  const handleSortQuery = (e) => {
+    const sortValue = e.target.value;
+    setSortQuery(sortValue);
+  };
+
+  const handleSort = (data) => {
+    if (sortQuery == "asc_id") {
+      data.sort(
+        (a, b) =>
+          parseInt(a.soa_id.slice(4, 7)) - parseInt(b.soa_id.slice(4, 7))
+      );
+    }else if (sortQuery == "desc_id") {
+      data.sort(
+        (a, b) =>
+          parseInt(b.soa_id.slice(4, 7)) - parseInt(a.soa_id.slice(4, 7))
+      );
+    }else if (sortQuery == "asc_company") {
+      data.sort(
+        (a, b) =>
+          a.name_of_insured.localeCompare(b.name_of_insured)
+      );
+    }else if (sortQuery == "desc_company") {
+      data.sort(
+        (a, b) =>
+          b.name_of_insured.localeCompare(a.name_of_insured)
+      );
+    }else if (sortQuery == "new_start") {
+      data.sort(
+        (a, b) =>
+          -a.period_start.localeCompare(b.period_start)
+      );
+    }else if (sortQuery == "old_start") {
+      data.sort(
+        (a, b) =>
+          a.period_start.localeCompare(b.period_start)
+      );
+    }
+  };
+
+  handleSort(filteredData);
+
+  // modal control
   const [modalState, setModalState] = useState(false);
   const handleOpenModal = () => setModalState(true);
   const handleCloseModal = () => setModalState(false);
 
-  const [editStatementOfAccount, setEditStatementOfAccount] = useState({
+  const [detailStatementOfAccount, setDetailStatementOfAccount] = useState({
     soa_id: "",
     name_of_insured: "",
     period_start: null,
     period_end: null,
   });
-  const [editSoaModal, setEditSoaModal] = useState(false);
-  const handleOpenEditSoaModal = (data) => {
-    setEditSoaModal(true);
-    setEditStatementOfAccount({
-      ...editStatementOfAccount,
+  const [detailSoaModal, setDetailSoaModal] = useState(false);
+  const handleOpenDetailSoaModal = (data) => {
+    setDetailSoaModal(true);
+    setDetailStatementOfAccount({
+      ...detailStatementOfAccount,
       soa_id: data[0],
       name_of_insured: data[1],
       period_start: data[2],
       period_end: data[3],
     });
   };
-  const handleCloseEditSoaModal = () => setEditSoaModal(false);
+  const handleCloseDetailSoaModal = () => setDetailSoaModal(false);
 
+  //console.log(filteredData);
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <CreateSoaModal
@@ -114,10 +159,10 @@ export default function soaList() {
         handleCloseModal={handleCloseModal}
       />
       <EditSoaModal
-        editSoaModal={editSoaModal}
-        handleCloseModal={handleCloseEditSoaModal}
-        editStatementOfAccount={editStatementOfAccount}
-        setEditStatementOfAccount={setEditStatementOfAccount}
+        detailSoaModal={detailSoaModal}
+        handleCloseModal={handleCloseDetailSoaModal}
+        detailStatementOfAccount={detailStatementOfAccount}
+        setDetailStatementOfAccount={setDetailStatementOfAccount}
       />
       <div className="flex justify-between mb-2">
         <div className="">
@@ -146,26 +191,30 @@ export default function soaList() {
             icon={<FaSearch />}
           />
         </div>
-        <div className="w-1/3 flex justify-between ">
+        <div className="w-1/3 flex justify-end ">
           <select
             id="currency"
             name="currency"
             className="drop-shadow-md focus:border-green-700 focus:border-[3px] border-[2.5px] border-gray-500 rounded-lg  h-[40px]  text-gray-700  focus:outline-none focus:shadow-outline mt-2"
             placeholder="sort"
+            onChange={handleSortQuery}
           >
             <option value="" selected disabled>
               Sort
             </option>
-            <option value="invoice_id">Invoice Number</option>
-            <option value="issued_date">Issued Date</option>
-            <option value="amount">Amount</option>
+            <option value="asc_id">Ascending SoA Number</option>
+            <option value="desc_id">Descending SoA Number</option>
+            <option value="asc_company">Ascending Insured Company</option>
+            <option value="desc_company">Descending Insured Company</option>
+            <option value="new_start">Newest Period Start</option>
+            <option value="old_start">Oldest Period Start</option>
           </select>
         </div>
       </div>
       <div className="bg-white rounded-lg w-min-[1500px] w-max-full mt-5 p-5 h-[900px] overflow-y-auto">
         <TableMUI
           tableData={filteredData}
-          handleOpenEditSoaModal={handleOpenEditSoaModal}
+          handleOpenDetailSoaModal={handleOpenDetailSoaModal}
         />
       </div>
     </div>

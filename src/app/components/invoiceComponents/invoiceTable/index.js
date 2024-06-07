@@ -29,7 +29,7 @@ const theme = createTheme({
 
 
 
-export default function tableMUI({tableData}) {
+export default function tableMUI({tableData, handleOpenModal}) {
   return (
     <ThemeProvider theme={theme}>
       <TableContainer>
@@ -54,14 +54,14 @@ export default function tableMUI({tableData}) {
                   {row.invoice_id}</Link>
                 </TableCell>
                 <TableCell align="left">{row.recipient}</TableCell>
-                <TableCell align="left">{row.issued_date}</TableCell>
-                <TableCell align="left">{row.policy_period}</TableCell>
+                <TableCell align="left">{dayjs(row.issued_date).format('DD/MM/YYYY')}</TableCell>
+                <TableCell align="left">{dayjs(row.period_start).format('DD/MM/YYYY')}-{dayjs(row.period_end).format('DD/MM/YYYY')}</TableCell>
                 <TableCell align="left">{row.amount}</TableCell>
-                {/* <TableCell sx={{ borderBottom: "none" }} align="center">
-                  <button className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-black hover:bg-white hover:text-black rounded-lg bg-yellow-500 border-yellow-500">
-                    Edit
+                <TableCell sx={{ borderBottom: "none" }} align="center">
+                  <button onClick={(e)=>handleOpenModal(row.invoice_id)} className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600">
+                    Delete
                   </button>
-                </TableCell> */}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

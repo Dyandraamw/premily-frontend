@@ -12,42 +12,41 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 700,
+  width: 400,
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
   borderRadius: 3,
 };
 
-export default function editSoaModal({
-  editSoaModal,
-  handleCloseEditSoaModal,
-  editStatementOfAccount,
-  setEditStatementOfAccount,
+export default function deleteInvoiceModal({
+  modalState,
+  handleCloseModal,
+  delInvoice,
+  setdetailStatementOfAccount,
 }) {
+  // const handleTextfield = (e) => {
+  //   setEditStatementOfAccount({
+  //     ...editStatementOfAccount,
+  //     [e.target.id]: e.target.value,
+  //   });
+  // };
 
-  const handleTextfield = (e) => {
-    setEditStatementOfAccount({
-      ...editStatementOfAccount,
-      [e.target.id]: e.target.value,
-    });
-  };
+  // const handleDateStart = (e) => {
+  //   const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
+  //   setEditStatementOfAccount({
+  //     ...editStatementOfAccount,
+  //     period_start: dateformat,
+  //   });
+  // };
 
-  const handleDateStart = (e) => {
-    const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
-    setEditStatementOfAccount({
-      ...editStatementOfAccount,
-      period_start: dateformat,
-    });
-  };
-
-  const handleDateEnd = (e) => {
-    const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
-    setEditStatementOfAccount({
-      ...editStatementOfAccount,
-      period_end: dateformat,
-    });
-  };
+  // const handleDateEnd = (e) => {
+  //   const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
+  //   setEditStatementOfAccount({
+  //     ...editStatementOfAccount,
+  //     period_end: dateformat,
+  //   });
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -57,30 +56,30 @@ export default function editSoaModal({
   return (
     <div>
       <Modal
-        open={editSoaModal}
+        open={modalState}
         // onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
           <form onSubmit={handleSubmit}>
-            <button
-              onClick={handleCloseEditSoaModal}
+            {/* <button
+              onClick={handleCloseModal}
               className="flex justify-end w-full text-xl font-bold  hover:text-green-700"
             >
               X
-            </button>
+            </button> */}
             <div className="">
               <div>
                 <h1 className="flex w-full justify-center text-2xl  font-semibold">
-                  Edit a Statement of Account
+                  Delete Invoice
                 </h1>
-                <p className="flex w-full justify-center font-medium text-md text-gray-500">
-                  Edit the details of existing Statement of Account
+                <p className=" w-full text-center justify-center font-medium text-md text-gray-500">
+                  Are you sure you want to delete Invoice number <b>{delInvoice}</b> 
                 </p>
               </div>
               <div className="mx-5">
-                <div className="w-1/2 mt-5">
+                {/* <div className="w-1/2 mt-5">
                   <Textfield
                     label={"Statement of Account Number"}
                     id={"soa_id"}
@@ -114,10 +113,15 @@ export default function editSoaModal({
                     onChange={handleDateEnd}
                     dateValue={dayjs(editStatementOfAccount.period_end)}
                   />
+                </div> */}
+                <div className="flex justify-between">
+                  <button onClick={handleCloseModal} className="w-1/2 my-5 mx-1 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-slate-700 border-slate-700">
+                    Cancel
+                  </button>
+                  <button className="w-1/2 my-5 mx-1 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600">
+                    Delete
+                  </button>
                 </div>
-                <button className=" w-full my-5 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">
-                  Submit
-                </button>
               </div>
             </div>
           </form>

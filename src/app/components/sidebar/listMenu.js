@@ -12,13 +12,13 @@ export default function listMenu() {
       <div className="w-full">
         {/* Dashboard button */}
         <div className="flex items-center w-full hover:bg-green-700 hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold rounded-lg">
-          <BiSolidDashboard className="mx-5 text-2xl" />
+          <BiSolidDashboard className="mx-5 text-3xl" />
           <Link href={"/"}>Dashboard</Link>
         </div>
 
         {/* Invoice List button */}
         <div className="flex items-center w-full hover:bg-green-700 hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold rounded-lg">
-          <FaFileInvoiceDollar className="mx-5 text-2xl" />
+          <FaFileInvoiceDollar className="mx-5 text-3xl" />
           <Link href={"/invoiceList"}>Invoice List</Link>
         </div>
 
@@ -26,27 +26,25 @@ export default function listMenu() {
         <div className="flex items-center w-full  hover:bg-green-700 hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold rounded-lg">
           <IoMdListBox className="mx-5 text-3xl" />
           <Link href={"/soaList"}>Statement of Account</Link>
-          
         </div>
 
         {/* Payment Status button */}
         <div className="flex items-center w-full  hover:bg-green-700 hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold rounded-lg">
-          <MdFactCheck className="mx-5 text-2xl" />
+          <MdFactCheck className="mx-5 text-3xl" />
           <Link href={"/paymentStatus"}>Payment Status</Link>
-          
         </div>
       </div>
 
       <div className="w-full">
         {/* Staff Access button */}
         <div className="flex items-center w-full  hover:bg-green-700 hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold rounded-lg">
-          <FaUserGear className="mx-5 text-2xl" />
+          <FaUserGear className="mx-5 text-3xl" />
           <Link href={"/StaffAccess"}>Staff Access</Link>
         </div>
 
         {/* Profile button */}
         <div className="flex items-center w-full  hover:bg-green-700 hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold rounded-lg">
-          <FaCircleUser className="mx-5 text-2xl" />
+          <FaCircleUser className="mx-5 text-3xl" />
           <Link href={"/Profile"}>Profile</Link>
         </div>
 
