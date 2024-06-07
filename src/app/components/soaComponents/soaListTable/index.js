@@ -26,7 +26,7 @@ const theme = createTheme({
   },
 });
 
-export default function tableMUI({ tableData, handleOpenEditSoaModal }) {
+export default function tableMUI({ tableData, handleOpenDetailSoaModal }) {
   return (
     <ThemeProvider theme={theme}>
       <TableContainer>
@@ -60,16 +60,16 @@ export default function tableMUI({ tableData, handleOpenEditSoaModal }) {
                 <TableCell sx={{ borderBottom: "none" }} align="center">
                   <button
                     onClick={(e) =>
-                      handleOpenEditSoaModal([
+                      handleOpenDetailSoaModal([
                         row.soa_id,
                         row.name_of_insured,
                         row.period_start,
                         row.period_end
                       ])
                     }
-                    className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-black hover:bg-white hover:text-black rounded-lg bg-yellow-500 border-yellow-500"
+                    className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600"
                   >
-                    Edit
+                    Delete
                   </button>
                 </TableCell>
               </TableRow>

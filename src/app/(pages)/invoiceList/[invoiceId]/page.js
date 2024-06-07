@@ -147,9 +147,10 @@ export default function invoiceDetail({ params }) {
               <div class="col-span-2 grid grid-cols-1 divide-y-[2.5px] divide-black">
                 <div className="flex justify-center font-bold py-2">AMOUNT</div>
                 <div className="px-3">
-                  <b>
-                    {invoice_data.currency} &emsp;{invoice_data.net_premium.toLocaleString()}
-                  </b>
+                  <div className="flex items-center">
+                    <b>{invoice_data.currency}</b>
+                    <p className="text-right">&emsp;{invoice_data.net_premium.toLocaleString()}</p>
+                  </div>
                   <p>
                     {invoice_data.currency} &emsp;{invoice_data.brokerage.toLocaleString()}
                   </p>
