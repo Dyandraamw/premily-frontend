@@ -5,6 +5,7 @@ import SideTextfield from "../../components/sideTextfield";
 import DatePickerMUI from "../../components/datePickerMUI";
 import SumInsuredForm from "@/app/components/invoiceComponents/sumInsuredForm";
 import InvInstallmentForm from "../../components/invoiceComponents/invInstallmentForm";
+import ImgDragDrop from "../../components/imgDragDrop";
 
 export default function debitNote() {
   const [debitNote, setDebitNote] = useState({
@@ -41,22 +42,6 @@ export default function debitNote() {
     e.preventDefault();
   };
 
-  // const [siData, setSiData] = useState([
-  //   { item: "", sum_insured: "", notes: "" },
-  // ]);
-
-  // const handleAddSiRow = () => {
-  //   setSiData([...siData,{item: "", sum_insured: "", notes: ""}])
-  // };
-
-  // const handleSiChange = (e,i) => {
-  //   const {id,value} = e.target
-  //   const changeValue = [...siData]
-  //   changeValue[i][id] = value
-  //   setSiData(changeValue)
-  // };
-
-  // const handleDeleteSiRow = () => {};
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <div className="mb-2">
@@ -74,10 +59,7 @@ export default function debitNote() {
           <div>
             {/* company details */}
             <div className="flex justify-between">
-              <div className="w-[300px] border-2 border-black h-[300px]">
-                {" "}
-                image sementara
-              </div>
+            <ImgDragDrop className={'w-[250px]  h-[260px]'}/>
               <div className="flex flex-col w-96 mt-5">
                 <Textfield
                   label={"Company Name"}

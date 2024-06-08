@@ -13,7 +13,7 @@ export default function textfield({
 }) {
   return (
     <div className="mb-4 w-full">
-      <label className="block text-black text-lg font-bold mb-2" for={id}>
+      <label className="block text-black text-lg font-bold mb-2" htmlFor={id}>
         {label}
       </label>
       <div className="w-full flex justify-end items-center relative">
