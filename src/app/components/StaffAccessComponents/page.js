@@ -81,14 +81,10 @@ export default function TableUser({ tableData }) {
             ))}
           </TableBody>
         </Table>
-        <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
-          {/* <div className="p-6">
-            <h3 className="text-xl font-semibold text-gray-600 mb-5">
-              Title Modal
-            </h3>
-          </div> */}
-          Modal Modal Modal
-        </Modal>
+        <Modal
+          isVisible={showModal}
+          onClose={() => setShowModal(false)}
+        ></Modal>
       </TableContainer>
     </ThemeProvider>
   );

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+// import { DataGrid } from "@mui/x-data-grid";
 import Radio from "@mui/material/Radio";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Table } from "@mui/material";
@@ -27,16 +27,18 @@ const theme = createTheme({
   },
 });
 
+export default function AddItem({
+  tableData,
+  handleRadioChange,
+  selectedValue,
+}) {
+  //   const [selectedValue, setSelectedValue] = useState(0);
 
+  //   const handleRadioChange = (event) => {
+  //     setSelectedValue(event.target.value);
+  //   };
 
-export default function AddItem({tableData, handleRadioChange, selectedValue}) {
-//   const [selectedValue, setSelectedValue] = useState(0);
-
-//   const handleRadioChange = (event) => {
-//     setSelectedValue(event.target.value);
-//   };
-
-  console.log(selectedValue)
+  console.log(selectedValue);
   return (
     // <div>
     //   <DataGrid
@@ -81,7 +83,9 @@ export default function AddItem({tableData, handleRadioChange, selectedValue}) {
                 </TableCell>
                 <TableCell align="left">{row.recipient}</TableCell>
                 <TableCell align="left">{row.issued_date}</TableCell>
-                <TableCell align="left">{row.start_date}-{row.end_date}</TableCell>
+                <TableCell align="left">
+                  {row.start_date}-{row.end_date}
+                </TableCell>
                 <TableCell align="left">{row.amount}</TableCell>
               </TableRow>
             ))}

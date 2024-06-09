@@ -38,16 +38,19 @@ export default function PaymentStatus() {
 
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
-      <div className="mb-2 flex">
-        <div className="justify-end">
+      <div className="flex justify-between mb-2">
+        <div className="">
           <h1 className="text-4xl text-green-700 font-bold">Payment Status</h1>
-          <p className="flex flex-col ml-1 font-medium text-gray-600">
+          <p className="ml-1 font-medium text-gray-600">
             View, create, and edit your payment status
           </p>
         </div>
-        <div className="ml-[690px] m-auto">
+        <div>
           <Link href={"/SelectInvoicesPS"}>
-            <button className="py-3 w-52 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700 ">
+            <button
+              href={"/SelectInvoicesPS"}
+              className="py-3 w-52 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700 "
+            >
               Create Payment Status
             </button>
           </Link>
@@ -62,9 +65,9 @@ export default function PaymentStatus() {
             icon={<FaSearch />}
           />
         </div>
-        <div className="w-1/3 flex justify-between ">
-          <DatePickerMUI label={"issued date"} />
-          <DatePickerMUI label={"policy period"} />
+        <div className="w-1/3 flex justify-end ">
+          {/* <DatePickerMUI label={"issued date"} />
+          <DatePickerMUI label={"policy period"} /> */}
           <select
             id="currency"
             name="currency"
