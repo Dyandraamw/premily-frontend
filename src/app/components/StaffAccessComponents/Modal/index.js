@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import SelectFields from "../SelectedFields";
-import Button from "../Button.js/page";
 
 const Modal = ({ isVisible, onClose }) => {
   const [modal, setModal] = useState();
@@ -23,7 +21,7 @@ const Modal = ({ isVisible, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Role submitted:", modal);
+    console.log("Rejected", modal);
     onClose();
   };
 
@@ -47,21 +45,23 @@ const Modal = ({ isVisible, onClose }) => {
           X
         </button>
         <div className=" flex flex-col w-full mb-3 items-center justify-center">
-          <h1 className="text-2xl p-2 rounded font-semibold">Change Role</h1>
-          <p>Change your role to control your access</p>
+          <h1 className="text-2xl p-2 rounded font-semibold">
+            Reject Access Request
+          </h1>
+          <p>Are you sure want to reject the access request?</p>
         </div>
-        <p className="font-semibold mt-5 mb-3 text-xl">Change Role</p>
-        <SelectFields
-          value={Modal}
-          label="Change Role"
-          onChange={handleChange}
-        ></SelectFields>
-        <div className="">
+        <div className="flex justify-around w-full m-auto">
           <button
-            className="w-full my-5 mb-5 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
             onClick={handleSubmit}
+            className="p-2 px-4 border-[3px] mr-3 drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
           >
-            Submit
+            Accept
+          </button>
+          <button
+            onClick={() => onClose()}
+            className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600"
+          >
+            Reject
           </button>
         </div>
       </div>

@@ -7,6 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Link from "next/link";
 
 function createData(
   payment_status_id,
@@ -68,14 +69,19 @@ export default function TablePaymentStatus({ tableData }) {
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.payment_status_id}
+                  <Link
+                    className="hover:font-semibold hover:text-green-700"
+                    href={"/paymentStatus/" + row.payment_status_id}
+                  >
+                    {row.payment_status_id}
+                  </Link>
                 </TableCell>
                 <TableCell align="left">{row.invoice_id}</TableCell>
                 <TableCell align="left">{row.invoice_recipient}</TableCell>
                 <TableCell align="left">{row.policy_period}</TableCell>
                 <TableCell sx={{ borderBottom: "none" }} align="center">
-                  <button className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-black hover:bg-white hover:text-black rounded-lg bg-yellow-500 border-yellow-500">
-                    Edit
+                  <button className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600">
+                    Delete
                   </button>
                 </TableCell>
               </TableRow>
