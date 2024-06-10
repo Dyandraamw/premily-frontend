@@ -79,10 +79,6 @@ export default function StaffAcces() {
     ),
   ];
 
-  const handleSearch = (e) => {
-    const searchVal = e.target;
-  };
-
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <div className="mb-2">

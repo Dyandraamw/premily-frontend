@@ -75,10 +75,11 @@ export default function TableStaff({ tableData, onAccept, onReject, onClose }) {
                     Accept
                   </button>
                   <button
-                    onClick={() => onReject(row)}
+                    onClick={() => setShowModal(true)}
+                    // onClick={() => onReject(row)}
                     className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600"
                   >
-                    Reject
+                    Delete
                   </button>
                 </TableCell>
               </TableRow>
