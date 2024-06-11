@@ -2,9 +2,43 @@
 import React, { useState } from "react";
 import TableUser from "@/app/components/StaffAccessComponents/page";
 import TableStaff from "@/app/components/StaffAccessComponents/TableAccessRequest/page";
+import ChangeRole from "@/app/components/StaffAccessComponents/Modal";
 
 export default function StaffAcces() {
   const [showModal, setShowModal] = useState(false);
+
+  const [accessRequests, setAccessRequests] = useState([
+    {
+      username: "John_Williams",
+      email: "John.williams@gmail.com",
+      phone: "081234218765",
+      role: "Pending",
+    },
+    // Add more initial data as needed
+  ]);
+
+  const [userList, setUserList] = useState([
+    {
+      username: "Alexander",
+      email: "G.Alex@gmail.com",
+      phone: "081234218765",
+      role: "Guest",
+    },
+    // Add more initial data as needed
+  ]);
+
+  const handleAccept = (user) => {
+    setUserList([...userList, { ...user, role: "User" }]);
+    setAccessRequests(
+      accessRequests.filter((u) => u.username !== user.username)
+    );
+  };
+
+  const handleReject = (user) => {
+    setAccessRequests(
+      accessRequests.filter((u) => u.username !== user.username)
+    );
+  };
 
   function createData(username, email, phone, role) {
     return { username, email, phone, role };
@@ -49,22 +83,6 @@ export default function StaffAcces() {
     const searchVal = e.target;
   };
 
-  // const [siData, setSiData] = useState([
-  //   { item: "", sum_insured: "", notes: "" },
-  // ]);
-
-  // const handleAddSiRow = () => {
-  //   setSiData([...siData,{item: "", sum_insured: "", notes: ""}])
-  // };
-
-  // const handleSiChange = (e,i) => {
-  //   const {id,value} = e.target
-  //   const changeValue = [...siData]
-  //   changeValue[i][id] = value
-  //   setSiData(changeValue)
-  // };
-
-  // const handleDeleteSiRow = () => {};
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <div className="mb-2">
@@ -77,7 +95,11 @@ export default function StaffAcces() {
         <h1 className="ml-4 text-[34px] font-semibold text-green-700 ">
           Access Request
         </h1>
-        <TableStaff tableData={StaffAcces} />
+        <TableStaff
+          tableData={accessRequests}
+          onAccept={handleAccept}
+          onReject={handleReject}
+        />
       </div>
       <div className="bg-white rounded-lg w-min-[1500px] w-max-full mt-5 p-5 h-[350px] overflow-y-auto">
         <h1 className="ml-4 text-[34px] font-semibold text-green-700 ">
@@ -85,23 +107,6 @@ export default function StaffAcces() {
         </h1>
         <TableUser onClick={() => setShowModal(true)} tableData={UserLists} />
       </div>
-
-      {/* <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
-        <div className="py-6 px-6 lg:px-8 text-left">
-          <h1 className="mb-3 text-xl font-medium text-gray-600">
-            Change Role
-          </h1>
-          <form className="space-y-6" action="#">
-            <div>
-              <label
-                for="email"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              />
-            </div>
-          </form>
-          <Textfield />
-        </div>
-      </Modal> */}
     </div>
   );
 }

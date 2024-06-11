@@ -24,12 +24,8 @@ export default function SelectFields() {
           label="Company"
           onChange={handleChange}
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Sinarmas</MenuItem>
-          <MenuItem value={20}>BCA</MenuItem>
-          <MenuItem value={30}>Mandiri</MenuItem>
+          <MenuItem value={10}>Admin</MenuItem>
+          <MenuItem value={20}>Staff</MenuItem>
         </Select>
       </FormControl>
     </div>
