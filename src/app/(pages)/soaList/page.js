@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import TableMUI from "../../components/soaComponents/soaListTable";
 import Textfield from "../../components/textfield";
@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import CreateSoaModal from "../../components/soaComponents/createSoaModal";
 import EditSoaModal from "../../components/soaComponents/deleteSoaModal";
+import axios from "axios";
 
 function createData(soa_id, name_of_insured, period_start, period_end) {
   return { soa_id, name_of_insured, period_start, period_end };
@@ -66,6 +67,130 @@ const soaData = [
   ),
 ];
 export default function soaList() {
+  //////////////////////////////////////////////////////////////////////////
+  const [soaList, setSoaList] = useState([]);
+//   const cors = require("cors");
+// app.use(cors());
+  //const axios = require("axios").default;
+  let config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: "https://premily-premily-d67f7a97.koyeb.app/api/retrive-soa",
+    headers: {
+      Authorization:
+        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMzliYWY4MDMtODkxYy00N2ZiLWFhYjEtYWNjNzE4ZmYzZGFlIiwiZXhwIjoxNzE4MjY4NDc3fQ.JV-CPgivJYHv0WUS91Xtne14ILfphb_yZT5cgydiuxI",
+    },
+  };
+
+  //fetch data
+  useEffect(() => {
+    const fetchSoaList = () => {
+      // axios.get("https://premily-premily-d67f7a97.koyeb.app/api/retrive-soa",{ headers:
+      //     {Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMzliYWY4MDMtODkxYy00N2ZiLWFhYjEtYWNjNzE4ZmYzZGFlIiwiZXhwIjoxNzE4MjY4NDc3fQ.JV-CPgivJYHv0WUS91Xtne14ILfphb_yZT5cgydiuxI'}
+      //   })
+      //   .then((response) => {
+      //     console.log(response);
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
+      // api
+      //   .get(`${API_URL}/api`, {
+      //     params: {
+      //     },
+      //   })
+      //   .then((response) => {
+      //     {
+      //       response.data.data !== null
+      //         ? setSoaList(response.data.data)
+      //         : setSoaList([]);
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log(error)
+      //   });
+    };
+    fetchSoaList();
+
+    async function fetchDummy() {
+      try {
+        const response = await axios.get(
+          'http://localhost:8080/api/books',
+          {headers:{
+            "Content-Type":"application/json"
+        }}
+          // {
+          //   headers: {
+          //     Authorization:
+          //       // "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWZlZTQ2ZWYtZDc4OC00OTAxLTg5YTktZmVkZTczNDZmNGQyIiwiZXhwIjoxNzE4MzY1NTI5fQ.2zn1dLxc4jvXnO2NS6ffdh3z_Zf5aXqmEmQhjeKse8A",
+
+          //       "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMzliYWY4MDMtODkxYy00N2ZiLWFhYjEtYWNjNzE4ZmYzZGFlIiwiZXhwIjoxNzE4MzY2MDU1fQ.Z_Zv51sg0W-ouakQSBuZJS7JO4WgiqWszWJ0TltQ4JA",
+          //     },
+
+            
+          // }
+        );
+        console.log( response);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    fetchDummy();
+
+    async function fetchDummy2() {
+      try {
+        const response = await axios.get(
+          'http://localhost:2024/api/retrive-soa',
+          {headers:{
+            "Content-Type":"application/json",
+            Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWZlZTQ2ZWYtZDc4OC00OTAxLTg5YTktZmVkZTczNDZmNGQyIiwiZXhwIjoxNzE4MzY1NTI5fQ.2zn1dLxc4jvXnO2NS6ffdh3z_Zf5aXqmEmQhjeKse8A",
+            "Credentials": false
+            
+        }}
+          // {
+          //   headers: {
+          //     Authorization:
+          //       // "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWZlZTQ2ZWYtZDc4OC00OTAxLTg5YTktZmVkZTczNDZmNGQyIiwiZXhwIjoxNzE4MzY1NTI5fQ.2zn1dLxc4jvXnO2NS6ffdh3z_Zf5aXqmEmQhjeKse8A",
+
+          //       "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMzliYWY4MDMtODkxYy00N2ZiLWFhYjEtYWNjNzE4ZmYzZGFlIiwiZXhwIjoxNzE4MzY2MDU1fQ.Z_Zv51sg0W-ouakQSBuZJS7JO4WgiqWszWJ0TltQ4JA",
+          //     },
+
+            
+          // }
+        );
+        console.log( response);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    fetchDummy2();
+  }, []);
+
+  const headerSoaList = [
+    {
+      key: "invoice_id",
+      title: "Invoice Number",
+    },
+    {
+      key: "recipient",
+      title: "Recipient",
+    },
+    {
+      key: "issued_date",
+      title: "Issued Date",
+    },
+    {
+      key: "policy_period",
+      title: "Policy Period",
+    },
+    {
+      key: "amount",
+      title: "Amount",
+    },
+  ];
+  //////////////////////////////////////////////////////////////////////////
   const [query, setQuery] = useState("");
   const [filteredData, setFilteredData] = useState(soaData);
   const [sortQuery, setSortQuery] = useState("");
@@ -97,31 +222,19 @@ export default function soaList() {
         (a, b) =>
           parseInt(a.soa_id.slice(4, 7)) - parseInt(b.soa_id.slice(4, 7))
       );
-    }else if (sortQuery == "desc_id") {
+    } else if (sortQuery == "desc_id") {
       data.sort(
         (a, b) =>
           parseInt(b.soa_id.slice(4, 7)) - parseInt(a.soa_id.slice(4, 7))
       );
-    }else if (sortQuery == "asc_company") {
-      data.sort(
-        (a, b) =>
-          a.name_of_insured.localeCompare(b.name_of_insured)
-      );
-    }else if (sortQuery == "desc_company") {
-      data.sort(
-        (a, b) =>
-          b.name_of_insured.localeCompare(a.name_of_insured)
-      );
-    }else if (sortQuery == "new_start") {
-      data.sort(
-        (a, b) =>
-          -a.period_start.localeCompare(b.period_start)
-      );
-    }else if (sortQuery == "old_start") {
-      data.sort(
-        (a, b) =>
-          a.period_start.localeCompare(b.period_start)
-      );
+    } else if (sortQuery == "asc_company") {
+      data.sort((a, b) => a.name_of_insured.localeCompare(b.name_of_insured));
+    } else if (sortQuery == "desc_company") {
+      data.sort((a, b) => b.name_of_insured.localeCompare(a.name_of_insured));
+    } else if (sortQuery == "new_start") {
+      data.sort((a, b) => -a.period_start.localeCompare(b.period_start));
+    } else if (sortQuery == "old_start") {
+      data.sort((a, b) => a.period_start.localeCompare(b.period_start));
     }
   };
 
