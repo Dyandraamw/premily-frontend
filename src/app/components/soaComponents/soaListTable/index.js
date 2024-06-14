@@ -5,7 +5,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import dayjs from "dayjs";
 import Link from "next/link";
@@ -26,7 +25,22 @@ const theme = createTheme({
   },
 });
 
-export default function tableMUI({ tableData, handleOpenDetailSoaModal }) {
+export default function tableMUI({ tableData, handleOpenDeleteSoaModal }) {
+  const handleStartPeriod = (data) => {
+    if (data!=null) {
+      const start = dayjs(data.slice(0,10)).format('DD/MM/YYYY')
+      return start
+    }
+    return
+  };
+
+  const handleEndPeriod = (data) => {
+    if (data!=null) {
+      const end = dayjs(data.slice(13,23)).format('DD/MM/YYYY')
+      return end
+    }
+    return
+  };
   return (
     <ThemeProvider theme={theme}>
       <TableContainer>
@@ -41,31 +55,23 @@ export default function tableMUI({ tableData, handleOpenDetailSoaModal }) {
           <TableBody>
             {tableData.map((row) => (
               <TableRow
-                key={row.soa_id}
+                key={row.SOA_ID}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
                   <Link
                     className="hover:font-semibold hover:text-green-700"
-                    href={"/soaList/" + row.soa_id}
+                    href={"/soaList/" + row.SOA_ID}
                   >
-                    {row.soa_id}
+                    {row.SOA_ID}
                   </Link>
                 </TableCell>
-                <TableCell align="left">{row.name_of_insured}</TableCell>
-                <TableCell align="left">
-                  {dayjs(row.period_start).format("DD/MM/YYYY")}-
-                  {dayjs(row.period_end).format("DD/MM/YYYY")}
-                </TableCell>
+                <TableCell align="left">{row.Name_Of_Insured}</TableCell>
+                <TableCell align="left">{handleStartPeriod(row.Period)}-{handleEndPeriod(row.Period)}</TableCell>
                 <TableCell sx={{ borderBottom: "none" }} align="center">
                   <button
                     onClick={(e) =>
-                      handleOpenDetailSoaModal([
-                        row.soa_id,
-                        row.name_of_insured,
-                        row.period_start,
-                        row.period_end
-                      ])
+                      handleOpenDeleteSoaModal(row.SOA_ID)
                     }
                     className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600"
                   >

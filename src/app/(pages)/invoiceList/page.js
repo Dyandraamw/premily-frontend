@@ -1,141 +1,77 @@
 "use client";
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
 import TableMUI from "../../components/invoiceComponents/invoiceTable";
 import Textfield from "../../components/textfield";
-import SideTextfield from "../../components/sideTextfield";
-import DatePickerMUI from "../../components/datePickerMUI";
 import DeleteInvoiceModal from "../../components/invoiceComponents/deleteInvoiceModal";
 import { FaSearch } from "react-icons/fa";
 import dayjs from "dayjs";
+import axios from "axios";
 
 export default function invoiceList() {
-  function createData(
-    invoice_id,
-    recipient,
-    issued_date,
-    period_start,
-    period_end,
-    amount
-  ) {
-    return {
-      invoice_id,
-      recipient,
-      issued_date,
-      period_start,
-      period_end,
-      amount,
+  // fetch data ////////////////////////////////////////////
+  const [invoiceList, setInvoiceList] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const url = "/api/invoice-list";
+  const authToken =
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYzI0ZTdiODEtMzQ0MS00MGI2LThiZjgtZTU0NDFlMjNlZTVlIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzE4NjM3MjI2fQ.-Bq4dPdBWjUa9cB-2IlF8W6oKieB0SCC_PXx0IcRh-Y";
+
+  useEffect(() => {
+    const fetchInvoiceList = () => {
+      axios.get(url, {
+          headers: {
+            Authorization: authToken,
+          },
+        })
+        .then((response) => {
+          setInvoiceList(response.data)
+          setFilteredData(response.data)
+          //console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     };
-  }
+    fetchInvoiceList();
+  }, []);
 
-  const invoices = [
-    createData(
-      "CN-001",
-      "PT. Garuda Indonesia",
-      dayjs("2024-05-07").toISOString(),
-      dayjs("2024-05-07").toISOString(),
-      dayjs("2026-06-08").toISOString(),
-      "$100,00"
-    ),
-    createData(
-      "DN-001",
-      "PT. Garuda Indonesia",
-      dayjs("2024-06-07").toISOString(),
-      dayjs("2024-04-10").toISOString(),
-      dayjs("2025-05-05").toISOString(),
-      "$100,00"
-    ),
-    createData(
-      "CN-002",
-      "PT. Garuda Indonesia",
-      dayjs("2022-07-07").toISOString(),
-      dayjs("2024-12-30").toISOString(),
-      dayjs("2026-07-12").toISOString(),
-      "$100,00"
-    ),
-    createData(
-      "CN-003",
-      "PT. Garuda Indonesia",
-      dayjs("2023-02-05").toISOString(),
-      dayjs("2023-02-05").toISOString(),
-      dayjs("2024-06-11").toISOString(),
-      "$100,00"
-    ),
-    createData(
-      "DN-002",
-      "PT. Garuda Indonesia",
-      dayjs("2024-10-10").toISOString(),
-      dayjs("2022-02-02").toISOString(),
-      dayjs("2023-03-03").toISOString(),
-      "$100,00"
-    ),
-    createData(
-      "CN-004",
-      "PT. Garuda Indonesia",
-      dayjs("2024-05-30").toISOString(),
-      dayjs("2024-11-20").toISOString(),
-      dayjs("2026-10-19").toISOString(),
-      "$100,00"
-    ),
-    createData(
-      "DN-003",
-      "PT. Garuda Indonesia",
-      dayjs("2024-05-12").toISOString(),
-      dayjs("2024-04-04").toISOString(),
-      dayjs("2026-06-06").toISOString(),
-      "$100,00"
-    ),
-    createData(
-      "DN-004",
-      "PT. Garuda Indonesia",
-      dayjs("2023-05-11").toISOString(),
-      dayjs("2024-09-15").toISOString(),
-      dayjs("2026-11-20").toISOString(),
-      "$100,00"
-    ),
-    createData(
-      "DN-005",
-      "PT. Garuda Indonesia",
-      dayjs("2024-12-10").toISOString(),
-      dayjs("2024-09-11").toISOString(),
-      dayjs("2028-11-20").toISOString(),
-      "$100,00"
-    ),
-    createData(
-      "DN-006",
-      "PT. Garuda Indonesia",
-      dayjs("2024-08-10").toISOString(),
-      dayjs("2024-12-16").toISOString(),
-      dayjs("2027-11-20").toISOString(),
-      "$100,00"
-    ),
-    createData(
-      "CN-005",
-      "PT. Air Asia",
-      dayjs("2024-06-10").toISOString(),
-      dayjs("2024-10-16").toISOString(),
-      dayjs("2026-11-23").toISOString(),
-      "$100,00"
-    ),
-  ];
 
+  ///////////////////////////////////////////////////
+  // filters ///////////////////////////////////////////////
   const [query, setQuery] = useState("");
-  const [filteredData, setFilteredData] = useState(invoices);
+  
   const [sortQuery, setSortQuery] = useState("");
+
+  const handleStartPeriod = (data) => {
+    if (data!=null) {
+      const start = dayjs(data.slice(0,10)).format('DD/MM/YYYY')
+      return start
+    }
+    return
+  };
+
+  const handleEndPeriod = (data) => {
+    if (data!=null) {
+      const end = dayjs(data.slice(13,23)).format('DD/MM/YYYY')
+      return end
+    }
+    return
+  };
 
   const handleSearch = (e) => {
     const searchQuery = e.target.value;
     //console.log(e.target.value)
     setQuery(searchQuery);
 
-    const filteredInvoice = invoices.filter(
+    const filteredInvoice = invoiceList.filter(
       (data) =>
-        data.invoice_id.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
-        data.recipient.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        data.issued_date.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        data.policy_period.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        data.amount.toLowerCase().includes(searchQuery.toLowerCase())
+        data.Invoice_ID.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
+        data.Recipient.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.Created_At.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        handleStartPeriod(data.Period).toLowerCase().includes(searchQuery.toLowerCase()) ||
+        handleEndPeriod(data.Period).toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.Total_Premium_Due.toLowerCase().includes(searchQuery.toLowerCase())
     );
+    //console.log(filteredInvoice)
     setFilteredData(filteredInvoice);
   };
 
@@ -149,31 +85,34 @@ export default function invoiceList() {
     if (sortQuery == "asc_id") {
       data.sort(
         (a, b) =>
-          parseInt(a.invoice_id.slice(4, 7)) -
-          parseInt(b.invoice_id.slice(4, 7))
+          parseInt(a.Invoice_ID.slice(3, 8)) -
+          parseInt(b.Invoice_ID.slice(3, 8))
       );
     } else if (sortQuery == "desc_id") {
       data.sort(
         (a, b) =>
-          parseInt(b.invoice_id.slice(4, 7)) -
-          parseInt(a.invoice_id.slice(4, 7))
+          parseInt(b.Invoice_ID.slice(3, 8)) -
+          parseInt(a.Invoice_ID.slice(3, 8))
       );
     } else if (sortQuery == "asc_recipient") {
-      data.sort((a, b) => a.recipient.localeCompare(b.recipient));
+      data.sort((a, b) => a.Recipient.localeCompare(b.Recipient));
     } else if (sortQuery == "desc_recipient") {
-      data.sort((a, b) => b.recipient.localeCompare(a.recipient));
+      data.sort((a, b) => b.Recipient.localeCompare(a.Recipient));
     } else if (sortQuery == "new_issued") {
-      data.sort((a, b) => -a.issued_date.localeCompare(b.issued_date));
+      data.sort((a, b) => -a.Created_At.localeCompare(b.Created_At));
     } else if (sortQuery == "old_issued") {
-      data.sort((a, b) => a.issued_date.localeCompare(b.issued_date));
+      data.sort((a, b) => a.Created_At.localeCompare(b.Created_At));
     } else if (sortQuery == "new_start") {
-      data.sort((a, b) => -a.period_start.localeCompare(b.period_start));
+      data.sort((a, b) => -handleStartPeriod(a.Period).localeCompare(handleStartPeriod(b.Period)));
     } else if (sortQuery == "old_start") {
-      data.sort((a, b) => a.period_start.localeCompare(b.period_start));
+      data.sort((a, b) => handleStartPeriod(a.Period).localeCompare(handleStartPeriod(b.Period)));
     }
   };
-  handleSort(filteredData)
+  handleSort(filteredData);
+  // console.log(filteredData)
+  ///////////////////////////////////////////////////
 
+  // modal handler /////////////////////////////////////////
   const [modalState, setModalState] = useState(false);
   const [delInvoice, setDelInvoice] = useState("");
   const handleOpenModal = (data) => {
@@ -181,7 +120,7 @@ export default function invoiceList() {
     setDelInvoice(data);
   };
   const handleCloseModal = () => setModalState(false);
-
+  ///////////////////////////////////////////////////
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <DeleteInvoiceModal
@@ -206,13 +145,14 @@ export default function invoiceList() {
         </div>
         <div className="w-1/3 flex justify-end ">
           <select
-            id="currency"
-            name="currency"
+            id="sort_invoice"
+            name="sort_invoice"
             className="drop-shadow-md focus:border-green-700 focus:border-[3px] border-[2.5px] border-gray-500 rounded-lg  h-[40px]  text-gray-700  focus:outline-none focus:shadow-outline mt-2"
             placeholder="sort"
             onChange={handleSortQuery}
+            defaultValue="sortHeader"
           >
-            <option value="" selected disabled>
+            <option value="sortHeader"  disabled>
               Sort
             </option>
             <option value="asc_id">Ascending Invoice Number</option>
