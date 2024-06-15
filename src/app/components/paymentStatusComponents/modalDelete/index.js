@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
@@ -14,11 +15,11 @@ const style = {
   borderRadius: 3,
 };
 
-export default function DeleteStaffAccessModal({
-  detailSAModal,
+export default function DeletePsModal({
+  detailPsModal,
   handleCloseModal,
-  detailStaffAccess,
-  setdetailStaffAccess,
+  detailPaymentStatus,
+  setdetailPaymentStatus,
 }) {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,7 +29,7 @@ export default function DeleteStaffAccessModal({
   return (
     <div>
       <Modal
-        open={detailSAModal}
+        open={detailPsModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -37,11 +38,11 @@ export default function DeleteStaffAccessModal({
             <div className="">
               <div>
                 <h1 className="flex w-full justify-center text-2xl  font-semibold">
-                  Delete Access Request
+                  Delete Payment Status
                 </h1>
                 <p className=" w-full text-center justify-center font-medium text-md text-gray-500">
-                  Are you sure you want to delete access request{" "}
-                  {/* <b>{detailStaffAccess.username[0]}</b> */}
+                  Are you sure you want to delete Payment Status{" "}
+                  <b>{detailPaymentStatus.payment_status_id}</b>
                 </p>
               </div>
               <div className="mx-5">

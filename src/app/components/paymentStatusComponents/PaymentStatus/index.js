@@ -67,11 +67,11 @@ export default function TablePaymentStatus({
                   <button
                     onClick={(e) =>
                       handleOpenDetailPsModal([
-                        payment_status_id,
-                        invoice_id,
-                        invoice_recipient,
-                        period_start,
-                        period_end,
+                        row.payment_status_id,
+                        row.invoice_id,
+                        row.invoice_recipient,
+                        row.period_start,
+                        row.period_end,
                       ])
                     }
                     className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600"

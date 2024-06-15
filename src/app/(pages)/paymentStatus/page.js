@@ -4,10 +4,11 @@ import Link from "next/link";
 import dayjs from "dayjs";
 
 import { FaSearch } from "react-icons/fa";
+
 import Textfield from "../../components/textfield";
 import DatePickerMUI from "../../components/datePickerMUI";
 import TablePaymentStatus from "@/app/components/paymentStatusComponents/PaymentStatus";
-import DeletePsModal from "@/app/components/paymentStatusComponents/modalDelete/page";
+import DeletePsModal from "@/app/components/paymentStatusComponents/modalDelete";
 
 function createData(
   payment_status_id,
@@ -169,25 +170,26 @@ export default function PaymentStatus() {
 
   const [detailPsModal, setDetailPsModal] = useState(false);
   const handleOpenDetailPsModal = (data) => {
+    console.log(data);
     setDetailPsModal(true);
     setDetailPaymentStatus({
       ...detailPaymentStatus,
-      payment_status_id: [0],
-      invoice_id: [1],
-      invoice_recipient: [2],
+      payment_status_id: data[0],
+      invoice_id: data[1],
+      invoice_recipient: data[2],
       period_start: data[3],
       period_end: data[4],
     });
   };
-  const handleCloseDetailPsModal = () => setDetailPsModal(false);
 
+  const handleCloseDetailPsModal = () => setDetailPsModal(false);
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <DeletePsModal
-        detailSoaModal={detailPsModal}
+        detailPsModal={detailPsModal}
         handleCloseModal={handleCloseDetailPsModal}
-        detailStatementOfAccount={detailPaymentStatus}
-        setDetailStatementOfAccount={setDetailPaymentStatus}
+        detailPaymentStatus={detailPaymentStatus}
+        setDetailPaymentStatus={setDetailPaymentStatus}
       />
       <div className="flex justify-between mb-2">
         <div className="">

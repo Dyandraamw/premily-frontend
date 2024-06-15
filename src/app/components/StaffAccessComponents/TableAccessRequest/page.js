@@ -26,17 +26,11 @@ const theme = createTheme({
   },
 });
 
-function createData(username, email, phone, role) {
-  return { username, email, phone, role };
-}
-
-const tableData = [
-  createData("John_Williams", "John.williams@gmail.com", "081234218765"),
-  createData("Williams", "John.williams@gmail.com", "081234218765"),
-  createData("hn_Wil", "John.williams@gmail.com", "081234218765"),
-];
-
-export default function TableStaff({ tableData, onAccept, onReject, onClose }) {
+export default function TableStaff({
+  tableData,
+  onAccept,
+  handleOpenDetailStaffAccessModal,
+}) {
   const [showModal, setShowModal] = useState(false);
 
   const handleSubmit = (e) => {
@@ -75,8 +69,13 @@ export default function TableStaff({ tableData, onAccept, onReject, onClose }) {
                     Accept
                   </button>
                   <button
-                    onClick={() => setShowModal(true)}
-                    // onClick={() => onReject(row)}
+                    onClick={(e) =>
+                      handleOpenDetailStaffAccessModal([
+                        row.username,
+                        row.email,
+                        row.phone,
+                      ])
+                    }
                     className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600"
                   >
                     Delete

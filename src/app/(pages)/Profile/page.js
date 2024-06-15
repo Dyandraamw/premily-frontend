@@ -2,11 +2,13 @@
 import React, { useRef, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { CiCamera } from "react-icons/ci";
+import ImgDragDrop from "../../components/imgDragDrop";
+import ProfileDragDrop from "@/app/components/uploadPhoto/page";
 
 function Profile({ value, onChange, defaultSrc, click }) {
+  const fileInputRef = useRef(null);
   const [src, setSrc] = useState(defaultSrc || null);
   const [file, setFile] = useState(null);
-  const fileInputRef = useRef(null);
 
   const browse = () => {
     if (fileInputRef.current) {
@@ -15,11 +17,12 @@ function Profile({ value, onChange, defaultSrc, click }) {
   };
 
   const handleChange = (e) => {
-    const file = e.target.file[0];
+    const file = e.target.files[0];
     if (file) {
-      onChange(file);
+      setFile(file);
+      // onChange(file);
       const reader = new FileReader();
-      reader.readAsDataUrl(file);
+      reader.readAsDataURL(file);
       reader.onload = (e) => {
         setSrc(e.target.result);
       };
@@ -56,6 +59,10 @@ function Profile({ value, onChange, defaultSrc, click }) {
         </p>
         <div className="flex flex-col justify-center items-center rounded-md bg-white w-5/12 h-full text-white mx-auto border-2 border-green-800 outline-green-700 mt-28">
           <div className="relative inline-block">
+            {/* <ProfileDragDrop
+              className={"w-[250px]  h-[260px] rounded-full mb-3 "}
+            /> */}
+
             <input
               type="file"
               ref={fileInputRef}
@@ -63,8 +70,8 @@ function Profile({ value, onChange, defaultSrc, click }) {
               onChange={handleChange}
               class="hidden"
             ></input>
-            <FaUserCircle className="size-24 mt-12 mb-6 text-black "></FaUserCircle>
-            <div className="absolute top-[50px]  w-24 h-24 bg-black rounded-full bg-opacity-35  flex items-center justify-center">
+            <FaUserCircle className="size-32 mt-12 mb-6 text-black "></FaUserCircle>
+            <div className="absolute top-[55px]  w-28 h-28 bg-black rounded-full bg-opacity-35  flex items-center justify-center">
               <button
                 onClick={browse}
                 className="rounded-full hover:bg-white hover:bg-opacity-25 p-2 focus:outline-none text-gray-300 transition duration-300"
