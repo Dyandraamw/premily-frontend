@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import TableMUI from "../../components/soaComponents/soaListTable";
 import Textfield from "../../components/textfield";
@@ -9,7 +9,8 @@ import { FaSearch } from "react-icons/fa";
 import dayjs from "dayjs";
 import Link from "next/link";
 import CreateSoaModal from "../../components/soaComponents/createSoaModal";
-import EditSoaModal from "../../components/soaComponents/deleteSoaModal";
+import DeleteSoaModal from "../../components/soaComponents/deleteSoaModal";
+import axios from "axios";
 
 function createData(soa_id, name_of_insured, period_start, period_end) {
   return { soa_id, name_of_insured, period_start, period_end };
@@ -66,22 +67,89 @@ const soaData = [
   ),
 ];
 export default function soaList() {
+  //fetch data ////////////////////////////////////////////////////////////
+  const [soaListData, setSoaListData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+
+  const url = "/api/retrive-soa";
+  const authToken =
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYzI0ZTdiODEtMzQ0MS00MGI2LThiZjgtZTU0NDFlMjNlZTVlIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzE4NjM3MjI2fQ.-Bq4dPdBWjUa9cB-2IlF8W6oKieB0SCC_PXx0IcRh-Y";
+
+  useEffect(() => {
+    const fetchSoaList = () => {
+      axios.get(url, {
+          headers: {
+            Authorization: authToken,
+          },
+        })
+        .then((response) => {
+          setSoaListData(response.data)
+          setFilteredData(response.data)
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchSoaList();
+  }, []);
+
+  const headerSoaList = [
+    {
+      key: "invoice_id",
+      title: "Invoice Number",
+    },
+    {
+      key: "recipient",
+      title: "Recipient",
+    },
+    {
+      key: "issued_date",
+      title: "Issued Date",
+    },
+    {
+      key: "policy_period",
+      title: "Policy Period",
+    },
+    {
+      key: "amount",
+      title: "Amount",
+    },
+  ];
+
+  ////////////////////////////////////////////////////////////
+  // filter control ////////////////////////////////////////////////////////////
   const [query, setQuery] = useState("");
-  const [filteredData, setFilteredData] = useState(soaData);
+  //const [filteredData, setFilteredData] = useState(soaData);
   const [sortQuery, setSortQuery] = useState("");
 
-  // filter control
+  const handleStartPeriod = (data) => {
+    if (data!=null) {
+      const start = dayjs(data.slice(0,10)).format('DD/MM/YYYY')
+      return start
+    }
+    return
+  };
+
+  const handleEndPeriod = (data) => {
+    if (data!=null) {
+      const end = dayjs(data.slice(13,23)).format('DD/MM/YYYY')
+      return end
+    }
+    return
+  };
+
   const handleSearch = (e) => {
     const searchQuery = e.target.value;
     //console.log(e.target.value)
     setQuery(searchQuery);
 
-    const filteredSoa = soaData.filter(
+    const filteredSoa = soaListData.filter(
       (data) =>
-        data.soa_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        data.name_of_insured.toLowerCase().includes(searchQuery.toLowerCase())
-      // data.period_start.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      // data.period_end.toLowerCase().includes(searchQuery.toLowerCase())
+        data.SOA_ID.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.Name_Of_Insured.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        handleStartPeriod(data.Period).toLowerCase().includes(searchQuery.toLowerCase()) ||
+        handleEndPeriod(data.Period).toLowerCase().includes(searchQuery.toLowerCase()) 
     );
     setFilteredData(filteredSoa);
   };
@@ -95,62 +163,41 @@ export default function soaList() {
     if (sortQuery == "asc_id") {
       data.sort(
         (a, b) =>
-          parseInt(a.soa_id.slice(4, 7)) - parseInt(b.soa_id.slice(4, 7))
+          parseInt(a.SOA_ID.slice(4, 9)) - parseInt(b.SOA_ID.slice(4, 9))
       );
-    }else if (sortQuery == "desc_id") {
+    } else if (sortQuery == "desc_id") {
       data.sort(
         (a, b) =>
-          parseInt(b.soa_id.slice(4, 7)) - parseInt(a.soa_id.slice(4, 7))
+          parseInt(b.SOA_ID.slice(4, 9)) - parseInt(a.SOA_ID.slice(4, 9))
       );
-    }else if (sortQuery == "asc_company") {
-      data.sort(
-        (a, b) =>
-          a.name_of_insured.localeCompare(b.name_of_insured)
-      );
-    }else if (sortQuery == "desc_company") {
-      data.sort(
-        (a, b) =>
-          b.name_of_insured.localeCompare(a.name_of_insured)
-      );
-    }else if (sortQuery == "new_start") {
-      data.sort(
-        (a, b) =>
-          -a.period_start.localeCompare(b.period_start)
-      );
-    }else if (sortQuery == "old_start") {
-      data.sort(
-        (a, b) =>
-          a.period_start.localeCompare(b.period_start)
-      );
+    } else if (sortQuery == "asc_company") {
+      data.sort((a, b) => a.Name_Of_Insured.localeCompare(b.Name_Of_Insured));
+    } else if (sortQuery == "desc_company") {
+      data.sort((a, b) => b.Name_Of_Insured.localeCompare(a.Name_Of_Insured));
+    } else if (sortQuery == "new_start") {
+      data.sort((a, b) => -(a.Period.slice(0,10)).localeCompare(b.Period.slice(0,10)));
+    } else if (sortQuery == "old_start") {
+      data.sort((a, b) => (a.Period.slice(0,10)).localeCompare(b.Period.slice(0,10)));
     }
   };
 
   handleSort(filteredData);
 
-  // modal control
+  ////////////////////////////////////////////////////////////
+  // modal control ////////////////////////////////////////////////////////////
   const [modalState, setModalState] = useState(false);
   const handleOpenModal = () => setModalState(true);
   const handleCloseModal = () => setModalState(false);
 
-  const [detailStatementOfAccount, setDetailStatementOfAccount] = useState({
-    soa_id: "",
-    name_of_insured: "",
-    period_start: null,
-    period_end: null,
-  });
-  const [detailSoaModal, setDetailSoaModal] = useState(false);
-  const handleOpenDetailSoaModal = (data) => {
-    setDetailSoaModal(true);
-    setDetailStatementOfAccount({
-      ...detailStatementOfAccount,
-      soa_id: data[0],
-      name_of_insured: data[1],
-      period_start: data[2],
-      period_end: data[3],
-    });
+  const [detailStatementOfAccount, setDetailStatementOfAccount] = useState("");
+  const [deleteSoaModal, setDeleteSoaModal] = useState(false);
+  const handleOpenDeleteSoaModal = (data) => {
+    setDeleteSoaModal(true);
+    setDetailStatementOfAccount(data);
   };
-  const handleCloseDetailSoaModal = () => setDetailSoaModal(false);
+  const handleCloseDeleteSoaModal = () => setDeleteSoaModal(false);
 
+  ////////////////////////////////////////////////////////////
   //console.log(filteredData);
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
@@ -158,9 +205,9 @@ export default function soaList() {
         modalState={modalState}
         handleCloseModal={handleCloseModal}
       />
-      <EditSoaModal
-        detailSoaModal={detailSoaModal}
-        handleCloseModal={handleCloseDetailSoaModal}
+      <DeleteSoaModal
+        deleteSoaModal={deleteSoaModal}
+        handleCloseModal={handleCloseDeleteSoaModal}
         detailStatementOfAccount={detailStatementOfAccount}
         setDetailStatementOfAccount={setDetailStatementOfAccount}
       />
@@ -193,13 +240,14 @@ export default function soaList() {
         </div>
         <div className="w-1/3 flex justify-end ">
           <select
-            id="currency"
-            name="currency"
-            className="drop-shadow-md focus:border-green-700 focus:border-[3px] border-[2.5px] border-gray-500 rounded-lg  h-[40px]  text-gray-700  focus:outline-none focus:shadow-outline mt-2"
-            placeholder="sort"
-            onChange={handleSortQuery}
-          >
-            <option value="" selected disabled>
+              id="sort_soa"
+              name="sort_soa"
+              className="drop-shadow-md focus:border-green-700 focus:border-[3px] border-[2.5px] border-gray-500 rounded-lg  h-[40px]  text-gray-700  focus:outline-none focus:shadow-outline mt-2"
+              placeholder="sort"
+              onChange={handleSortQuery}
+              defaultValue="sortHeader"
+            >
+            <option value="sortHeader" disabled>
               Sort
             </option>
             <option value="asc_id">Ascending SoA Number</option>
@@ -214,7 +262,7 @@ export default function soaList() {
       <div className="bg-white rounded-lg w-min-[1500px] w-max-full mt-5 p-5 h-[900px] overflow-y-auto">
         <TableMUI
           tableData={filteredData}
-          handleOpenDetailSoaModal={handleOpenDetailSoaModal}
+          handleOpenDeleteSoaModal={handleOpenDeleteSoaModal}
         />
       </div>
     </div>
