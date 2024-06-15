@@ -206,7 +206,6 @@ export default function paymentStatusDetail({ params }) {
         modalState={adjustmentModalState}
         handleCloseModal={handleCloseAdjustmentModal}
         instalment_data={instalment_data}
-        
       />
       <EditAdjustmentModal
         modalState={editAdjustmentModal}

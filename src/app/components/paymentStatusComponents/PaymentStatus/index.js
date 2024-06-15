@@ -1,37 +1,14 @@
-import * as React from "react";
+import React from "react";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Link from "next/link";
+import dayjs from "dayjs";
+
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import Link from "next/link";
-
-function createData(
-  payment_status_id,
-  invoice_id,
-  invoice_recipient,
-  policy_period
-) {
-  return { payment_status_id, invoice_id, invoice_recipient, policy_period };
-}
-
-const tableData = [
-  createData(
-    "PS-001",
-    "CN-001",
-    "PT. Garuda Indonesia",
-    "05/07/2024-06/08/2025"
-  ),
-  createData(
-    "PS-002",
-    "CN-002",
-    "PT. Garuda Indonesia",
-    "05/07/2024-06/08/2025"
-  ),
-];
 
 const theme = createTheme({
   components: {
@@ -49,7 +26,10 @@ const theme = createTheme({
   },
 });
 
-export default function TablePaymentStatus({ tableData }) {
+export default function TablePaymentStatus({
+  tableData,
+  handleOpenDetailPsModal,
+}) {
   return (
     <ThemeProvider theme={theme}>
       <TableContainer>
@@ -78,9 +58,24 @@ export default function TablePaymentStatus({ tableData }) {
                 </TableCell>
                 <TableCell align="left">{row.invoice_id}</TableCell>
                 <TableCell align="left">{row.invoice_recipient}</TableCell>
-                <TableCell align="left">{row.policy_period}</TableCell>
+                <TableCell align="left">
+                  {" "}
+                  {dayjs(row.period_start).format("DD/MM/YYYY")}-
+                  {dayjs(row.period_end).format("DD/MM/YYYY")}
+                </TableCell>
                 <TableCell sx={{ borderBottom: "none" }} align="center">
-                  <button className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600">
+                  <button
+                    onClick={(e) =>
+                      handleOpenDetailPsModal([
+                        row.payment_status_id,
+                        row.invoice_id,
+                        row.invoice_recipient,
+                        row.period_start,
+                        row.period_end,
+                      ])
+                    }
+                    className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600"
+                  >
                     Delete
                   </button>
                 </TableCell>

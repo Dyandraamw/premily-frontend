@@ -13,12 +13,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <main className="flex w-screen overflow-hidden h-screen">
-          <Sidebar/>
-          <div className=" w-[82%] bg-[#F3F4F8] overflow-y-auto ">
-          {children}
-          </div>
-        </main>
+        <main>{children}</main>
       </body>
     </html>
   );

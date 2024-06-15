@@ -14,12 +14,7 @@ const style = {
   borderRadius: 3,
 };
 
-export default function DeleteStaffAccessModal({
-  detailSAModal,
-  handleCloseModal,
-  detailStaffAccess,
-  setdetailStaffAccess,
-}) {
+export default function SignOutModal({ detailCRModal, handleCloseModal }) {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -28,7 +23,7 @@ export default function DeleteStaffAccessModal({
   return (
     <div>
       <Modal
-        open={detailSAModal}
+        open={detailCRModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -37,11 +32,10 @@ export default function DeleteStaffAccessModal({
             <div className="">
               <div>
                 <h1 className="flex w-full justify-center text-2xl  font-semibold">
-                  Delete Access Request
+                  Sign Out
                 </h1>
                 <p className=" w-full text-center justify-center font-medium text-md text-gray-500">
-                  Are you sure you want to delete access request{" "}
-                  {/* <b>{detailStaffAccess.username[0]}</b> */}
+                  Are you sure you want to Sign Out your account?{" "}
                 </p>
               </div>
               <div className="mx-5">
@@ -53,7 +47,7 @@ export default function DeleteStaffAccessModal({
                     Cancel
                   </button>
                   <button className="w-1/2 my-5 mx-1 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600">
-                    Delete
+                    Sign Out
                   </button>
                 </div>
               </div>

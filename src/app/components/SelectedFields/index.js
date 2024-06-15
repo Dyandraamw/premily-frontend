@@ -7,25 +7,26 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
 export default function SelectFields() {
-  const [company, setCompany] = useState("");
+  const [role, setRole] = useState("");
 
   const handleChange = (event) => {
-    setCompany(event.target.value);
+    setRole(event.target.value);
   };
 
   return (
     <div>
       <FormControl sx={{ minWidth: 120 }} className="w-full mb-5">
-        <InputLabel id="demo-simple-select-helper-label">Company</InputLabel>
+        <InputLabel id="demo-simple-select-helper-label" />
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
-          value={company}
-          label="Company"
+          value={role}
+          label="Role"
           onChange={handleChange}
+          // helperText="Incorrect entry"
         >
-          <MenuItem value={10}>Admin</MenuItem>
-          <MenuItem value={20}>Staff</MenuItem>
+          <MenuItem value={role}>Admin</MenuItem>
+          <MenuItem value={role}>Staff</MenuItem>
         </Select>
       </FormControl>
     </div>
