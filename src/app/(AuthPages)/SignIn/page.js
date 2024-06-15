@@ -1,0 +1,226 @@
+"use client";
+import React, { useState, useRef, useEffect, useContext } from "react";
+import Link from "next/link";
+
+import IconButton from "@mui/material/IconButton";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import InputAdornment from "@mui/material/InputAdornment";
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { FormHelperText } from "@mui/material";
+
+export default function SignIn() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(true);
+
+  const userRef = useRef();
+  const errRef = useRef();
+
+  const [user, setUser] = useState("");
+  const [password, setPassword] = useState("");
+  const [errMsg, setErrMsg] = useState("");
+  const [success, setSuccess] = useState(false);
+
+  const [userError, setUserError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  useEffect(() => {
+    userRef.current.focus();
+  }, []);
+
+  const validateInputs = () => {
+    let valid = true;
+    setUserError("");
+    setPasswordError("");
+
+    if (!user) {
+      setUserError("Username is required");
+      valid = false;
+    }
+    if (!password) {
+      setPasswordError("Password is required");
+      valid = false;
+    }
+
+    return valid;
+  };
+
+  const axios = require("axios");
+  const FormData = require("form-data");
+  let data = new FormData();
+  data.append("email", "joko@gmail.com");
+  data.append("password", "KTyhCCCfmACZCUJNZeBuUjlFxWtmRswQGxyjbZXMYsxItZdVHA");
+  data.append("remember_me", "true");
+
+  let config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: "https://premily-premily-d67f7a97.koyeb.app/sign-in",
+    headers: {
+      email: "joko@gmail.com",
+      password: "KTyhCCCfmACZCUJNZeBuUjlFxWtmRswQGxyjbZXMYsxItZdVHA",
+      remember_me: true,
+    },
+    data: data,
+  };
+
+  axios
+    .request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // if (!validateInputs()) return;
+
+    // try {
+    //   const response = await axios.post(
+    //     LOGIN_URL,
+    //     JSON.stringify({ user, password }),
+    //     {
+    //       headers: { "Content-Type": "application/json" },
+    //       withCredentials: true,
+    //     }
+    //   );
+    //   console.log(JSON.stringify(response?.data));
+
+    //   const accessToken = response?.data?.accessToken;
+    //   const roles = response?.data?.roles;
+    //   setAuth({ user, password, roles, accessToken });
+    //   setUser("");
+    //   setPassword("");
+    //   setSuccess(true);
+    // } catch (err) {
+    //   if (!err?.response) {
+    //     setErrMsg("No Server Response");
+    //   } else if (err.response?.status === 400) {
+    //     setErrMsg("Missing Username or Password");
+    //   } else if (err.response?.status === 401) {
+    //     setErrMsg("Unauthorized");
+    //   } else {
+    //     setErrMsg("Login Failed");
+    //   }
+    //   errRef.current.focus();
+    // }
+  };
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  return (
+    <>
+      {success ? (
+        <section>
+          <h1> you are logged in!</h1>
+        </section>
+      ) : (
+        <div className="flex justify-center min-h-screen flex-col items-center w-full p-16">
+          <p
+            ref={errRef}
+            className={errMsg ? "errmsg" : "offscreen"}
+            aria-live="assertive"
+          >
+            {errMsg}
+          </p>
+          <div className="w-96 p-8 shadow-lg border-2 border-green-800 bg-white rounded-md">
+            <form onSubmit={handleSubmit}>
+              <h1 className="text-xl block text-center font-semibold mb-8 mt-5 tracking-wide">
+                Sign In To Your Account!
+              </h1>
+              <TextField
+                required
+                id="outlined-Email"
+                label="Username"
+                ref={userRef}
+                autoComplete="off"
+                onChange={(e) => setUser(e.target.value)}
+                value={user}
+                error={!!userError}
+                helperText={userError}
+                className="w-full mt-3 mb-5"
+              />
+              <FormControl
+                sx={{ width: "25ch" }}
+                required
+                variant="outlined"
+                autoComplete="off"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                className="w-full mb-5"
+              >
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Password
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? "text" : "password"}
+                  error={!!passwordError}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
+                />
+                <FormHelperText>{passwordError}</FormHelperText>
+              </FormControl>
+
+              <div className="mt-3 flex justify-between items-center ">
+                <div className="mr-3">
+                  <input className="mr-2" type="checkbox"></input>
+                  <label>Remember me</label>
+                </div>
+                <div>
+                  <Link
+                    href="/ForgotPassword"
+                    className="text-gray-500 font-semibold hover:text-green-800"
+                  >
+                    Forgot Password?
+                  </Link>
+                </div>
+              </div>
+              <div className="mt-14">
+                <button
+                  href="/#"
+                  type="submit"
+                  className="border-2 border-green-700 bg-green-700 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-green-700 font-semibold"
+                >
+                  Sign In
+                </button>
+              </div>
+            </form>
+            <div className="mt-3">
+              <p className="flex justify-center text-black text-sm">
+                Don't have an account?
+                <Link
+                  href="/SignUp"
+                  className="text-gray-500 hover:text-green-800 font-semibold"
+                >
+                  Sign Up
+                </Link>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

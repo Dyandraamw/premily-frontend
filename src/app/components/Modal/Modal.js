@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import SelectFields from "../SelectedFields";
 import Button from "../Button.js/page";
+import SelectFields from "../SelectedFields";
 
 const Modal = ({ isVisible, onClose }) => {
   const [modal, setModal] = useState();
@@ -50,9 +50,9 @@ const Modal = ({ isVisible, onClose }) => {
           <h1 className="text-2xl p-2 rounded font-semibold">Change Role</h1>
           <p>Change your role to control your access</p>
         </div>
-        <p className="font-semibold mt-5 mb-3 text-xl">Change Role</p>
+        {/* <p className="font-semibold mt-5 mb-3 text-xl">Change Role</p> */}
         <SelectFields
-          value={Modal}
+          value={modal}
           label="Change Role"
           onChange={handleChange}
         ></SelectFields>

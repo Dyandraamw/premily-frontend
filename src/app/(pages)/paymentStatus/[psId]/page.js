@@ -2,12 +2,7 @@
 import React, { useState } from "react";
 
 import TableMUI from "../../../components/paymentStatusComponents/paymentStatusDetailTable";
-import Textfield from "../../../components/textfield";
-import DatePickerMUI from "../../../components/datePickerMUI";
-import { FaSearch } from "react-icons/fa";
 import dayjs from "dayjs";
-import Link from "next/link";
-import CreateSoaModal from "../../../components/soaComponents/createSoaModal";
 import AddPaymentModal from "../../../components/paymentStatusComponents/addPaymentModal";
 import AddAdjustmentModal from "../../../components/paymentStatusComponents/addAdjustmentModal";
 import EditPaymentModal from "../../../components/paymentStatusComponents/editPaymentModal";
