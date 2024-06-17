@@ -1,51 +1,64 @@
-
+'use client'
 import React, { useState } from "react";
 import Textfield from "../../textfield";
 
-export default function EditSumInsuredForm({ invoiceData  }) {
-    const [siData, setSiData] = useState(invoiceData);
-    
-      const handleClick = () => {
-        setSiData([...siData,{item: "", sum_insured: "", notes: ""}])
-      };
-    
-      const handleChange = (e,i) => {
-        const {id,value} = e.target
-        const changeValue = [...siData]
-        changeValue[i][id] = value
-        setSiData(changeValue)
-      };
-    
-      const handleDeleteRow = (i) => {
-        const delRow = [...siData]
-        delRow.splice(i,1)
-        setSiData(delRow)
-      };
+export default function EditSumInsuredForm({ invoiceData, siData, setSiData }) {
+  const [initialLoad, setInitialLoad] = useState(false);
+  const handleLoad = (e) => {
+    if (initialLoad == false) {
+      setSiData(invoiceData);
+    }
+  };
+
+  const handleClick = () => {
+    setInitialLoad(true)
+    setSiData([...siData, {
+      Items_Name: "",
+      Sum_Insured_Amount: 0,
+      Notes: "",
+    },]);
+  };
+
+  const handleChange = (e, i) => {
+    setInitialLoad(true)
+    const { id, value } = e.target;
+    const changeValue = [...siData];
+    changeValue[i][id] = value;
+    setSiData(changeValue);
+  };
+
+  const handleDeleteRow = (i) => {
+    setInitialLoad(true)
+    const delRow = [...siData];
+    delRow.splice(i, 1);
+    setSiData(delRow);
+  };
+  //console.log(siData)
   return (
-    <div>
+    <div onLoad={handleLoad()}>
       {siData.map((val, i) => (
         <div className="flex items-center">
           <div className="grid grid-cols-3 gap-6 w-[90%]">
             <Textfield
-              label={i==0?"Item":""}
-              id={"item"}
+              label={i == 0 ? "Item" : ""}
+              id={"Items_Name"}
               placeholder={"insert item name..."}
               onChange={(e) => handleChange(e, i)}
-              value={val.item}
+              value={val.Items_Name}
             />
             <Textfield
-              label={i==0?"Sum Insured":""}
-              id={"sum_insured"}
+              label={i == 0 ? "Sum Insured" : ""}
+              id={"Sum_Insured_Amount"}
               placeholder={"insert amount..."}
               onChange={(e) => handleChange(e, i)}
-              value={val.sum_insured}
+              value={val.Sum_Insured_Amount}
             />
             <Textfield
-              label={i==0?"Notes":""}
-              id={"notes"}
+              label={i == 0 ? "Notes" : ""}
+              id={"Notes"}
               placeholder={"insert notes..."}
               onChange={(e) => handleChange(e, i)}
-              value={val.note}
+              value={val.Notes}
             />
           </div>
           {i != 0 ? (

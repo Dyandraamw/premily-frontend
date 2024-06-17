@@ -53,40 +53,40 @@ export default function tableMUI({ tableData, handleOpenModal }) {
           <TableBody>
             {tableData.map((row) => (
               <TableRow
-                key={row.name}
+                key={row.Invoice_ID}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.invoice_id}
+                  {row.Invoice_ID}
                 </TableCell>
-                <TableCell align="left">{row.recipient}</TableCell>
-                <TableCell align="left">{row.instalment_number}</TableCell>
-                <TableCell align="left">{row.due_date}</TableCell>
+                <TableCell align="left">{row.Recipient}</TableCell>
+                <TableCell align="left">{row.Installment_Standing}</TableCell>
+                <TableCell align="left">{row.Due_Date}</TableCell>
                 <TableCell align="left">{row.currency}</TableCell>
-                <TableCell align="left">{row.amount}</TableCell>
+                <TableCell align="left">{row.SOA_Amount}</TableCell>
                 <TableCell sx={{ color: "#757575" }} align="center">
                   |
                 </TableCell>
-                <TableCell align="left">{row.payment_date}</TableCell>
+                <TableCell align="left">{row.Payment_Date}</TableCell>
                 <TableCell align="left">{row.currency}</TableCell>
-                <TableCell align="left">{row.payment_amount}</TableCell>
-                <TableCell align="left">{row.alocation}</TableCell>
+                <TableCell align="left">{row.Payment_Amount}</TableCell>
+                <TableCell align="left">{row.Payment_Allocation}</TableCell>
                 <TableCell align="left">{row.balance}</TableCell>
                 <TableCell align="left">
                   <div
                     className={
-                      (row.payment_status == "Paid"
+                      (row.Status == "PAID"
                         ? "bg-green-700"
-                        : row.payment_status == "Outstanding"
+                        : row.Status == "OUTSTANDING"
                         ? "bg-yellow-600"
                         : "bg-red-700") +
                       " flex justify-center rounded-2xl p-2 text-white "
                     }
                   >
-                    {row.payment_status}
+                    {row.Status}
                   </div>
                 </TableCell>
-                <TableCell align="left">{row.aging}</TableCell>
+                <TableCell align="left">{row.Aging}</TableCell>
                 <TableCell align="center">
                   <button
                     onClick={(e) =>

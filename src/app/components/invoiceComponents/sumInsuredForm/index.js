@@ -23,6 +23,7 @@ export default function sumInsuredForm({ invoiceData  }) {
         delRow.splice(i,1)
         setSiData(delRow)
       };
+      //console.log(siData)
   return (
     <div>
       {siData.map((val, i) => (

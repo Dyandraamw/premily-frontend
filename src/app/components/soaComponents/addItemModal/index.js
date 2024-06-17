@@ -14,6 +14,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Radio from "@mui/material/Radio";
 import dayjs from "dayjs";
+import { addItemApi } from "@/app/utils/api/soaApi";
 
 const style = {
   position: "absolute",
@@ -28,38 +29,51 @@ const style = {
 };
 
 const theme = createTheme({
-    components: {
-      MuiTableCell: {
-        styleOverrides: {
-          root: {
-            fontSize: "1rem",
-            fontFamily: "inherit",
-          },
-          head: {
-            fontWeight: 700,
-          },
+  components: {
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          fontSize: "1rem",
+          fontFamily: "inherit",
+        },
+        head: {
+          fontWeight: 700,
         },
       },
     },
-  });
+  },
+});
 
-function createData(instalment_id,instalment_number, due_date, amount) {
-  return {instalment_id,instalment_number, due_date, amount};
+function createData(instalment_id, instalment_number, due_date, amount) {
+  return { instalment_id, instalment_number, due_date, amount };
 }
 
-const instalment_data = [
-  createData('INS-001',1, dayjs("04/04/2025").format("DD/MM/YYYY"), 100),
-  createData('INS-002',2, dayjs("01/01/2026").format("DD/MM/YYYY"), 100),
-];
+// const instalment_data = [
+//   createData("INS-001", 1, dayjs("04/04/2025").format("DD/MM/YYYY"), 100),
+//   createData("INS-002", 2, dayjs("01/01/2026").format("DD/MM/YYYY"), 100),
+// ];
 
-export default function addItemModal({ modalState, handleCloseModal, statementOfAccount, setStatementOfAccount }) {
-//   const [statementOfAccount, setStatementOfAccount] = useState({
-//     invoice_id: selectedValue,
-//     instalment_id: "",
-//     payment_date: "",
-//     payment_amount: 0,
-//   });
+export default function addItemModal({
+  setSelectedValue,
+  handleModalRadio,
+  selectedValue,
+  modalState,
+  handleCloseModal,
+  statementOfAccount,
+  setStatementOfAccount,
+  insDetail,
+  handleCurrency,
+  soa_id,
+}) {
+  //   const [statementOfAccount, setStatementOfAccount] = useState({
+  //     invoice_id: selectedValue,
+  //     instalment_id: "",
+  //     payment_date: "",
+  //     payment_amount: 0,
+  //   });
+  const [instalment_data, setData] = useState([]);
 
+  console.log(insDetail);
   const handleTextfield = (e) => {
     setStatementOfAccount({
       ...statementOfAccount,
@@ -68,25 +82,30 @@ export default function addItemModal({ modalState, handleCloseModal, statementOf
   };
 
   const handleDate = (e) => {
-    const dateformat = dayjs(e.$d).format("DD/MM/YYYY")
+    const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
     setStatementOfAccount({
       ...statementOfAccount,
       payment_date: dateformat,
     });
   };
 
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    let itemForm = new FormData();
+    itemForm.append("invoice_id", statementOfAccount.invoice_id);
+    itemForm.append("payment_date", statementOfAccount.payment_date);
+    itemForm.append("payment_amount", statementOfAccount.payment_amount);
+    itemForm.append(
+      "installment_standing",
+      statementOfAccount.installment_standing
+    );
+    itemForm.append("payment_currency", statementOfAccount.payment_currency);
+
+    await addItemApi(soa_id, itemForm);
+    handleCloseModal();
+    window.location.replace("/soaList/" + soa_id);
   };
 
-  const [insSelectedValue, setInsSelectedValue] = useState(0);
-
-  const handleRadioChange = (e) => {
-    setInsSelectedValue(e.target.value);
-    setStatementOfAccount({...statementOfAccount,instalment_id: e.target.value})
-    // console.log(event.target.value)
-  };
   //console.log(statementOfAccount)
   return (
     <div>
@@ -128,7 +147,7 @@ export default function addItemModal({ modalState, handleCloseModal, statementOf
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {instalment_data.map((row) => (
+                          {insDetail.map((row, idx) => (
                             <TableRow
                               key={row.name}
                               sx={{
@@ -139,20 +158,19 @@ export default function addItemModal({ modalState, handleCloseModal, statementOf
                             >
                               <TableCell align="left">
                                 <Radio
-                                  checked={row.instalment_id == insSelectedValue}
-                                  onChange={handleRadioChange}
-                                  value={row.instalment_id}
+                                  checked={idx + 1 == selectedValue}
+                                  onChange={handleModalRadio}
+                                  value={idx + 1}
                                 />
-                                
                               </TableCell>
                               <TableCell component="th" scope="row">
-                                {row.instalment_number}
+                                {idx + 1}
                               </TableCell>
                               <TableCell align="left">
-                                {row.due_date}
+                                {dayjs(row.Due_Date).format("DD/MM/YYYY")}
                               </TableCell>
                               <TableCell align="left">
-                                {row.amount}
+                                {row.Ins_Amount}
                               </TableCell>
                             </TableRow>
                           ))}
@@ -165,7 +183,7 @@ export default function addItemModal({ modalState, handleCloseModal, statementOf
                 <div className="grid grid-cols-2 ">
                   <DatePickerMUI
                     bigLabel={"Payment Date"}
-                    label={"start date"}
+                    label={"Payment date"}
                     onChange={handleDate}
                   />
                   <Textfield
@@ -176,11 +194,30 @@ export default function addItemModal({ modalState, handleCloseModal, statementOf
                     value={statementOfAccount.amount}
                   />
                 </div>
-                <button className=" w-full my-5 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">
+                <div>
+                  <h2 className="font-bold text-lg">Payment Currency</h2>
+                  <select
+                    id="payment_currency"
+                    name="payment_currency"
+                    className="drop-shadow-md focus:border-green-700 focus:border-[3px] border-[2.5px] border-gray-500 rounded-lg  h-[40px]  text-gray-700  focus:outline-none focus:shadow-outline mt-2"
+                    placeholder="sort"
+                    onChange={handleCurrency}
+                    defaultValue="currencyHeader"
+                  >
+                    <option value="currencyHeader" disabled>
+                      Currency
+                    </option>
+                    <option value="USD">USD</option>
+                    <option value="IDR">IDR</option>
+                  </select>
+                </div>
+
+                <button
+                  type="submit"
+                  className=" w-full my-5 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
+                >
                   Submit
                 </button>
-
-                
               </div>
             </div>
           </form>

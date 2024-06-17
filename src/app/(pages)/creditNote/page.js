@@ -6,42 +6,126 @@ import DatePickerMUI from "../../components/datePickerMUI";
 import SumInsuredForm from "@/app/components/invoiceComponents/sumInsuredForm";
 import InvInstallmentForm from "../../components/invoiceComponents/invInstallmentForm";
 import ImgDragDrop from "../../components/imgDragDrop";
+import axios from "axios";
 
 export default function creditNote() {
+  const [imgValue, setImgValue] = useState(null);
+  const [siData, setSiData] = useState([
+    { item: "", sum_insured: "", notes: "" },
+  ]);
+  const [insData, setInsData] = useState([{ due_date: null, amount: "" }]);
   const [creditNote, setCreditNote] = useState({
-    company_name: "",
-    company_address: "",
-    company_number: "",
+    typeInvoice: "credit",
     recipient: "",
     recipient_address: "",
-    invoice_id: "DN-001",
-    currency: "",
     net_premium: "",
-    brokerage: "",
     discount: "",
-    pph: "",
-    risk_management: "",
     admin_cost: "",
+    risk_management: "",
+    brokerage: "",
+    pph: "",
     total_premium_due: "",
     policy_number: "",
     name_of_insured: "",
     address_of_insured: "",
     insurance_type: "",
-    // start_date:"",
-    // end_date:"",
-    // sum_insured_form:[],
-    terms_of_payment: "",
+    //////
+    company_pict: "",
+    company_name: "",
+    company_number: "",
+    company_address: "",
+    company_contact: "",
+    currency: "USD",
+    terms_of_period: "",
     remarks: "",
   });
+
+  ///////////////////////////////////////////////////
+  const url = "/api/create-invoices";
+  const authToken =
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYzI0ZTdiODEtMzQ0MS00MGI2LThiZjgtZTU0NDFlMjNlZTVlIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzE4NjM3MjI2fQ.-Bq4dPdBWjUa9cB-2IlF8W6oKieB0SCC_PXx0IcRh-Y";
+
+  const FormData = require("form-data");
+  const [insDueDate,setInsDueDate] = useState([])
+  const [insAmount,setInsAmount] = useState([])
+
+  // const handleInsDueDate = (data) => {
+  //   let dueDateArr = data.map(a=>a.due_date)
+  //   return(dueDateArr)
+  //   //setInsDueDate(dueDateArr)
+  // };
+
+  // const handleInsAmount = (data) => {
+  //   let amountArr = data.map(a=>a.amount)
+  //   return(amountArr)
+  // };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let invForm = new FormData();
+    invForm.append("typeInvoice", "debit");
+    invForm.append("recipient", "PT. Malaysia Air");
+    invForm.append("address", "Jakarta barat");
+    invForm.append("desc_premium", "4000");
+    invForm.append("desc_discount", "1234");
+    invForm.append("desc_admin_cost", "45678");
+    invForm.append("desc_risk_management", "43567");
+    invForm.append("desc_brokage", "5678");
+    invForm.append("desc_pph", "0");
+    invForm.append("total_premium_due", "12000");
+    invForm.append("policy_number", "01.401.50.2023.0015-0");
+    invForm.append("name_of_insured", "PT. Gunung Selatan");
+    invForm.append("address_of_insured", "Jakarta, DKI Jakarta");
+    invForm.append(
+      "type_of_insurance",
+      "AVIATION HULL & SPARES ALL RISKS, THIRD PARTY AND PASSENGER LIABILITY, HULL WAR, PERSONAL ACCIDENT"
+    );
+    invForm.append("periode_start", "2022-09-08");
+    invForm.append("periode_end", "2025-09-08");
+    invForm.append(
+      "terms_of_period",
+      "Based on AVN 6A- the premium shall be paid in the following instalments :"
+    );
+    invForm.append(
+      "remarks",
+      "1st Instalment has to be paid before Inception"
+    );
+    invForm.append("due_date", insDueDate);
+    invForm.append("ins_amount", insAmount);
+    invForm.append("items_name", "Aircrafts");
+    invForm.append("sum_ins_amount", "1500000");
+    invForm.append("notes", "There's was insurance of .....");
+    invForm.append("company_pict", imgValue);
+    invForm.append("comp_name", "PT Insurance");
+    invForm.append("comp_address", "create address");
+    invForm.append("comp_contact", "72417207420");
+
+    axios
+      .post(url, invForm, {
+        headers: {
+          Authorization: authToken,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        return response.data
+        // handleCloseModal();
+        // alert("Statement of Account Sucessfully Created!");
+        // location.reload("/soaList");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  ///////////////////////////////////////////////////
 
   const handleTextChange = (e) => {
     setCreditNote({ ...creditNote, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
-
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  // };
 
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
@@ -61,7 +145,7 @@ export default function creditNote() {
             {/* company details */}
             <div className="flex justify-between">
               <div>
-                <ImgDragDrop className={'w-[250px]  h-[260px]'}/>
+                <ImgDragDrop className={"w-[250px]  h-[260px]"} imgValue={imgValue} setImgValue={setImgValue} />
               </div>
               <div className="flex flex-col w-96 mt-5">
                 <Textfield
@@ -291,7 +375,7 @@ export default function creditNote() {
                 </label>
 
                 <div className="border-[3px] border-green-700 rounded-xl mt-2 py-4 pl-5">
-                  <InvInstallmentForm />
+                  <InvInstallmentForm insAmount={insAmount} setInsAmount={setInsAmount} setInsDueDate={setInsDueDate} insDueDate={insDueDate} insData={insData} setInsData={setInsData} />
                 </div>
               </div>
               <div className="w-full">

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import TableMUI from "../../../components/soaComponents/soaDetailTable";
 import Textfield from "../../../components/textfield";
@@ -9,6 +9,8 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import CreateSoaModal from "../../../components/soaComponents/createSoaModal";
 import EditItemModal from "../../../components/soaComponents/editItemModal";
+import axios from "axios";
+import { fetchSoaDetails } from "@/app/utils/api/soaApi";
 
 function createData(
   soa_id_details,
@@ -176,18 +178,30 @@ const soaData = [
 ];
 export default function statementOfAccount({ params }) {
   const [query, setQuery] = useState("");
-  const [filteredData, setFilteredData] = useState(soaData);
+  const [soaDetails, setSoaDetails] = useState([])
+  const [filteredData, setFilteredData] = useState([]);
+
+  useEffect(() => {
+    const fetchSoa = async () => {
+      const response = await fetchSoaDetails(params.soaId)
+      setSoaDetails(response)
+      setFilteredData(response)
+      console.log(response)
+
+    };
+    fetchSoa();
+  }, []);
 
   const handleSearch = (e) => {
     const searchQuery = e.target.value;
     //console.log(e.target.value)
     setQuery(searchQuery);
 
-    const filteredSoa = soaData.filter(
+    const filteredSoa = soaDetails.filter(
       (data) =>
-        data.invoice_id.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
-        data.recipient.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        data.payment_status.toLowerCase().includes(searchQuery.toLowerCase()) 
+        data.Invoice_ID.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.Recipient.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.Status.toLowerCase().includes(searchQuery.toLowerCase()) 
       // data.period_end.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredData(filteredSoa);

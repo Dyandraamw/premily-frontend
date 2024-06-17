@@ -1,68 +1,104 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Textfield from "../../../../components/textfield";
 import SideTextfield from "../../../../components/sideTextfield";
 import DatePickerMUI from "../../../../components/datePickerMUI";
 import SumInsuredForm from "../../../../components/invoiceComponents/editSumInsuredForm";
 import InvInstallmentForm from "../../../../components/invoiceComponents/editInvInstallmentForm";
 import dayjs from "dayjs";
+import { fetchInvoiceDetail } from "@/app/utils/api/invApi";
 
 export default function editInvoice({ params }) {
   const [invoiceData, setinvoiceData] = useState({
-    invoice_type: "credit",
-    company_name: "PT. Lead Insurance Broker",
-    company_address:
-      "AD Premier Office Park 17th Floor Suite 6 Jl.TB Simatupang No. 5, Jakarta Selatan 12550, Indonesia",
-    company_number: "+62 821809246",
-    recipient: "PT. Garuda Indonesia",
-    recipient_address:
-      "Jl. Dewi Sartika, Sentani Kota Sentani, Cawang,Jakarta 99352, Indonesia",
-    invoice_id: params.invoiceId,
-    currency: "USD",
-    net_premium: 100000,
-    brokerage: 100,
-    discount: 50,
-    pph: 50,
-    risk_management: 10,
-    admin_cost: 3,
-    total_premium_due: 90000,
-    policy_number: "70.301.50.2023.0011-0",
-    name_of_insured: "PT. Alda Air",
-    address_of_insured:
-      "Jl. Telkom, Sentani Kota Sentani, Jayapura Regency,Papua 99352, Indonesia",
-    insurance_type:
-      "AVIATION HULL & SPARES ALL RISKS, THIRDPARTY AND PASSENGER LIABILITY, HULL WAR, PERSONAL ACCIDENT",
-    start_date: dayjs("2024-05-31").toISOString(),
-    end_date: dayjs("2024-12-314").toISOString(),
-    sum_insured_detail: [
-      { item: "Cessna Grand Caravan EX", sum_insured: 2580, note: "PK DLT" },
-      { item: "Cessna Grand Caravan EX", sum_insured: 2700, note: "PK DLY" },
-      { item: "Cessna Grand Caravan EX", sum_insured: 2600, note: "PK DLA" },
-    ],
-
-    terms_of_payment: "based on AVN 6A.",
-    remarks: "sample of remarks",
+    recipient_address: "",
+    address_of_insured: "",
+    company_address: "",
+    company_number: "",
+    company_name: "",
+    company_pict: "",
+    created_at: null,
+    admin_cost: 0,
+    brokerage: 0,
+    discount: 0,
+    pph: 0,
+    risk_management: 0,
+    invoice_id: "",
+    name_of_insured: "",
+    net_premium: 0,
+    end_date: null,
+    start_date: null,
+    policy_number: "",
+    remarks: "",
+    recipient: "",
+    terms_of_payment: "",
+    total_premium_due: 0,
+    invoice_type: "",
+    insurance_type: "",
+    updated_at: null,
+    user_id: "",
     instalments_detail: [
       {
-        instalment_id: "INS-001",
-        instalment_number: 1,
-        due_date: dayjs("2024-07-31").toISOString(),
-        amount: 30000,
-      },
-      {
-        instalment_id: "INS-002",
-        instalment_number: 2,
-        due_date: dayjs("2024-10-31").toISOString(),
-        amount: 30000,
-      },
-      {
-        instalment_id: "INS-003",
-        instalment_number: 3,
-        due_date: dayjs("2024-12-31").toISOString(),
-        amount: 30000,
+        Installment_ID: "",
+        Invoice_ID: "",
+        Due_Date: null,
+        Ins_Amount: 0,
+        Payment_Details: "",
       },
     ],
+    sum_insured_detail: [
+      {
+        Sum_Insured_ID: "",
+        Invoice_ID: "",
+        Items_Name: "",
+        Sum_Insured_Amount: 0,
+        Notes: "",
+      },
+    ],
+    currency: "",
   });
+
+  useEffect(() => {
+    const fetchinv = async () => {
+      const invList = await fetchInvoiceDetail(params.invoiceId);
+      setinvoiceData({
+        ...invoiceData,
+        recipient_address: invList.Address,
+        address_of_insured: invList.Address_Of_Insured,
+        company_address: invList.Company_Address,
+        company_number: invList.Company_Contact,
+        company_name: invList.Company_Name,
+        company_pict: invList.Company_Picture,
+        created_at: invList.Created_At,
+        admin_cost: invList.Desc_Admin_Cost,
+        brokerage: invList.Desc_Brokage,
+        discount: invList.Desc_Discount,
+        pph: invList.Desc_PPH,
+        risk_management: invList.Desc_Risk_Management,
+        invoice_id: invList.Invoice_ID,
+        name_of_insured: invList.Name_Of_Insured,
+        net_premium: invList.Net_Premium,
+        end_date: invList.Period_End,
+        start_date: invList.Period_Start,
+        policy_number: invList.Policy_Number,
+        remarks: invList.Remarks,
+        recipient: invList.Recipient,
+        terms_of_payment: invList.Terms_Of_Period,
+        total_premium_due: invList.Total_Premium_Due,
+        invoice_type: invList.Type,
+        insurance_type: invList.Type_Of_Insurance,
+        updated_at: invList.Updated_At,
+        user_id: invList.UserID,
+        sum_insured_detail: invList.Sum_Insured_Details,
+        instalments_detail: invList.Installment,
+        currency: invList.Currency,
+      });
+      console.log(invList);
+    };
+    fetchinv();
+  }, []);
+
+  const [insData, setInsData] = useState(invoiceData.instalments_detail);
+  const [siData, setSiData] = useState(invoiceData.sum_insured_detail);
 
   const handleTextChange = (e) => {
     setinvoiceData({ ...invoiceData, [e.target.id]: e.target.value });
@@ -313,6 +349,8 @@ export default function editInvoice({ params }) {
               <div className="border-[3px] border-green-700 rounded-xl mt-5 py-4 pl-5">
                 <SumInsuredForm
                   invoiceData={invoiceData.sum_insured_detail}
+                  siData={siData}
+                  setSiData={setSiData}
                 />
               </div>
             </div>
@@ -338,6 +376,8 @@ export default function editInvoice({ params }) {
                 <div className="border-[3px] border-green-700 rounded-xl mt-2 py-4 pl-5">
                   <InvInstallmentForm
                     invoiceData={invoiceData.instalments_detail}
+                    insData={insData}
+                    setInsData={setInsData}
                   />
                 </div>
               </div>

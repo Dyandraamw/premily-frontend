@@ -1,9 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddItem from "../../../../components/soaComponents/addItem";
 import dayjs from "dayjs";
 import Link from "next/link";
 import AddItemModal from "../../../../components/soaComponents/addItemModal";
+import { fetchInvoiceDetail, fetchInvoiceList } from "@/app/utils/api/invApi";
 
 const tableData = [
   {
@@ -48,14 +49,35 @@ const tableData = [
   },
 ];
 
-export default function soaAddItem() {
-  const [selectedValue, setSelectedValue] = useState(0);
+export default function soaAddItem({ params }) {
+  const [invoiceList, setInvoiceList] = useState([]);
+  const [insDetail, setInsDetail] = useState([{
+    Installment_ID: "",
+    Invoice_ID: "",
+    Due_Date: null,
+    Ins_Amount: 0,
+    Payment_Details: "",
+  },]);
+  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedIns, setSelectedIns] = useState(0);
   const [statementOfAccount, setStatementOfAccount] = useState({
     invoice_id: "",
-    instalment_id: "",
+    // instalment_id: "",
+    installment_standing: 0,
     payment_date: "",
     payment_amount: 0,
+    payment_currency: "",
   });
+  
+  useEffect(() => {
+    const fetchinv = async () => {
+      const invList = await fetchInvoiceList();
+      setInvoiceList(invList);
+
+      // console.log(invList)
+    };
+    fetchinv();
+  }, []);
 
   const handleRadioChange = (e) => {
     setSelectedValue(e.target.value);
@@ -63,12 +85,42 @@ export default function soaAddItem() {
       ...statementOfAccount,
       invoice_id: e.target.value,
     });
+
+    
+  };
+
+  const handleModalRadio = (e) => {
+    setSelectedIns(e.target.value);
+    setStatementOfAccount({
+      ...statementOfAccount,
+      installment_standing: e.target.value,
+    });
+  };
+
+  const handleCurrency = (e) => {
+    //const sortValue = e.target.value;
+    setStatementOfAccount({
+      ...statementOfAccount,
+      payment_currency: e.target.value,
+    });
   };
 
   const [modalState, setModalState] = useState(false);
-  const handleOpenModal = () => setModalState(true);
+  const handleOpenModal = () => {
+    if (selectedValue!= "") {
+      const fetchinvDet = async (Invoice_ID) => {
+        const insList = await fetchInvoiceDetail(Invoice_ID);
+        setInsDetail(insList.Installment);
+  
+        //console.log(insList);
+      };
+  
+      fetchinvDet(selectedValue);
+      setModalState(true);
+    }
+    }
   const handleCloseModal = () => setModalState(false);
-
+    console.log(statementOfAccount)
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <AddItemModal
@@ -76,6 +128,12 @@ export default function soaAddItem() {
         handleCloseModal={handleCloseModal}
         statementOfAccount={statementOfAccount}
         setStatementOfAccount={setStatementOfAccount}
+        selectedValue={selectedIns}
+        handleModalRadio={handleModalRadio}
+        setSelectedValue={setSelectedIns}
+        insDetail={insDetail}
+        handleCurrency={handleCurrency}
+        soa_id={params.soaId}
       />
       <div className="flex justify-between mb-2">
         <div className="">
@@ -90,7 +148,7 @@ export default function soaAddItem() {
       <div className="bg-white drop-shadow-lg rounded-xl w-min-[1500px] w-max-full mt-5 p-5 h-[900px] overflow-y-auto">
         <p className="ml-1 text-lg font-semibold text-black">Select Invoice</p>
         <AddItem
-          tableData={tableData}
+          tableData={invoiceList}
           selectedValue={selectedValue}
           handleRadioChange={handleRadioChange}
         />

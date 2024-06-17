@@ -4,34 +4,24 @@ import TableMUI from "../../components/invoiceComponents/invoiceTable";
 import Textfield from "../../components/textfield";
 import DeleteInvoiceModal from "../../components/invoiceComponents/deleteInvoiceModal";
 import { FaSearch } from "react-icons/fa";
+import { fetchInvoiceList } from "../../utils/api/invApi";
 import dayjs from "dayjs";
-import axios from "axios";
 
 export default function invoiceList() {
   // fetch data ////////////////////////////////////////////
   const [invoiceList, setInvoiceList] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const url = "/api/invoice-list";
-  const authToken =
-    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYzI0ZTdiODEtMzQ0MS00MGI2LThiZjgtZTU0NDFlMjNlZTVlIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzE4NjM3MjI2fQ.-Bq4dPdBWjUa9cB-2IlF8W6oKieB0SCC_PXx0IcRh-Y";
 
   useEffect(() => {
-    const fetchInvoiceList = () => {
-      axios.get(url, {
-          headers: {
-            Authorization: authToken,
-          },
-        })
-        .then((response) => {
-          setInvoiceList(response.data)
-          setFilteredData(response.data)
-          //console.log(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+
+    const fetchinv = async () => {
+      const invList = await fetchInvoiceList()
+      setInvoiceList(invList)
+      setFilteredData(invList)
+      // console.log(invList)
     };
-    fetchInvoiceList();
+    fetchinv()
+
   }, []);
 
 
