@@ -12,7 +12,7 @@ export default function imgDragDrop({ className, imgValue, setImgValue }) {
     const imgUrl = URL.createObjectURL(file);
     document.querySelector("img").src = imgUrl;
     setImgValue(data);
-    //console.log(e.target.files[0])
+    console.log(imgUrl)
   };
 
   const handleDrag = (e) => {
@@ -45,7 +45,7 @@ export default function imgDragDrop({ className, imgValue, setImgValue }) {
     fileRef.current.click();
   };
 
-  //console.log(imgValue);
+  console.log(imgValue);
   return (
     <div
       className={
@@ -83,6 +83,7 @@ export default function imgDragDrop({ className, imgValue, setImgValue }) {
               Drag to upload image, or
             </p>
             <button
+            type="button"
               onClick={handleClick}
               className="p-2 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
             >

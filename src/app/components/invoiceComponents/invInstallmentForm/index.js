@@ -15,7 +15,6 @@ export default function invInstallmentForm({ insData, setInsData, setInsDueDate,
   };
 
   const handleInsDueDate = (data) => {
-    
     setInsDueDate(dueDateArr)
   };
 
@@ -26,10 +25,12 @@ export default function invInstallmentForm({ insData, setInsData, setInsDueDate,
 
 
   const handleChange = (e, i) => {
+    e.preventDefault();
     const { value } = e.target;
     const changeValue = [...insData];
     changeValue[i]["amount"] = value;
     setInsData(changeValue);
+    
     const changedValue2 = [...insAmount];
     changedValue2[i] = value;
     setInsAmount(changedValue2)
@@ -52,11 +53,11 @@ export default function invInstallmentForm({ insData, setInsData, setInsDueDate,
     delRow.splice(i, 1);
     setInsData(delRow);
   };
-  console.log(insAmount)
+  //console.log(insData)
   return (
     <div>
       {insData.map((val, i) => (
-        <div className="flex items-center">
+        <div className="flex items-center" key={i} >
           <div className="grid grid-cols-11 gap-2 w-[85%]">
             <div>
               {i == 0 ? (
@@ -90,6 +91,7 @@ export default function invInstallmentForm({ insData, setInsData, setInsDueDate,
           </div>
           {i != 0 ? (
             <button
+            type="button"
               onClick={() => handleDeleteRow(i)}
               className="flex text-red-600 hover:text-red-500 ml-2 text-md font-bold "
             >
@@ -99,6 +101,7 @@ export default function invInstallmentForm({ insData, setInsData, setInsDueDate,
         </div>
       ))}
       <button
+      type="button"
         onClick={handleClick}
         className="text-black hover:text-green-700 text-md font-bold"
       >

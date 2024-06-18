@@ -1,11 +1,11 @@
-'use client'
-import dayjs from 'dayjs';
-import React from 'react'
+"use client";
+import dayjs from "dayjs";
+import React from "react";
 
-export default function invoicePdfTemplate({invoice_data}) {
+export default function invoicePdfTemplate({ invoice_data }) {
   return (
-    <div className='bg-white'>
-      <div className="bg-white "> 
+    <div className="bg-white">
+      <div className="bg-white ">
         {/* top half */}
         <div>
           <h1 className="text-3xl text-black font-bold mb-2">
@@ -13,9 +13,12 @@ export default function invoicePdfTemplate({invoice_data}) {
           </h1>
           {/* company details */}
           <div className="flex justify-between">
-            <div className="w-[200px] border-2 border-black h-[200px]">
-              {" "}
-              image sementara
+            <div className="w-[200px]  h-[200px]">
+              <img
+                className="w-[200px] h-[200px]"
+                src={invoice_data.company_pict}
+                alt="company logo"
+              />
             </div>
           </div>
           {/* invoice details */}
@@ -25,12 +28,8 @@ export default function invoicePdfTemplate({invoice_data}) {
                 <b>FROM:&emsp;</b>
                 <div>
                   <p className="font-semibold">{invoice_data.company_name}</p>
-                  <p className="text-justify">
-                    {invoice_data.company_address}
-                  </p>
-                  <p className="text-justify">
-                    {invoice_data.company_number}
-                  </p>
+                  <p className="text-justify">{invoice_data.company_address}</p>
+                  <p className="text-justify">{invoice_data.company_number}</p>
                 </div>
               </div>
             </div>
@@ -83,28 +82,28 @@ export default function invoicePdfTemplate({invoice_data}) {
                 <div className="flex items-center">
                   <b>{invoice_data.currency}</b>
                   <p className="text-right">
-                    &emsp;{invoice_data.net_premium.toLocaleString()}
+                    &emsp;{parseInt(invoice_data.net_premium).toLocaleString()}
                   </p>
                 </div>
                 <p>
                   {invoice_data.currency} &emsp;
-                  {invoice_data.brokerage.toLocaleString()}
+                  {parseInt(invoice_data.brokerage).toLocaleString()}
                 </p>
                 <p>
                   {invoice_data.currency} &emsp;
-                  {invoice_data.discount.toLocaleString()}
+                  {parseInt(invoice_data.discount).toLocaleString()}
                 </p>
                 <p>
                   {invoice_data.currency} &emsp;
-                  {invoice_data.pph.toLocaleString()}
+                  {parseInt(invoice_data.pph).toLocaleString()}
                 </p>
                 <p>
                   {invoice_data.currency} &emsp;
-                  {invoice_data.risk_management.toLocaleString()}
+                  {parseInt(invoice_data.risk_management).toLocaleString()}
                 </p>
                 <p>
                   {invoice_data.currency} &emsp;
-                  {invoice_data.admin_cost.toLocaleString()}
+                  {parseInt(invoice_data.admin_cost).toLocaleString()}
                 </p>
               </div>
             </div>
@@ -123,7 +122,7 @@ export default function invoicePdfTemplate({invoice_data}) {
               <div className="font-bold py-2 px-3">
                 <b>
                   {invoice_data.currency} &emsp;
-                  {invoice_data.total_premium_due.toLocaleString()}
+                  {parseInt(invoice_data.total_premium_due).toLocaleString()}
                 </b>
               </div>
             </div>
@@ -131,7 +130,7 @@ export default function invoicePdfTemplate({invoice_data}) {
         </div>
 
         {/* content */}
-        <div className=" rounded-lg mt-5 border-[3px] border-black p-3">
+        <div className=" rounded-lg mt-5 mb-10 border-[3px] border-black p-3">
           <div className="grid grid-cols-7 p-2 ">
             <b className="col-span-2">Policy No</b>
             <p className="col-span-5">: &emsp;{invoice_data.policy_number}</p>
@@ -139,9 +138,7 @@ export default function invoicePdfTemplate({invoice_data}) {
 
           <div className="grid grid-cols-7 p-2">
             <b className="col-span-2 ">Name of Insured</b>
-            <p className="col-span-5">
-              : &emsp;{invoice_data.name_of_insured}
-            </p>
+            <p className="col-span-5">: &emsp;{invoice_data.name_of_insured}</p>
           </div>
 
           <div className="grid grid-cols-7 p-2">
@@ -157,16 +154,15 @@ export default function invoicePdfTemplate({invoice_data}) {
               : &emsp;<b>{invoice_data.insurance_type}</b>
             </div>
           </div>
-
-
         </div>
-        <div className=" rounded-lg mt-5 border-[3px] border-black p-3">
-        <div className="grid grid-cols-7 p-2">
+        <div className=" rounded-lg mt-[100px] border-[3px] border-black p-3">
+          <div className="grid grid-cols-7 p-2">
             <b className="col-span-2 ">Period of Policy</b>
             <div className="col-span-5 flex">
               : &emsp;
               <p>
-                {invoice_data.start_date} up to {invoice_data.end_date}
+                {dayjs(invoice_data.start_date).format("DD/MM/YYYY")} up to{" "}
+                {dayjs(invoice_data.end_date).format("DD/MM/YYYY")}
               </p>
             </div>
           </div>
@@ -189,14 +185,14 @@ export default function invoicePdfTemplate({invoice_data}) {
                     return (
                       <tr key={key}>
                         <td className="border-2 border-black px-1 ">
-                          {data.item}
+                          {data.Items_Name}
                         </td>
                         <td className="border-2 border-black px-1 ">
                           {invoice_data.currency}&emsp;
-                          {data.sum_insured.toLocaleString()}
+                          {parseInt(data.Sum_Insured_Amount).toLocaleString()}
                         </td>
                         <td className="border-2 border-black px-1 ">
-                          {data.note}
+                          {data.Notes}
                         </td>
                       </tr>
                     );
@@ -232,10 +228,10 @@ export default function invoicePdfTemplate({invoice_data}) {
                           </td>
                           <td className="border-2 border-black px-1 ">
                             {invoice_data.currency}&emsp;
-                            {data.amount.toLocaleString()}
+                            {parseInt(data.Ins_Amount).toLocaleString()}
                           </td>
                           <td className="border-2 border-black px-1 font-semibold">
-                            {dayjs(data.due_date).format('DD/MM/YYYY')}
+                            {dayjs(data.Due_Date).format("DD/MM/YYYY")}
                           </td>
                         </tr>
                       );
@@ -246,7 +242,9 @@ export default function invoicePdfTemplate({invoice_data}) {
                       </td>
                       <td className="border-2 border-black font-bold">
                         {invoice_data.currency}&emsp;
-                        {invoice_data.total_premium_due}
+                        {parseInt(
+                          invoice_data.total_premium_due
+                        ).toLocaleString()}
                       </td>
                       <td className="border-2 border-black "></td>
                     </tr>
@@ -256,7 +254,7 @@ export default function invoicePdfTemplate({invoice_data}) {
             </div>
           </div>
         </div>
+      </div>
     </div>
-    </div>
-  )
+  );
 }

@@ -117,7 +117,6 @@ export default function editInvoice({ params }) {
     const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
     setinvoiceData({ ...invoiceData, end_date: dateformat });
   };
-  
 
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
@@ -136,9 +135,12 @@ export default function editInvoice({ params }) {
           <div>
             {/* company details */}
             <div className="flex justify-between">
-              <div className="w-[300px] border-2 border-black h-[300px]">
-                {" "}
-                image sementara
+              <div className="w-[200px] mt-10 ml-5 h-[200px]">
+                <img
+                  className="w-[200px] h-[200px]"
+                  src={invoiceData.company_pict}
+                  alt="company logo"
+                />
               </div>
               <div className="flex flex-col w-96 mt-5">
                 <Textfield
@@ -166,7 +168,7 @@ export default function editInvoice({ params }) {
             </div>
 
             {/* invoice main details */}
-            <div className="grid grid-cols-4 gap-6 mt-5">
+            <div className="grid grid-cols-3 gap-6 mt-5">
               <Textfield
                 label={"Invoice Recipient"}
                 id={"recipient"}
@@ -190,7 +192,7 @@ export default function editInvoice({ params }) {
                 disabled={true}
               />
               {/* currency dropdown */}
-              <div>
+              {/* <div>
                 <label
                   for="currency"
                   className="block text-black text-lg font-bold mb-2"
@@ -207,7 +209,7 @@ export default function editInvoice({ params }) {
                   <option value="myr">MYR</option>
                   <option value="SGD">SGD</option>
                 </select>
-              </div>
+              </div> */}
             </div>
 
             {/* Description */}
@@ -393,7 +395,10 @@ export default function editInvoice({ params }) {
             </div>
 
             <div className="flex w-full justify-end mt-5">
-              <button className="p-2 border-[3px] drop-shadow-lg font-bold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">
+              <button
+                type="submit"
+                className="p-2 border-[3px] drop-shadow-lg font-bold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
+              >
                 Submit
               </button>
             </div>

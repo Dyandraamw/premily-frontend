@@ -54,6 +54,7 @@ export default function invoiceDetail({ params }) {
     ],
     currency: "",
   });
+
   useEffect(() => {
     const fetchinv = async () => {
       const invList = await fetchInvoiceDetail(params.invoiceId);
@@ -94,10 +95,10 @@ export default function invoiceDetail({ params }) {
     fetchinv();
   }, []);
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
   };
+  console.log(invoice_data.company_pict)
 
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
@@ -108,17 +109,16 @@ export default function invoiceDetail({ params }) {
           View Invoice Number {params.invoiceId} Details
         </p>
       </div>
-      <div className="bg-white rounded-lg w-min-[1500px] w-max-full mt-5 p-5 ">
+      <div className="bg-white rounded-lg w-min-[1500px] w-max-full mt-5 p-5 drop-shadow-xl ">
         {/* top half */}
         <div>
           <h1 className="text-3xl text-black font-bold mb-2">
-            {invoice_data.invoice_id == "credit" ? "Credit " : "Debit "}Note
+            {invoice_data.invoice_type == "credit" ? "Credit " : "Debit "}Note
           </h1>
           {/* company details */}
           <div className="flex justify-between">
-            <div className="w-[200px] border-2 border-black h-[200px]">
-              {" "}
-              image sementara
+            <div className="w-[200px]  h-[200px]">
+              <img className="w-[200px] h-[200px]" src={invoice_data.company_pict} alt="company logo" />
             </div>
           </div>
           {/* invoice details */}
@@ -213,7 +213,7 @@ export default function invoiceDetail({ params }) {
           <div class="grid grid-cols-7 divide-x-[2.5px] rounded-b-lg mb-2 border-t-0 border-[3px] border-black divide-black">
             <div class="col-span-5 grid grid-cols-1 divide-y-[2.5px]  divide-black">
               <div className="flex justify-center font-bold py-2">
-                {invoice_data.invoice_id == "credit"
+                {invoice_data.invoice_type == "credit"
                   ? "TOTAL PREMIUM DUE TO YOU"
                   : "TOTAL PREMIUM DUE TO US"}
               </div>
@@ -260,7 +260,8 @@ export default function invoiceDetail({ params }) {
             <div className="col-span-5 flex">
               : &emsp;
               <p>
-                {invoice_data.start_date} up to {invoice_data.end_date}
+                {dayjs(invoice_data.start_date).format("DD/MM/YYYY")} up to{" "}
+                {dayjs(invoice_data.end_date).format("DD/MM/YYYY")}
               </p>
             </div>
           </div>
@@ -340,7 +341,7 @@ export default function invoiceDetail({ params }) {
                       </td>
                       <td className="border-2 border-black font-bold">
                         {invoice_data.currency}&emsp;
-                        {invoice_data.total_premium_due}
+                        {parseInt(invoice_data.total_premium_due).toLocaleString()}
                       </td>
                       <td className="border-2 border-black "></td>
                     </tr>
@@ -359,7 +360,7 @@ export default function invoiceDetail({ params }) {
             </Link>
           </button>
           <div className="w-[130px]">
-            {/* <PdfButton invoice_data={invoice_data} /> */}
+            <PdfButton invoice_data={invoice_data} />
           </div>
         </div>
       </div>

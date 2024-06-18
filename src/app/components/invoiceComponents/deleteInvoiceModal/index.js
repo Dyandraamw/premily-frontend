@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import dayjs from "dayjs";
 import axios from "axios";
+import { deleteInvoice } from "@/app/utils/api/invApi";
 
 const style = {
   position: "absolute",
@@ -27,21 +28,11 @@ export default function deleteInvoiceModal({
   const authToken =
     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYzI0ZTdiODEtMzQ0MS00MGI2LThiZjgtZTU0NDFlMjNlZTVlIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzE4NjM3MjI2fQ.-Bq4dPdBWjUa9cB-2IlF8W6oKieB0SCC_PXx0IcRh-Y";
 
-  const handleDelete = () => {
-    axios.delete(url + `${delInvoice}`, {
-        headers: {
-          Authorization: authToken,
-        },
-      })
-      .then((response) => {
-        handleCloseModal()
-        alert(response.data)
-        console.log(response.data);
-        location.reload('/invoiceList');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const handleDelete = async (e) => {
+    handleCloseModal()
+    await deleteInvoice(delInvoice)
+
+
   };
   return (
     <div>

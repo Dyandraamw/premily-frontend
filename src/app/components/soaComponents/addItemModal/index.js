@@ -62,7 +62,7 @@ export default function addItemModal({
   statementOfAccount,
   setStatementOfAccount,
   insDetail,
-  handleCurrency,
+  // handleCurrency,
   soa_id,
 }) {
   //   const [statementOfAccount, setStatementOfAccount] = useState({
@@ -77,7 +77,7 @@ export default function addItemModal({
   const handleTextfield = (e) => {
     setStatementOfAccount({
       ...statementOfAccount,
-      payment_amount: e.target.value,
+      payment_amount: parseInt(e.target.value),
     });
   };
 
@@ -99,7 +99,7 @@ export default function addItemModal({
       "installment_standing",
       statementOfAccount.installment_standing
     );
-    itemForm.append("payment_currency", statementOfAccount.payment_currency);
+    // itemForm.append("payment_currency", statementOfAccount.payment_currency);
 
     await addItemApi(soa_id, itemForm);
     handleCloseModal();
@@ -194,7 +194,7 @@ export default function addItemModal({
                     value={statementOfAccount.amount}
                   />
                 </div>
-                <div>
+                {/* <div>
                   <h2 className="font-bold text-lg">Payment Currency</h2>
                   <select
                     id="payment_currency"
@@ -210,7 +210,7 @@ export default function addItemModal({
                     <option value="USD">USD</option>
                     <option value="IDR">IDR</option>
                   </select>
-                </div>
+                </div> */}
 
                 <button
                   type="submit"
