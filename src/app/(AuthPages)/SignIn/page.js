@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useState, useRef } from "react";
 import Link from "next/link";
 
 import IconButton from "@mui/material/IconButton";
@@ -11,10 +11,11 @@ import TextField from "@mui/material/TextField";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { FormHelperText } from "@mui/material";
+import { TokenSignIn } from "@/app/utils/api/AuthToken/refreshToken";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [token, setToken] = useState(null);
 
   const userRef = useRef();
   const errRef = useRef();
@@ -27,89 +28,16 @@ export default function SignIn() {
   const [userError, setUserError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
-  useEffect(() => {
-    userRef.current.focus();
-  }, []);
-
-  const validateInputs = () => {
-    let valid = true;
-    setUserError("");
-    setPasswordError("");
-
-    if (!user) {
-      setUserError("Username is required");
-      valid = false;
-    }
-    if (!password) {
-      setPasswordError("Password is required");
-      valid = false;
-    }
-
-    return valid;
-  };
-
-  const axios = require("axios");
-  const FormData = require("form-data");
-  let data = new FormData();
-  data.append("email", "joko@gmail.com");
-  data.append("password", "KTyhCCCfmACZCUJNZeBuUjlFxWtmRswQGxyjbZXMYsxItZdVHA");
-  data.append("remember_me", "true");
-
-  let config = {
-    method: "post",
-    maxBodyLength: Infinity,
-    url: "https://premily-premily-d67f7a97.koyeb.app/sign-in",
-    headers: {
-      email: "joko@gmail.com",
-      password: "KTyhCCCfmACZCUJNZeBuUjlFxWtmRswQGxyjbZXMYsxItZdVHA",
-      remember_me: true,
-    },
-    data: data,
-  };
-
-  axios
-    .request(config)
-    .then((response) => {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const FormData = require("form-data");
+    let data = new FormData();
+    data.append("email", user);
+    data.append("password", password);
+    data.append("remember_me", "true");
 
-    // if (!validateInputs()) return;
-
-    // try {
-    //   const response = await axios.post(
-    //     LOGIN_URL,
-    //     JSON.stringify({ user, password }),
-    //     {
-    //       headers: { "Content-Type": "application/json" },
-    //       withCredentials: true,
-    //     }
-    //   );
-    //   console.log(JSON.stringify(response?.data));
-
-    //   const accessToken = response?.data?.accessToken;
-    //   const roles = response?.data?.roles;
-    //   setAuth({ user, password, roles, accessToken });
-    //   setUser("");
-    //   setPassword("");
-    //   setSuccess(true);
-    // } catch (err) {
-    //   if (!err?.response) {
-    //     setErrMsg("No Server Response");
-    //   } else if (err.response?.status === 400) {
-    //     setErrMsg("Missing Username or Password");
-    //   } else if (err.response?.status === 401) {
-    //     setErrMsg("Unauthorized");
-    //   } else {
-    //     setErrMsg("Login Failed");
-    //   }
-    //   errRef.current.focus();
-    // }
+    const token = await TokenSignIn(data);
+    setToken(token);
   };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -122,7 +50,7 @@ export default function SignIn() {
     <>
       {success ? (
         <section>
-          <h1> you are logged in!</h1>
+          <Link href="/dashboard" />
         </section>
       ) : (
         <div className="flex justify-center min-h-screen flex-col items-center w-full p-16">
@@ -141,7 +69,7 @@ export default function SignIn() {
               <TextField
                 required
                 id="outlined-Email"
-                label="Username"
+                label="Email"
                 ref={userRef}
                 autoComplete="off"
                 onChange={(e) => setUser(e.target.value)}
