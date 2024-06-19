@@ -4,7 +4,6 @@ import React, { useRef, useState } from "react";
 export default function imgDragDrop({ className, imgValue, setImgValue }) {
   const fileRef = useRef(null);
   const [dragState, setDragState] = useState(false);
-  
 
   const uploadImg = (e, data) => {
     e.preventDefault();
@@ -84,6 +83,7 @@ export default function imgDragDrop({ className, imgValue, setImgValue }) {
             </p>
             <button
               onClick={handleClick}
+              type="button"
               className="p-2 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
             >
               Select Image

@@ -11,15 +11,13 @@ import TextField from "@mui/material/TextField";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-import { Alert } from "@mui/material";
-import { FaInfoCircle } from "react-icons/fa";
-import { FaRegTimesCircle } from "react-icons/fa";
-import { FaCheckCircle } from "react-icons/fa";
+import { FetchSignUp } from "@/app/utils/api/AuthToken/refreshToken";
+import ImgDragDrop from "../../components/imgDragDrop/index";
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PASS_REGEX = /^(?=.*[a-z])(?=.*[A-Z)(?=.*[0-9])(?=.*[!@#%]).{8,24}$/;
 
-export default function SignUp(company) {
+export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -28,20 +26,14 @@ export default function SignUp(company) {
 
   const [user, setUser] = useState("");
   const [validName, setValidName] = useState(false);
-  const [userFocus, setUserFocus] = useState(false);
 
-  const [password, setPassword] = useState("");
-  const [validPassword, setValidPassword] = useState("");
-  const [passwordFocus, setPasswordFocus] = useState("");
-
-  const [matchPassword, setMatchPassword] = useState("");
-  const [validMatch, setValidMatch] = useState("");
-  const [matchFocus, setMatcFocus] = useState("");
-
+  const [email, setEmail] = useState();
+  const [name, setName] = useState();
+  const [phoneNumber, setPhoneNumber] = useState();
+  const [password, setPassword] = useState();
+  const [confirmPassword, setConfirmPassword] = useState();
+  const [image, setImageValue] = useState(null);
   const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
-
-  const [fetchedData, setFetchedData] = useState(null);
 
   useEffect(() => {
     if (userRef.current) {
@@ -49,36 +41,21 @@ export default function SignUp(company) {
     }
   }, []);
 
-  useEffect(() => {
-    const result = USER_REGEX.test(user);
-    // console.log(result);
-    // console.log(user);
-    setValidName(result);
-  }, [user]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let data = new FormData();
+    data.append("username", user);
+    data.append("email", email);
+    data.append("name", name);
+    data.append("phone", phoneNumber);
+    data.append("password", password);
+    data.append("confirmPassword", confirmPassword);
+    data.append("company", "PT Garuda Indonesia");
+    data.append("image", image);
 
-  useEffect(() => {
-    const result = PASS_REGEX.test(user);
-    // console.log(result);
-    // console.log(password);
-    setValidPassword(result);
-    const match = password === matchPassword;
-    setValidMatch(match);
-  }, [password, matchPassword]);
-
-  useEffect(() => {
-    setErrMsg("");
-  }, [user, password, matchPassword]);
-
-  // useEffect(async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       "https://premily-app-test-premily-7f5a9b07.koyeb.app/sign-up"
-  //     );
-  //     setFetchData(response.data);
-  //   } catch (err) {
-  //     console.log("error fetch data", err);
-  //   }
-  // });
+    const response = await FetchSignUp(data);
+    console.log("api ada", response.data);
+  };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowConfirmPasswordd = () =>
@@ -101,135 +78,122 @@ export default function SignUp(company) {
       >
         {errMsg}
       </p>
-      <Alert className="mb-5 w-96 rounded-md tracking-widest font-semibold hidden">
+      {/* <Alert className="mb-5 w-96 rounded-md tracking-widest font-semibold hidden">
         Your Account Already Sign Up!
-      </Alert>
+      </Alert> */}
       <div className="w-96 p-6 shadow-lg border-2 border-green-800 bg-white rounded-md">
-        <h1 className="text-xl block text-center font-semibold mb-8 mt-5">
-          Sign Up To Your Account
-        </h1>
-        <TextField
-          required
-          id="outlined-Email"
-          label="Email"
-          className="w-full mt-3 mb-5"
-        />
-        <TextField
-          required
-          id="outlined-username"
-          label="Username"
-          ref={userRef}
-          autoComplete="off"
-          onChange={(e) => setUser(e.target.value)}
-          aria-invalid={validName ? "false" : "true"}
-          aria-describedby="uidnote"
-          onFocus={() => setUserFocus(true)}
-          onBlur={() => setUserFocus(false)}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton>
-                {validName ? (
-                  <FaCheckCircle color="green" />
-                ) : !user ? (
-                  <FaRegTimesCircle color="red" />
-                ) : null}
-              </IconButton>
-              {/* <icon>
-                {validName ? (
-                  <FaCheckCircle color="green" />
-                ) : !user ? null : (
-                  <FaRegTimesCircle color="red" />
-                )}
-              </icon> */}
-            </InputAdornment>
-          }
-          className="w-full mb-5 border-green-500"
-        />
-        <p
-          id="uidnote"
-          className={
-            userFocus && user && !validName ? "instruction" : "offscreen"
-          }
-        >
-          <FaInfoCircle>
-            4 to 24 characters.
-            <br /> Must begin with a letter.
-            <br /> Letters, numbers, underscores, hyphens allowed.
-          </FaInfoCircle>
-        </p>
-        <TextField
-          id="outlined-username"
-          label="Name"
-          className="w-full mb-5"
-        />
-        <TextField
-          id="outlined-phone"
-          label="Phone Number"
-          className="w-full mb-5"
-        />
-        <FormControl
-          sx={{ width: "25ch" }}
-          variant="outlined"
-          required
-          className="w-full mb-5"
-        >
-          <InputLabel htmlFor="outlined-adornment-password">
-            Password
-          </InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={showPassword ? "text" : "password"}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
+        <form onSubmit={handleSubmit}>
+          <h1 className="text-xl block text-center font-semibold mb-8 mt-5">
+            Sign Up To Your Account
+          </h1>
+          <TextField
+            required
+            id="outlined-Email"
+            label="Email"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            className="w-full mt-3 mb-5"
           />
-        </FormControl>
-        <FormControl
-          sx={{ width: "25ch" }}
-          variant="outlined"
-          required
-          className="w-full mb-5"
-        >
-          <InputLabel htmlFor="outlined-adornment-password">
-            Confirm Password
-          </InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={showConfirmPassword ? "text" : "ConfirmPassword"}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowConfirmPasswordd}
-                  onMouseDown={handleMouseDownConfirmPassword}
-                  edge="end"
-                >
-                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Confirm Password"
+          <TextField
+            required
+            id="outlined-username"
+            label="Username"
+            ref={userRef}
+            autoComplete="off"
+            onChange={(e) => setUser(e.target.value)}
+            value={user}
+            aria-invalid={validName ? "false" : "true"}
+            className="w-full mb-5 border-green-500"
           />
-        </FormControl>
-        <div className="mt-8 mb-3">
-          <button
-            href="/SignIn"
-            type="submit"
-            className="border-2 border-green-700 bg-green-700 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-green-700 font-semibold"
+          <TextField
+            id="outlined-name"
+            label="Name"
+            onChange={(e) => setName(e.target.value)}
+            value={name}
+            className="w-full mb-5"
+          />
+          <TextField
+            id="outlined-phone"
+            label="Phone Number"
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            value={phoneNumber}
+            className="w-full mb-5"
+          />
+          <FormControl
+            sx={{ width: "25ch" }}
+            variant="outlined-password"
+            required
+            autoComplete="off"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            className="w-full mb-5"
           >
-            <Link href="/SignIn">Sign Up</Link>
-          </button>
-        </div>
+            <InputLabel htmlFor="outlined-adornment-password">
+              Password
+            </InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-password"
+              type={showPassword ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Password"
+            />
+          </FormControl>
+          <FormControl
+            sx={{ width: "25ch" }}
+            variant="outlined=confirm-password"
+            required
+            autoComplete="off"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={confirmPassword}
+            className="w-full mb-5"
+          >
+            <InputLabel htmlFor="outlined-adornment-password">
+              Confirm Password
+            </InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-confirm-password"
+              type={showConfirmPassword ? "text" : "ConfirmPassword"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowConfirmPasswordd}
+                    onMouseDown={handleMouseDownConfirmPassword}
+                    edge="end"
+                  >
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Confirm Password"
+            />
+          </FormControl>
+          <ImgDragDrop
+            setImgValue={setImageValue}
+            imgValue={image}
+            className="w-30 h-30 "
+          />
+          <div className="mt-8 mb-3">
+            <button
+              href="/SignIn"
+              type="submit"
+              className="border-2 border-green-700 bg-green-700 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-green-700 font-semibold"
+            >
+              <Link href="/SignIn">Sign Up</Link>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
