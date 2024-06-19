@@ -4,18 +4,21 @@ import Textfield from "../../textfield";
 import DatePickerMUI from "../../datePickerMUI";
 import dayjs from "dayjs";
 
-export default function editInvInstallmentForm({ invoiceData, insData, setInsData}) {
+export default function editInvInstallmentForm({
+  invoiceData,
+  insData,
+  setInsData,
+}) {
   const [initialLoad, setInitialLoad] = useState(false);
   const handleLoad = (e) => {
-    if(initialLoad==false){
-      setInsData(invoiceData)
-      
+    if (initialLoad == false) {
+      setInsData(invoiceData);
     }
-  }
+  };
 
- //console.log(invoiceData)
+  //console.log(invoiceData)
   const handleClick = () => {
-    setInitialLoad(true)
+    setInitialLoad(true);
     setInsData([
       ...insData,
       {
@@ -23,11 +26,10 @@ export default function editInvInstallmentForm({ invoiceData, insData, setInsDat
         Ins_Amount: 0,
       },
     ]);
-    
   };
 
   const handleChange = (e, i) => {
-    setInitialLoad(true)
+    setInitialLoad(true);
     const { value } = e.target;
     const changeValue = [...insData];
     changeValue[i]["Ins_Amount"] = value;
@@ -35,8 +37,8 @@ export default function editInvInstallmentForm({ invoiceData, insData, setInsDat
   };
 
   const handleDateChange = (e, i) => {
-    setInitialLoad(true)
-    const dvalue =dayjs(e.$d).format('YYYY-MM-DD')
+    setInitialLoad(true);
+    const dvalue = dayjs(e.$d).format("YYYY-MM-DD");
     // console.log(e)
     const changedValue = [...insData];
     changedValue[i]["Due_Date"] = dvalue;
@@ -45,7 +47,7 @@ export default function editInvInstallmentForm({ invoiceData, insData, setInsDat
   };
 
   const handleDeleteRow = (i) => {
-    setInitialLoad(true)
+    setInitialLoad(true);
     const delRow = [...insData];
     delRow.splice(i, 1);
     setInsData(delRow);
@@ -88,6 +90,7 @@ export default function editInvInstallmentForm({ invoiceData, insData, setInsDat
           </div>
           {i != 0 ? (
             <button
+              type="button"
               onClick={() => handleDeleteRow(i)}
               className="flex text-red-600 hover:text-red-500 ml-2 text-md font-bold "
             >
@@ -97,6 +100,7 @@ export default function editInvInstallmentForm({ invoiceData, insData, setInsDat
         </div>
       ))}
       <button
+        type="button"
         onClick={handleClick}
         className="text-black hover:text-green-700 text-md font-bold"
       >

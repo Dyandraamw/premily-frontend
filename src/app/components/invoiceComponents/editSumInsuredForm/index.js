@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useState } from "react";
 import Textfield from "../../textfield";
 
@@ -11,16 +11,19 @@ export default function EditSumInsuredForm({ invoiceData, siData, setSiData }) {
   };
 
   const handleClick = () => {
-    setInitialLoad(true)
-    setSiData([...siData, {
-      Items_Name: "",
-      Sum_Insured_Amount: 0,
-      Notes: "",
-    },]);
+    setInitialLoad(true);
+    setSiData([
+      ...siData,
+      {
+        Items_Name: "",
+        Sum_Insured_Amount: 0,
+        Notes: "",
+      },
+    ]);
   };
 
   const handleChange = (e, i) => {
-    setInitialLoad(true)
+    setInitialLoad(true);
     const { id, value } = e.target;
     const changeValue = [...siData];
     changeValue[i][id] = value;
@@ -28,7 +31,7 @@ export default function EditSumInsuredForm({ invoiceData, siData, setSiData }) {
   };
 
   const handleDeleteRow = (i) => {
-    setInitialLoad(true)
+    setInitialLoad(true);
     const delRow = [...siData];
     delRow.splice(i, 1);
     setSiData(delRow);
@@ -63,6 +66,7 @@ export default function EditSumInsuredForm({ invoiceData, siData, setSiData }) {
           </div>
           {i != 0 ? (
             <button
+              type="button"
               onClick={() => handleDeleteRow(i)}
               className="flex text-red-600 hover:text-red-500 ml-2 text-md font-bold "
             >
@@ -72,6 +76,7 @@ export default function EditSumInsuredForm({ invoiceData, siData, setSiData }) {
         </div>
       ))}
       <button
+        type="button"
         onClick={handleClick}
         className="text-black hover:text-green-700 text-md font-bold"
       >

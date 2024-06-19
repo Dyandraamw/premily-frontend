@@ -9,7 +9,7 @@ export default function sideTextfield({
 }) {
   return (
     <div className="flex mb-4 w-full items-center">
-      <label className="block text-black text-lg w-2/4 font-bold " for={id}>
+      <label className="block text-black text-lg w-2/4 font-bold " htmlFor={id}>
         {label} 
       </label>
       <input

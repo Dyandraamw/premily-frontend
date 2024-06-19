@@ -25,7 +25,17 @@ const theme = createTheme({
   },
 });
 
-export default function tableMUI({ tableData, handleOpenModal }) {
+export default function tableMUI({ tableData, handleOpenModal, calcValues }) {
+  const handleAging = (data, bal) => {
+    if (bal >= 0) {
+      return "-";
+    }
+    const curr = dayjs();
+    const days = curr.diff(data, "day");
+
+    return days;
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <TableContainer>
@@ -51,9 +61,9 @@ export default function tableMUI({ tableData, handleOpenModal }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {tableData.map((row) => (
+            {tableData.map((row, i) => (
               <TableRow
-                key={row.Invoice_ID}
+                key={row.SOA_Details_ID}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
@@ -61,41 +71,54 @@ export default function tableMUI({ tableData, handleOpenModal }) {
                 </TableCell>
                 <TableCell align="left">{row.Recipient}</TableCell>
                 <TableCell align="left">{row.Installment_Standing}</TableCell>
-                <TableCell align="left">{row.Due_Date}</TableCell>
-                <TableCell align="left">{row.currency}</TableCell>
+                <TableCell align="left">
+                  {dayjs(row.Due_Date).format("DD/MM/YYYY")}
+                </TableCell>
+                <TableCell align="left">IDR</TableCell>
                 <TableCell align="left">{row.SOA_Amount}</TableCell>
                 <TableCell sx={{ color: "#757575" }} align="center">
                   |
                 </TableCell>
-                <TableCell align="left">{row.Payment_Date}</TableCell>
-                <TableCell align="left">{row.currency}</TableCell>
+                <TableCell align="left">
+                  {dayjs(row.Payment_Date).format("DD/MM/YYYY")}
+                </TableCell>
+                <TableCell align="left">IDR</TableCell>
                 <TableCell align="left">{row.Payment_Amount}</TableCell>
-                <TableCell align="left">{row.Payment_Allocation}</TableCell>
-                <TableCell align="left">{row.balance}</TableCell>
+                <TableCell align="left">
+                  {calcValues.length != 0 ? calcValues[i].alocation : null}
+                </TableCell>
+                <TableCell align="left">
+                  {calcValues.length != 0 ? calcValues[i].balance : null}
+                </TableCell>
                 <TableCell align="left">
                   <div
                     className={
-                      (row.Status == "PAID"
-                        ? "bg-green-700"
-                        : row.Status == "OUTSTANDING"
-                        ? "bg-yellow-600"
-                        : "bg-red-700") +
+                      (calcValues.length != 0 ? (calcValues[i].status == "PAID" ? "bg-green-700": "bg-yellow-600") : null) +
+                      // (row.Status == "PAID"
+                      //   ? "bg-green-700"
+                      //   : row.Status == "OUTSTANDING"
+                      //   ? "bg-yellow-600"
+                      //   : "bg-red-700") +
                       " flex justify-center rounded-2xl p-2 text-white "
                     }
                   >
-                    {row.Status}
+                    {calcValues.length != 0 ? calcValues[i].status : null}
                   </div>
                 </TableCell>
-                <TableCell align="left">{row.Aging}</TableCell>
+                <TableCell align="left">
+                  {calcValues.length != 0
+                    ? handleAging(row.Due_Date, calcValues[i].balance)
+                    : null}
+                </TableCell>
                 <TableCell align="center">
                   <button
                     onClick={(e) =>
                       handleOpenModal([
-                        row.soa_id_details,
-                        row.invoice_id,
-                        row.instalment_id,
-                        row.payment_date,
-                        row.payment_amount,
+                        row.SOA_Details_ID,
+                        row.Invoice_ID,
+                        row.Installment_Standing,
+                        row.Payment_Date,
+                        row.Payment_Amount,
                       ])
                     }
                     className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-black hover:bg-white hover:text-black rounded-lg bg-yellow-500 border-yellow-500"

@@ -5,49 +5,9 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import AddItemModal from "../../../../components/soaComponents/addItemModal";
 import { fetchInvoiceDetail, fetchInvoiceList } from "@/app/utils/api/invApi";
+import { fetchSoaDetails } from "@/app/utils/api/soaApi";
 
-const tableData = [
-  {
-    invoice_id: "CN-001",
-    recipient: "PT.Garuda Indonesia",
-    issued_date: dayjs("05/07/2024").format("DD/MM/YYYY"),
-    start_date: dayjs("05/07/2024").format("DD/MM/YYYY"),
-    end_date: dayjs("10/08/2025").format("DD/MM/YYYY"),
-    amount: 1000,
-  },
-  {
-    invoice_id: "CN-002",
-    recipient: "PT.Sriwijaya",
-    issued_date: dayjs("05/07/2024").format("DD/MM/YYYY"),
-    start_date: dayjs("05/07/2024").format("DD/MM/YYYY"),
-    end_date: dayjs("10/08/2025").format("DD/MM/YYYY"),
-    amount: 1000,
-  },
-  {
-    invoice_id: "CN-003",
-    recipient: "PT.KLM",
-    issued_date: dayjs("05/07/2024").format("DD/MM/YYYY"),
-    start_date: dayjs("05/07/2024").format("DD/MM/YYYY"),
-    end_date: dayjs("10/08/2025").format("DD/MM/YYYY"),
-    amount: 1000,
-  },
-  {
-    invoice_id: "DN-005",
-    recipient: "PT.Citilink",
-    issued_date: dayjs("05/07/2024").format("DD/MM/YYYY"),
-    start_date: dayjs("05/07/2024").format("DD/MM/YYYY"),
-    end_date: dayjs("10/08/2025").format("DD/MM/YYYY"),
-    amount: 1000,
-  },
-  {
-    invoice_id: "DN-006",
-    recipient: "PT.Lion Air",
-    issued_date: dayjs("05/07/2024").format("DD/MM/YYYY"),
-    start_date: dayjs("05/07/2024").format("DD/MM/YYYY"),
-    end_date: dayjs("10/08/2025").format("DD/MM/YYYY"),
-    amount: 1000,
-  },
-];
+
 
 export default function soaAddItem({ params }) {
   const [invoiceList, setInvoiceList] = useState([]);
@@ -60,13 +20,14 @@ export default function soaAddItem({ params }) {
   },]);
   const [selectedValue, setSelectedValue] = useState("");
   const [selectedIns, setSelectedIns] = useState(0);
+  const [soaDetails, setSoaDetails] = useState([])
   const [statementOfAccount, setStatementOfAccount] = useState({
     invoice_id: "",
     // instalment_id: "",
     installment_standing: 0,
     payment_date: "",
     payment_amount: 0,
-    payment_currency: "",
+    // payment_currency: "",
   });
   
   useEffect(() => {
@@ -74,9 +35,10 @@ export default function soaAddItem({ params }) {
       const invList = await fetchInvoiceList();
       setInvoiceList(invList);
 
-      // console.log(invList)
     };
     fetchinv();
+
+
   }, []);
 
   const handleRadioChange = (e) => {
@@ -85,15 +47,13 @@ export default function soaAddItem({ params }) {
       ...statementOfAccount,
       invoice_id: e.target.value,
     });
-
-    
   };
 
   const handleModalRadio = (e) => {
     setSelectedIns(e.target.value);
     setStatementOfAccount({
       ...statementOfAccount,
-      installment_standing: e.target.value,
+      installment_standing: parseInt(e.target.value),
     });
   };
 
@@ -132,7 +92,7 @@ export default function soaAddItem({ params }) {
         handleModalRadio={handleModalRadio}
         setSelectedValue={setSelectedIns}
         insDetail={insDetail}
-        handleCurrency={handleCurrency}
+        // handleCurrency={handleCurrency}
         soa_id={params.soaId}
       />
       <div className="flex justify-between mb-2">

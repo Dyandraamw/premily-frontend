@@ -1,7 +1,11 @@
 import axios from "axios";
 
 const authToken =
-  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYzI0ZTdiODEtMzQ0MS00MGI2LThiZjgtZTU0NDFlMjNlZTVlIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzE4NjM3MjI2fQ.-Bq4dPdBWjUa9cB-2IlF8W6oKieB0SCC_PXx0IcRh-Y";
+  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYzI0ZTdiODEtMzQ0MS00MGI2LThiZjgtZTU0NDFlMjNlZTVlIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzE4OTY5NDA3fQ.BdVavVV-yT1hnZHCy9oAuhVpq4cIuIucxYl9ah9Ds8M";
+
+// const authToken =
+// "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMmMwNzI5MDAtNzhiNy00NTJkLTk0NzAtZWIzYTJmZTFhZGE4Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzE4OTcyNDM3fQ.IOpQkZ-r2_3Xqs5-FH_hzJVT8agyBV1MPUhk3ip5_N4";
+
 
 export const fetchSoaList = async () => {
   const url = "/api/retrive-soa";
@@ -66,6 +70,25 @@ export const addItemApi = async (soa_id,itemForm) => {
 
     alert("Item Successfully Added!");
 
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    alert(error);
+    throw error;
+  }
+};
+
+export const editItemApi = async (soa_det_id,itemForm) => {
+  const url = "/api/edit-items/";
+  try {
+    const response = await axios.put(url + `${soa_det_id}`, itemForm, {
+      headers: {
+        Authorization: authToken,
+      },
+    });
+
+    alert("Item Successfully Edited!");
+    location.reload("/soaList/"+soa_det_id)
     return response.data;
   } catch (error) {
     console.log(error);
