@@ -29,77 +29,64 @@ const theme = createTheme({
 
 export default function AddInvoice({
   tableData,
-  selectedValue,
-  handleRadioChange,
+  selectedInvoice,
+  onSelectInvoice,
 }) {
   // const { tableData, selectedInvoice, onSelectInvoice } = props;
-  // const handleSelect = (invoice_id) => {
-  //   onSelectInvoice(invoice_id);
-  // };
-
-  //const [selectedValue, setSelectedValue] = useState();
-
-  // const handleRadioChange = (event) => {
-  //   setSelectedValue(event.target.value);
-  // };
-  const handleStartPeriod = (data) => {
-    if (data!=null) {
-      const start = dayjs(data.slice(0,10)).format('DD/MM/YYYY')
-      return start
-    }
-    return
+  const handleSelect = (invoice_id) => {
+    onSelectInvoice(invoice_id);
   };
 
-  const handleEndPeriod = (data) => {
-    if (data!=null) {
-      const end = dayjs(data.slice(13,23)).format('DD/MM/YYYY')
-      return end
-    }
-    return
+  const [selectedValue, setSelectedValue] = useState();
+
+  const handleRadioChange = (event) => {
+    setSelectedValue(event.target.value);
   };
 
   console.log(selectedValue);
   return (
     <ThemeProvider theme={theme}>
-    <TableContainer>
-      <Table aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="left"></TableCell>
-            <TableCell align="left">Invoice Number</TableCell>
-            <TableCell align="left">Recipient</TableCell>
-            <TableCell align="left">Issued Date</TableCell>
-            <TableCell align="left">Policy Period</TableCell>
-            <TableCell align="left">Amount</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {tableData.map((row) => (
-            <TableRow
-              key={row.Invoice_ID}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell align="left">
-                <Radio
-                  checked={row.Invoice_ID == selectedValue}
-                  onChange={handleRadioChange}
-                  value={row.Invoice_ID}
-                />
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {row.Invoice_ID}
-              </TableCell>
-              <TableCell align="left">{row.Recipient}</TableCell>
-              <TableCell align="left">{dayjs(row.Created_At).format('DD/MM/YYYY')}</TableCell>
-              <TableCell align="left">
-                {handleStartPeriod(row.Period)} - {handleEndPeriod(row.Period)}
-              </TableCell>
-              <TableCell align="left">{row.Total_Premium_Due}</TableCell>
+      <TableContainer>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="left"></TableCell>
+              <TableCell align="left">Invoice Number</TableCell>
+              <TableCell align="left">Recipient</TableCell>
+              <TableCell align="left">Issued Date</TableCell>
+              <TableCell align="left">Policy Period</TableCell>
+              <TableCell align="left">Amount</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  </ThemeProvider>
-);
+          </TableHead>
+          <TableBody>
+            {tableData.map((row) => (
+              <TableRow
+                key={row.name}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell align="left">
+                  <Radio
+                    checked={row.invoice_id == selectedValue}
+                    onChange={handleRadioChange}
+                    // onChange={() => handleSelect(row.invoice_id)}
+                    value={row.invoice_id}
+                    onClick={() => handleSelect(row.invoice_id)}
+                  />
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {row.invoice_id}
+                </TableCell>
+                <TableCell align="left">{row.recipient}</TableCell>
+                <TableCell align="left">{row.issued_date}</TableCell>
+                <TableCell align="left">
+                  {row.start_date}-{row.end_date}
+                </TableCell>
+                <TableCell align="left">{row.amount}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </ThemeProvider>
+  );
 }

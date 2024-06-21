@@ -39,8 +39,8 @@ function Row(props) {
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
-        <TableRow  sx={{ "& > *": { borderBottom: "unset" } }}>
-          <TableCell key={"icon_space"}>
+        <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
+          <TableCell>
             <IconButton
               aria-label="expand row"
               size="small"
@@ -49,31 +49,31 @@ function Row(props) {
               {open ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
             </IconButton>
           </TableCell>
-          <TableCell  key={"ins_idx"} component="th" scope="row">
-            {props.instalmentidx}
+          <TableCell component="th" scope="row">
+            {row.instalment_number}
           </TableCell>
-          <TableCell  key={"due_date_data"} align="left">
+          <TableCell align="left">
             {dayjs(row.due_date).format("DD/MM/YYYY")}
           </TableCell>
-          <TableCell  key={"ins_amount"} align="left">{row.ins_amount}</TableCell>
-          {props.adjustment_data.map((data,i) => (
-            <TableCell  key={i} align="left">
+          <TableCell align="left">{row.premium_inception}</TableCell>
+          {props.adjustment_data.map((data) => (
+            <TableCell align="left">
               {data.adjustment_amount[props.rowIndex]}
             </TableCell>
           ))}
-          <TableCell key={"ins_total"} align="left">{row.ins_total}</TableCell>
-          <TableCell  align="left">
+          <TableCell align="left">{row.total}</TableCell>
+          <TableCell align="left">
             <div
-              className={ row.installment_status!=""?
-                ((row.installment_status == "PAID"
+              className={
+                (row.status == "Paid"
                   ? "bg-green-700"
-                  : row.installment_status == "OUTSTANDING"
+                  : row.status == "Outstanding"
                   ? "bg-yellow-600"
                   : "bg-red-700") +
-                " flex justify-center rounded-2xl p-2 text-white "):null
+                " flex justify-center rounded-2xl p-2 text-white "
               }
             >
-              {row.installment_status}
+              {row.status}
             </div>
           </TableCell>
         </TableRow>
@@ -84,39 +84,40 @@ function Row(props) {
                 <ThemeProvider theme={theme}>
                   <Table size="small" aria-label="purchases">
                     <TableHead className="bg-green-700 bg-opacity-10 ">
-                      <TableRow key={props.instalmentidx}>
+                      <TableRow>
                         <TableCell>Payment Date</TableCell>
-                        <TableCell align="left">Payment Amount (IDR)</TableCell>
-                        <TableCell align="left">Alocation (IDR)</TableCell>
-                        <TableCell align="left">Balance (IDR)</TableCell>
+                        <TableCell align="left">Payment Amount (USD)</TableCell>
+                        <TableCell align="left">Alocation (USD)</TableCell>
+                        <TableCell align="left">Balance (USD)</TableCell>
                         <TableCell align="left"></TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {props.payment_data.map((nestedrow, i) =>
-                        nestedrow.pd_ins_id == row.installment_id ? (
-                          <TableRow key={nestedrow.pay_detail_id}>
+                      {props.payment_data.map((nestedrow) =>
+                        nestedrow.instalment_id == row.instalment_id ? (
+                          <TableRow key={nestedrow.payment_id}>
                             <TableCell>
-                              {dayjs(nestedrow.pay_date).format("DD/MM/YYYY")}
+                              {dayjs(nestedrow.payment_date).format(
+                                "DD/MM/YYYY"
+                              )}
                             </TableCell>
                             <TableCell align="left">
-                              {nestedrow.pay_amount}
+                              {nestedrow.payment_amount}
                             </TableCell>
                             <TableCell align="left">
-                              {nestedrow.pay_alocation}
+                              {nestedrow.alocation}
                             </TableCell>
                             <TableCell align="left">
-                              {nestedrow.pay_balance}
+                              {nestedrow.balance}
                             </TableCell>
                             <TableCell align="right">
                               <button
-                                type="button"
                                 onClick={(e) =>
                                   props.handleOpenEditPaymentModal([
-                                    nestedrow.pay_detail_id,
-                                    nestedrow.pd_ins_id,
-                                    nestedrow.pay_date,
-                                    nestedrow.pay_amount,
+                                    nestedrow.payment_id,
+                                    nestedrow.instalment_id,
+                                    nestedrow.payment_date,
+                                    nestedrow.payment_amount,
                                   ])
                                 }
                                 className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-black hover:bg-white hover:text-black rounded-lg bg-yellow-500 border-yellow-500"
@@ -140,7 +141,6 @@ function Row(props) {
 }
 
 export default function paymentStatusDetailTable({
-  paymentStatus,
   instalment_data,
   payment_data,
   adjustment_data,
@@ -153,41 +153,33 @@ export default function paymentStatusDetailTable({
         <Table aria-label="collapsible table">
           <TableHead className="bg-green-700 bg-opacity-10">
             <TableRow>
-              <TableCell key={"empty_space"} />
-              <TableCell key={"instalment_space"}>Instalment</TableCell>
-              <TableCell key={"due_date_space"} align="left">
-                Due Date
-              </TableCell>
-              <TableCell key={"premium_space"} align="left">
-                Premium Inception (IDR)
-              </TableCell>
+              <TableCell />
+              <TableCell>Instalment</TableCell>
+              <TableCell align="left">Due Date</TableCell>
+              <TableCell align="left">Premium Inception (USD)</TableCell>
               {adjustment_data.map((data) => (
-                <TableCell key={data.adjustment_itr} align="left">
+                <TableCell align="left">
                   <div className="flex items-center">
                     {data.adjustment_title}
                     <FaEdit
-                      className="text-yellow-600 hover:text-gray-700 ml-2 text-2xl"
-                      onClick={(e) =>
-                        handleOpenEditAdjustmentModal([
-                          data.adjustment_itr,
-                          data.adjustment_id,
-                          data.adjustment_title,
-                          data.adjustment_amount,
-                        ])
-                      }
+                      className="text-yellow-600 hover:text-green-700 ml-2 text-2xl"
+                      onClick={(e) => handleOpenEditAdjustmentModal([data.payment_status_id,
+                        data.adjustment_id,
+                        data.adjustment_title,
+                        data.adjustment_amount])}
                     />
                   </div>
                 </TableCell>
               ))}
-              <TableCell key={"total_space"} align="left">Total (IDR)</TableCell>
-              <TableCell key={"status_space"} align="left">Status</TableCell>
+              <TableCell align="left">Total (USD)</TableCell>
+              <TableCell align="left">Status</TableCell>
+              <TableCell align="left"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {instalment_data.map((data, index) => (
               <Row
-                key={data.installment_id}
-                instalmentidx={index + 1}
+                key={data.name}
                 row={data}
                 rowIndex={index}
                 payment_data={payment_data}

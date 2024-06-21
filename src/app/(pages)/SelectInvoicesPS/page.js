@@ -1,48 +1,59 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import dayjs from "dayjs";
 import Link from "next/link";
 import TableSelectInvoice from "@/app/components/paymentStatusComponents/TableSelectInvoice/page";
 import AddInvoice from "@/app/components/paymentStatusComponents/TableSelectInvoice/page";
-import { createPaymentStatusApi } from "@/app/utils/api/psApi";
-import { fetchInvoiceList } from "@/app/utils/api/invApi";
 
 export default function PaymentStatusDetail() {
-  const [selectedInvoice, setSelectedInvoice] = useState("");
-  const [invoiceList, setInvoiceList] = useState([]);
-  const [selectedValue, setSelectedValue] = useState("");
-  useEffect(() => {
-    const fetchinv = async () => {
-      const invList = await fetchInvoiceList();
-      setInvoiceList(invList);
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
 
-    };
-    fetchinv();
+  const handleInvoiceSelect = (invoice_id) => {
+    setSelectedInvoice(invoice_id);
+  };
 
-
-  }, []);
-
-
-
-  const handleSubmit = async(e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    let psForm = new FormData();
-    psForm.append("invoice_id", selectedValue);
-    const response = await createPaymentStatusApi(psForm);
-
-    window.location.replace("/paymentStatus/"+response.payment_status_id);
+    if (selectedInvoice) {
+      console.log("Selected Invoice:", selectedInvoice);
+    } else {
+      console.log("No invoice selected");
+    }
   };
 
+  function createData(
+    invoice_id,
+    recipient,
+    issued_date,
+    policy_period,
+    amount
+  ) {
+    return { invoice_id, recipient, issued_date, policy_period, amount };
+  }
 
-
-  const handleRadioChange = (e) => {
-    setSelectedValue(e.target.value);
-    // set({
-    //   ...statementOfAccount,
-    //   invoice_id: e.target.value,
-    // });
-  };
-
+  const row = [
+    createData(
+      "CN-001",
+      "PT. Garuda Indonesia",
+      dayjs("05/07/2024").format("DD/MM/YYYY"),
+      "05/07/2024-06/08/2025",
+      "$100,00"
+    ),
+    createData(
+      "CN-002",
+      "PT. Garuda Indonesia",
+      dayjs("05/07/2024").format("DD/MM/YYYY"),
+      "05/07/2024-06/08/2025",
+      "$100,00"
+    ),
+    createData(
+      "CN-003",
+      "PT. Garuda Indonesia",
+      dayjs("05/07/2024").format("DD/MM/YYYY"),
+      "05/07/2024-06/08/2025",
+      "$100,00"
+    ),
+  ];
 
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
@@ -60,10 +71,10 @@ export default function PaymentStatusDetail() {
         </div> */}
       </div>
       <div className="bg-white rounded-lg w-min-[1500px] w-max-full mt-5 p-5 h-[900px] overflow-y-auto mb-5">
-      <AddInvoice
-          tableData={invoiceList}
-          selectedValue={selectedValue}
-          handleRadioChange={handleRadioChange}
+        <AddInvoice
+          tableData={row}
+          selectedInvoice={selectedInvoice}
+          onSelectInvoice={handleInvoiceSelect}
         />
       </div>
 
@@ -71,11 +82,11 @@ export default function PaymentStatusDetail() {
         <Link href={"/paymentStatusDetail"}>
           <button
             className={`py-3 border-[3px] drop-shadow-lg font-semibold w-28 rounded-lg ${
-              selectedValue!=""
+              selectedInvoice
                 ? "bg-green-700 text-white border-green-700 hover:bg-white hover:text-black"
                 : "bg-gray-300 text-gray-600 border-gray-300 cursor-not-allowed"
             }`}
-            disabled={ selectedValue==""?true:false}
+            disabled={!selectedInvoice}
             // className="py-3 border-[3px] drop-shadow-lg font-semibold w-28 text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
             onClick={handleSubmit}
           >

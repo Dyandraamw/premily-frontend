@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import dayjs from "dayjs";
 
@@ -9,39 +9,98 @@ import Textfield from "../../components/textfield";
 import DatePickerMUI from "../../components/datePickerMUI";
 import TablePaymentStatus from "@/app/components/paymentStatusComponents/PaymentStatus";
 import DeletePsModal from "@/app/components/paymentStatusComponents/modalDelete";
-import { fetchPaymentStatusList } from "@/app/utils/api/psApi";
 
+function createData(
+  payment_status_id,
+  invoice_id,
+  invoice_recipient,
+  period_start,
+  period_end
+) {
+  return {
+    payment_status_id,
+    invoice_id,
+    invoice_recipient,
+    period_start,
+    period_end,
+  };
+}
+
+const psData = [
+  createData(
+    "PS-001",
+    "CN-001",
+    "PT. Garuda Indonesia",
+    dayjs("2024-05-07").toISOString(),
+    dayjs("2026-06-08").toISOString()
+  ),
+  createData(
+    "PS-002",
+    "CN-002",
+    "PT. Sriwijaya",
+    dayjs("2024-04-10").toISOString(),
+    dayjs("2025-05-05").toISOString()
+  ),
+  createData(
+    "PS-003",
+    "CN-003",
+    "PT. Alda Air",
+    dayjs("2024-12-30").toISOString(),
+    dayjs("2026-07-12").toISOString()
+  ),
+  createData(
+    "PS-004",
+    "CN-004",
+    "PT. Citilink",
+    dayjs("2023-02-05").toISOString(),
+    dayjs("2024-06-11").toISOString()
+  ),
+  createData(
+    "PS-005",
+    "CN-005",
+    "PT. Air Asia",
+    dayjs("2022-02-02").toISOString(),
+    dayjs("2023-03-03").toISOString()
+  ),
+  createData(
+    "PS-006",
+    "CN-006",
+    "PT. Lion Air",
+    dayjs("2024-11-20").toISOString(),
+    dayjs("2026-10-19").toISOString()
+  ),
+  createData(
+    "PS-007",
+    "CN-007",
+    "PT. Garuda Indonesia",
+    dayjs("2024-04-04").toISOString(),
+    dayjs("2026-06-06").toISOString()
+  ),
+  createData(
+    "PS-008",
+    "CN-008",
+    "PT. Garuda Indonesia",
+    dayjs("2024-09-16").toISOString(),
+    dayjs("2026-11-20").toISOString()
+  ),
+];
 
 export default function PaymentStatus() {
   const [query, setQuery] = useState("");
-  const [paymentStatusList,setPaymentStatusList] = useState([])
-  const [filteredData, setFilteredData] = useState([]);
+  const [filteredData, setFilteredData] = useState(psData);
   const [sortQuery, setSortQuery] = useState("");
-
-  useEffect(() => {
-
-    const fetchList = async () => {
-      const psList = await fetchPaymentStatusList()
-      setPaymentStatusList(psList)
-      setFilteredData(psList)
-      // console.log(invList)
-    };
-    fetchList()
-
-  }, []);
-
 
   const handleSearch = (e) => {
     const searchQuery = e.target.value;
     //console.log(e.target.value)
     setQuery(searchQuery);
 
-    const filteredData = paymentStatusList.filter(
+    const filteredData = psData.filter(
       (data) =>
         data.payment_status_id
           .toLowerCase()
           .includes(searchQuery.toLowerCase()) ||
-        data.invoice.toLowerCase().includes(searchQuery.toLowerCase())
+        data.invoice_recipient.toLowerCase().includes(searchQuery.toLowerCase())
       // data.period_start.toLowerCase().includes(searchQuery.toLowerCase()) ||
       // data.period_end.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -54,38 +113,38 @@ export default function PaymentStatus() {
   };
 
   const handleSort = (data) => {
-    
+    console.log(data[0].payment_status_id.slice(3, 6));
     if (sortQuery == "asc_ps_id") {
       data.sort(
         (a, b) =>
-          parseInt(a.payment_status_id.slice(8, 13)) -
-          parseInt(b.payment_status_id.slice(8, 13))
+          parseInt(a.payment_status_id.slice(3, 6)) -
+          parseInt(b.payment_status_id.slice(3, 6))
       );
     } else if (sortQuery == "desc_ps_id") {
       data.sort(
         (a, b) =>
-          parseInt(b.payment_status_id.slice(8, 13)) -
-          parseInt(a.payment_status_id.slice(8, 13))
+          parseInt(b.payment_status_id.slice(3, 6)) -
+          parseInt(a.payment_status_id.slice(3, 6))
       );
     } else if (sortQuery == "asc_invoice_id") {
       data.sort(
         (a, b) =>
-          parseInt(a.invoice_id.slice(4, 9)) -
-          parseInt(b.invoice_id.slice(4, 9))
+          parseInt(a.invoice_id.slice(3, 6)) -
+          parseInt(b.invoice_id.slice(3, 6))
       );
     } else if (sortQuery == "desc_invoice_id") {
       data.sort(
         (a, b) =>
-          parseInt(b.invoice_id.slice(4, 9)) -
-          parseInt(a.invoice_id.slice(4, 9))
+          parseInt(b.invoice_id.slice(3, 6)) -
+          parseInt(a.invoice_id.slice(3, 6))
       );
     } else if (sortQuery == "asc_recipient") {
       data.sort((a, b) =>
-        a.invoice.localeCompare(b.invoice)
+        a.invoice_recipient.localeCompare(b.invoice_recipient)
       );
     } else if (sortQuery == "desc_recipient") {
       data.sort((a, b) =>
-        b.invoice.localeCompare(a.invoice)
+        b.invoice_recipient.localeCompare(a.invoice_recipient)
       );
     } else if (sortQuery == "new_start") {
       data.sort((a, b) => -a.period_start.localeCompare(b.period_start));
@@ -111,7 +170,7 @@ export default function PaymentStatus() {
 
   const [detailPsModal, setDetailPsModal] = useState(false);
   const handleOpenDetailPsModal = (data) => {
-    // console.log(data);
+    console.log(data);
     setDetailPsModal(true);
     setDetailPaymentStatus({
       ...detailPaymentStatus,
@@ -175,12 +234,12 @@ export default function PaymentStatus() {
             <option value="asc_ps_id">Ascending Payment Status Number</option>
             <option value="desc_ps_id">Descending Payment Status Number</option>
             <option value="asc_invoice_id">
-              Ascending Invoice Number
+              Ascending Invoice Number Company
             </option>
             <option value="desc_invoice_id">
-              Descending Invoice Number
+              Descending Invoice Number Company
             </option>
-            <option value="asc_recipient">Asccending Invoice recipient</option>
+            <option value="desc_recipient">Asccending Invoice recipient</option>
             <option value="desc_recipient">Descending Invoice recipient</option>
             <option value="new_start">Newest Period Start</option>
             <option value="old_start">Oldest Period Start</option>

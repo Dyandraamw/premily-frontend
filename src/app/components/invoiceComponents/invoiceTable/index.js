@@ -29,7 +29,7 @@ const theme = createTheme({
 
 
 export default function tableMUI({tableData, handleOpenModal}) {
-  const currency = 'IDR'
+  const currency = 'USD'
   const handleStartPeriod = (data) => {
     if (data!=null) {
       const start = dayjs(data.slice(0,10)).format('DD/MM/YYYY')

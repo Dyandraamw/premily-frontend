@@ -7,7 +7,6 @@ import DatePickerMUI from "../../datePickerMUI";
 import Modal from "@mui/material/Modal";
 import SelectField from "../../selectField";
 import dayjs from "dayjs";
-import { addPaymentApi } from "@/app/utils/api/psApi";
 
 const style = {
   position: "absolute",
@@ -22,14 +21,13 @@ const style = {
 };
 
 export default function addPayment({
-  psId,
   modalState,
   handleCloseModal,
   instalment_data,
 }) {
   const [paymentDetails, setPaymentDetails] = useState({
-    payment_detail_id: psId,
-    instalment_id: "",
+    payment_detail_id: "PD-001",
+    instalment_id: instalment_data[0].instalment_id,
     payment_date: null,
     payment_amount: 0,
   });
@@ -42,30 +40,26 @@ export default function addPayment({
   };
 
   const handleDate = (e) => {
-    const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
+    const dateformat = dayjs(e.$d).format("DD/MM/YYYY")
     setPaymentDetails({
       ...paymentDetails,
       payment_date: dateformat,
     });
   };
 
-  const handleSubmit = async(e) => {
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    let payForm = new FormData();
-    payForm.append("installment_id", paymentDetails.instalment_id);
-    payForm.append("pay_date", paymentDetails.payment_date);
-    payForm.append("pay_amount", paymentDetails.payment_amount);
-    await addPaymentApi(payForm,psId)
   };
 
   const handleSelect = (e) => {
     setPaymentDetails({
-      ...paymentDetails,
-      instalment_id: e.target.value,
-    });
+        ...paymentDetails,
+        instalment_id: e,
+      });
   };
 
-  //console.log(paymentDetails);
+  // console.log(paymentDetails)
   return (
     <div>
       <Modal
@@ -77,7 +71,6 @@ export default function addPayment({
         <Box sx={style}>
           <form onSubmit={handleSubmit}>
             <button
-              type="button"
               onClick={handleCloseModal}
               className="flex justify-end w-full text-xl font-bold  hover:text-green-700"
             >
@@ -89,7 +82,7 @@ export default function addPayment({
                   Add Payment
                 </h1>
                 <p className="flex w-full justify-center font-medium text-md text-gray-500">
-                  Input payment details for payment status
+                Input payment details for payment status
                 </p>
               </div>
               <div className="mx-5">
@@ -105,18 +98,10 @@ export default function addPayment({
                       id="instalment_id"
                       name="instalment_id"
                       className="drop-shadow-md  focus:border-green-700 focus:border-[3px]  border-[2.5px] border-gray-500 rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      onChange={handleSelect}
+                      onChange={(e) => handleSelect(e.target.value)}
                     >
-                      <option value="" selected disabled>
-                        select installment
-                      </option>
-                      {instalment_data.map((opt, i) => (
-                        <option
-                          key={opt.installment_id}
-                          value={opt.installment_id}
-                        >
-                          {i+1}
-                        </option>
+                      {instalment_data.map((opt) => (
+                        <option value={opt.instalment_id}>{opt.instalment_number}</option>
                       ))}
                     </select>
                   </div>
