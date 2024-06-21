@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const authToken =
-  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYzI0ZTdiODEtMzQ0MS00MGI2LThiZjgtZTU0NDFlMjNlZTVlIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzE4OTY5NDA3fQ.BdVavVV-yT1hnZHCy9oAuhVpq4cIuIucxYl9ah9Ds8M";
+  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWVmNmNjMTAtOWI1NS00ZGMzLTkzYWYtNGJkZGE5Y2VkMjk4Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzE5MTMxMjUxfQ.nu2UuEhDNE9ypFEUfIh0RNc00XAJVb0IqIu1fjcr4Zg";
 
 // const authToken =
 // "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMmMwNzI5MDAtNzhiNy00NTJkLTk0NzAtZWIzYTJmZTFhZGE4Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzE4OTcyNDM3fQ.IOpQkZ-r2_3Xqs5-FH_hzJVT8agyBV1MPUhk3ip5_N4";

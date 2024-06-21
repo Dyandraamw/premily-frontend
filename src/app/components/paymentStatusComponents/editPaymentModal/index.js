@@ -7,6 +7,7 @@ import DatePickerMUI from "../../datePickerMUI";
 import Modal from "@mui/material/Modal";
 import SelectField from "../../selectField";
 import dayjs from "dayjs";
+import { editPaymentApi } from "@/app/utils/api/psApi";
 
 const style = {
   position: "absolute",
@@ -21,6 +22,7 @@ const style = {
 };
 
 export default function editPayment({
+  psID,
   modalState,
   handleCloseModal,
   instalment_data,
@@ -42,7 +44,7 @@ export default function editPayment({
   };
 
   const handleDate = (e) => {
-    const dateformat = dayjs(e.$d).format('YYYY-MM-DD')
+    const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
     // console.log(e)
     setEditPayment({
       ...editPayment,
@@ -50,9 +52,14 @@ export default function editPayment({
     });
   };
 
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    let payForm = new FormData();
+    payForm.append("pay_date", dayjs(editPayment.payment_date).format('YYYY-MM-DD'));
+    payForm.append("pay_amount", editPayment.payment_amount);
+
+    await editPaymentApi(payForm,editPayment.payment_id,psID)
+    handleCloseModal()
   };
 
   // const handleSelect = (e) => {
@@ -62,7 +69,7 @@ export default function editPayment({
   //     });
   // };
 
-  console.log(editPayment)
+  //console.log(editPayment);
   return (
     <div>
       <Modal
@@ -74,6 +81,7 @@ export default function editPayment({
         <Box sx={style}>
           <form onSubmit={handleSubmit}>
             <button
+              type="button"
               onClick={handleCloseModal}
               className="flex justify-end w-full text-xl font-bold  hover:text-green-700"
             >
@@ -82,10 +90,10 @@ export default function editPayment({
             <div className="">
               <div>
                 <h1 className="flex w-full justify-center text-2xl  font-semibold">
-                  Edit Payment {editPayment.payment_id}
+                  Edit {editPayment.payment_id}
                 </h1>
                 <p className="flex w-full justify-center font-medium text-md text-gray-500">
-                Edit selected payment details for payment status
+                  Edit selected payment details for payment status
                 </p>
               </div>
               <div className="mx-5">

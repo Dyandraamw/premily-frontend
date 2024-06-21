@@ -64,7 +64,7 @@ export default function EditSumInsuredForm({ invoiceData, siData, setSiData }) {
               value={val.Notes}
             />
           </div>
-          {i != 0 ? (
+          {/* {i != 0 ? (
             <button
               type="button"
               onClick={() => handleDeleteRow(i)}
@@ -72,16 +72,16 @@ export default function EditSumInsuredForm({ invoiceData, siData, setSiData }) {
             >
               Delete
             </button>
-          ) : null}
+          ) : null} */}
         </div>
       ))}
-      <button
+      {/* <button
         type="button"
         onClick={handleClick}
         className="text-black hover:text-green-700 text-md font-bold"
       >
         + add new item
-      </button>
+      </button> */}
     </div>
   );
 }

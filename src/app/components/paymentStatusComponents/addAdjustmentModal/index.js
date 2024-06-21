@@ -14,6 +14,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Radio from "@mui/material/Radio";
 import dayjs from "dayjs";
+import { addAdjustmentApi } from "@/app/utils/api/psApi";
 
 const style = {
   position: "absolute",
@@ -53,14 +54,15 @@ const theme = createTheme({
 // ];
 
 export default function addAdjustmentModal({
+  psId,
   modalState,
   handleCloseModal,
   instalment_data,
 }) {
   const arr_length = instalment_data.length;
   const [adjustment, setAdjustment] = useState({
-    payment_status_id: "PS-001",
-    adjustment_id: "ADJ-001",
+    payment_status_id: psId,
+    adjustment_id: "",
     adjustment_title: "",
     adjustment_amount: new Array(arr_length).fill(0),
   });
@@ -81,19 +83,27 @@ export default function addAdjustmentModal({
     });
   };
 
-  const handleDate = (e) => {
-    const dateformat = dayjs(e.$d).format("DD/MM/YYYY");
-    setAdjustment({
-      ...adjustment,
-      payment_date: dateformat,
-    });
-  };
+  // const handleDate = (e) => {
+  //   const dateformat = dayjs(e.$d).format("DD/MM/YYYY");
+  //   setAdjustment({
+  //     ...adjustment,
+  //     payment_date: dateformat,
+  //   });
+  // };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    let adjForm = new FormData();
+    adjForm.append("title", adjustment.adjustment_title);
+    const amountLen = adjustment.adjustment_amount.length
+    for (let index = 0; index < amountLen; index++) {
+      adjForm.append("amount", parseInt(adjustment.adjustment_amount[index]));
+    }
+    
+    await addAdjustmentApi(adjForm, adjustment.payment_status_id, psId);
   };
 
-  //   console.log(adjustment);
+  //console.log(adjustment);
   return (
     <div>
       <Modal
@@ -105,6 +115,7 @@ export default function addAdjustmentModal({
         <Box sx={style}>
           <form onSubmit={handleSubmit}>
             <button
+              type="button"
               onClick={handleCloseModal}
               className="flex justify-end w-full text-xl font-bold  hover:text-green-700"
             >
@@ -141,7 +152,7 @@ export default function addAdjustmentModal({
                         <TableBody>
                           {instalment_data.map((row, i) => (
                             <TableRow
-                              key={row.instalment_id}
+                              key={row.installment_id}
                               sx={{
                                 "&:last-child td, &:last-child th": {
                                   border: 0,
@@ -149,7 +160,7 @@ export default function addAdjustmentModal({
                               }}
                             >
                               <TableCell component="th" scope="row">
-                                {row.instalment_number}
+                                {i+1}
                               </TableCell>
                               <TableCell align="left">
                                 <Textfield

@@ -88,7 +88,7 @@ export default function editInvInstallmentForm({
               />
             </div>
           </div>
-          {i != 0 ? (
+          {/* {i != 0 ? (
             <button
               type="button"
               onClick={() => handleDeleteRow(i)}
@@ -96,16 +96,16 @@ export default function editInvInstallmentForm({
             >
               Delete
             </button>
-          ) : null}
+          ) : null} */}
         </div>
       ))}
-      <button
+      {/* <button
         type="button"
         onClick={handleClick}
         className="text-black hover:text-green-700 text-md font-bold"
       >
         + add new installment
-      </button>
+      </button>  */}
       {/* <p>{JSON.stringify(insData)}</p> */}
     </div>
   );

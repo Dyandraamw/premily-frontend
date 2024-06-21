@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import TableMUI from "../../../components/paymentStatusComponents/paymentStatusDetailTable";
 import dayjs from "dayjs";
@@ -7,117 +7,53 @@ import AddPaymentModal from "../../../components/paymentStatusComponents/addPaym
 import AddAdjustmentModal from "../../../components/paymentStatusComponents/addAdjustmentModal";
 import EditPaymentModal from "../../../components/paymentStatusComponents/editPaymentModal";
 import EditAdjustmentModal from "../../../components/paymentStatusComponents/editAdjustmentModal";
+import { fetchPaymentStatusDetail } from "@/app/utils/api/psApi";
 
-function createInstalment(
-  instalment_id,
-  instalment_number,
-  due_date,
-  premium_inception,
-  total,
-  status
-) {
-  return {
-    instalment_id,
-    instalment_number,
-    due_date,
-    premium_inception,
-    total,
-    status,
-  };
-}
 
-function createPayment(
-  payment_id,
-  instalment_id,
-  payment_date,
-  payment_amount,
-  alocation,
-  balance
-) {
-  return {
-    payment_id,
-    instalment_id,
-    payment_date,
-    payment_amount,
-    alocation,
-    balance,
-  };
-}
-
-const instalment_data = [
-  createInstalment(
-    "INS-001",
-    1,
-    dayjs("05/06/2024").format("DD/MM/YYYY"),
-    1000,
-    1000,
-    "Paid"
-  ),
-  createInstalment(
-    "INS-002",
-    2,
-    dayjs("05/06/2024").format("DD/MM/YYYY"),
-    1000,
-    1000,
-    "Paid"
-  ),
-];
-
-const payment_data = [
-  createPayment(
-    "PAY-001",
-    "INS-001",
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
-    500,
-    500,
-    -500
-  ),
-  createPayment(
-    "PAY-002",
-    "INS-001",
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
-    500,
-    500,
-    0
-  ),
-  createPayment(
-    "PAY-003",
-    "INS-002",
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
-    500,
-    500,
-    -500
-  ),
-  createPayment(
-    "PAY-004",
-    "INS-002",
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
-    500,
-    500,
-    0
-  ),
-];
-
-function createAdjustment(
-  payment_status_id,
-  adjustment_id,
-  adjustment_title,
-  adjustment_amount
-) {
-  return {
-    payment_status_id,
-    adjustment_id,
-    adjustment_title,
-    adjustment_amount,
-  };
-}
-
-const adjustment_data = [
-  createAdjustment("PS-001", "ADJ-001", "1st Adjustment", [100, 200, 300]),
-  createAdjustment("PS-001", "ADJ-002", "2nd Adjustment", [150, 250, 350]),
-];
 
 export default function paymentStatusDetail({ params }) {
+  const [paymentStatus, setPaymentStatus] = useState([]);
+  const [adjustmentData, setAdjustmentData] = useState([]);
+  const [invoiceDet, setInvoiceDet] = useState([]);
+  const [payments, setPayments] = useState([]);
+  const [instalments, setInstalments] = useState([]);
+  useEffect(() => {
+    const fetchList = async () => {
+      const ps = await fetchPaymentStatusDetail(params.psId);
+      setPaymentStatus(ps);
+      // setAdjustmentData(ps.adjustment_detail)
+      setInvoiceDet(ps.invoice);
+      setPayments(ps.payment_details);
+      setInstalments(ps.installments);
+
+      const adj = ps.adjustment_detail;
+      const insLen = ps.installments.length;
+      const loopLen = ps.adjustment_detail.length / insLen;
+      let adjArr = [];
+      for (let i = 0, ctr = 0; i < loopLen; i++) {
+        let adjItr = i + 1;
+        let adjTitle;
+        let adjID = [];
+        let adjAmount = [];
+        for (let x = 0; x < insLen; x++) {
+          adjTitle = adj[ctr].adjustment_title;
+          adjID.push(adj[ctr].adjustment_id);
+          adjAmount.push(adj[ctr].adjustment_amount);
+          ctr++;
+        }
+        adjArr.push({
+          adjustment_itr: adjItr,
+          adjustment_title: adjTitle,
+          adjustment_id: adjID,
+          adjustment_amount: adjAmount,
+        });
+      }
+      //console.log(adjArr)
+      setAdjustmentData(adjArr);
+    };
+    fetchList();
+  }, []);
+
   const [paymentModalState, setPaymentModalState] = useState(false);
   const handleOpenPaymentModal = () => setPaymentModalState(true);
   const handleClosePaymentModal = () => setPaymentModalState(false);
@@ -149,10 +85,10 @@ export default function paymentStatusDetail({ params }) {
 
   const [editAdjustmentModal, setEditAdjustmentModal] = useState(false);
   const [editAdjustment, setEditAdjustment] = useState({
-    payment_status_id: "",
-    adjustment_id: "",
+    adjustment_itr: 0,
+    adjustment_id: new Array(instalments.length).fill(""),
     adjustment_title: "",
-    adjustment_amount: new Array(instalment_data.length).fill(0),
+    adjustment_amount: new Array(instalments.length).fill(0),
   });
 
   const handleOpenEditAdjustmentModal = (data) => {
@@ -160,7 +96,7 @@ export default function paymentStatusDetail({ params }) {
     console.log(data);
     setEditAdjustment({
       ...editAdjustment,
-      payment_status_id: data[0],
+      adjustment_itr: data[0],
       adjustment_id: data[1],
       adjustment_title: data[2],
       adjustment_amount: data[3],
@@ -170,27 +106,30 @@ export default function paymentStatusDetail({ params }) {
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <AddPaymentModal
+        psId={params.psId}
         modalState={paymentModalState}
         handleCloseModal={handleClosePaymentModal}
-        instalment_data={instalment_data}
+        instalment_data={instalments}
       />
       <EditPaymentModal
+        psId={params.psId}
         modalState={editPaymentModal}
         handleCloseModal={handleCloseEditPaymentModal}
-        instalment_data={instalment_data}
+        instalment_data={instalments}
         editPayment={editPayment}
         setEditPayment={setEditPayment}
       />
       <AddAdjustmentModal
+        psId={params.psId}
         modalState={adjustmentModalState}
         handleCloseModal={handleCloseAdjustmentModal}
-        instalment_data={instalment_data}
-        
+        instalment_data={instalments}
       />
       <EditAdjustmentModal
+        psId={params.psId}
         modalState={editAdjustmentModal}
         handleCloseModal={handleCloseEditAdjustmentModal}
-        instalment_data={instalment_data}
+        instalment_data={instalments}
         editAdjustment={editAdjustment}
         setEditAdjustment={setEditAdjustment}
       />
@@ -222,11 +161,15 @@ export default function paymentStatusDetail({ params }) {
         <div className="ml-3 my-5">
           <div className="flex">
             <p className="font-semibold">Name of Insured&nbsp;</p>
-            <p>:&emsp;PT.Garuda Indonesia</p>
+            <p>:&emsp;{invoiceDet.name_of_insured}</p>
           </div>
           <div className="flex">
             <p className="font-semibold">Policy Period&nbsp;</p>
-            <p>:&emsp;05/07/2024 - 06/08/2025</p>
+            <p>
+              :&emsp;
+              {dayjs(invoiceDet.period_start).format("DD/MM/YYYY")} -
+              {dayjs(invoiceDet.period_end).format("DD/MM/YYYY")}
+            </p>
           </div>
           <div className="flex">
             <p className="font-semibold">Current Date&nbsp;</p>
@@ -235,9 +178,10 @@ export default function paymentStatusDetail({ params }) {
         </div>
         <p className="text-xl font-semibold mb-5">Billed Payment Terms</p>
         <TableMUI
-          instalment_data={instalment_data}
-          payment_data={payment_data}
-          adjustment_data={adjustment_data}
+          paymentStatus={paymentStatus}
+          instalment_data={instalments}
+          payment_data={payments}
+          adjustment_data={adjustmentData}
           handleOpenEditPaymentModal={handleOpenEditPaymentModal}
           handleOpenEditAdjustmentModal={handleOpenEditAdjustmentModal}
         />
@@ -248,47 +192,47 @@ export default function paymentStatusDetail({ params }) {
         <div className="grid grid-cols-4 gap-2 pb-5 mt-5 pt-5 h-[60%]">
           <div className="drop-shadow-xl border-2 border-gray-500 border-b-[6px] bg-white  border-b-blue-600 border-opacity-60 rounded-2xl h-full p-2 mr-4">
             <h3 className="flex justify-center text-center text-lg font-bold mt-3  ">
-              Premium Inception Sum
+              Premium Inception Sum (IDR)
             </h3>
             <p className="flex justify-center text-center text-gray-500 mt-1 ">
               Sum of the premium inception
             </p>
             <p className="flex justify-center mb-2 text-3xl font-semibold mt-5">
-              USD 200
+              {parseInt(paymentStatus.inception_sum).toLocaleString()}
             </p>
           </div>
 
-          <div className="drop-shadow-xl border-2 border-gray-500 border-b-[6px] bg-white  border-b-orange-600 border-opacity-60 rounded-2xl h-full p-2 mr-4">
+          <div className="drop-shadow-xl border-2 border-gray-500 border-b-[6px] bg-white  border-b-pink-600 border-opacity-60 rounded-2xl h-full p-2 mr-4">
             <h3 className="flex justify-center text-center text-lg font-bold mt-3  ">
-              Total Sum
+              Total Sum (IDR)
             </h3>
             <p className="flex justify-center text-center text-gray-500 mt-1 ">
               Sum of total after adjustments
             </p>
             <p className="flex justify-center mb-2 text-3xl font-semibold mt-5">
-              USD 200
+              {parseInt(paymentStatus.total_sum).toLocaleString()}
             </p>
           </div>
-          <div className="drop-shadow-xl border-2 border-gray-500 border-b-[6px] bg-white  border-b-violet-600 border-opacity-60 rounded-2xl h-full p-2 mr-4">
+          <div className="drop-shadow-xl border-2 border-gray-500 border-b-[6px] bg-white  border-b-green-600 border-opacity-60 rounded-2xl h-full p-2 mr-4">
             <h3 className="flex justify-center text-center text-lg font-bold mt-3  ">
-              Payment Amount Sum
+              Payment Amount Sum (IDR)
             </h3>
             <p className="flex justify-center text-center text-gray-500 mt-1 ">
               Sum of all payments
             </p>
             <p className="flex justify-center mb-2 text-3xl font-semibold mt-5">
-              USD 200
+              {parseInt(paymentStatus.payment_sum).toLocaleString()}
             </p>
           </div>
-          <div className="drop-shadow-xl border-2 border-gray-500 border-b-[6px] bg-white  border-b-red-600 border-opacity-60 rounded-2xl h-full p-2 mr-4">
+          <div className="drop-shadow-xl border-2 border-gray-500 border-b-[6px] bg-white  border-b-yellow-600 border-opacity-60 rounded-2xl h-full p-2 mr-4">
             <h3 className="flex justify-center text-center text-lg font-bold mt-3  ">
-              Outstanding Premium Sum
+              Outstanding Premium Sum (IDR)
             </h3>
             <p className="flex justify-center text-center text-gray-500 mt-1 ">
               Sum unpaid balance
             </p>
             <p className="flex justify-center mb-2 text-3xl font-semibold mt-5">
-              USD 200
+              {parseInt(paymentStatus.outstanding_sum).toLocaleString()}
             </p>
           </div>
         </div>

@@ -13,60 +13,7 @@ import DeleteSoaModal from "../../components/soaComponents/deleteSoaModal";
 import axios from "axios";
 import { fetchSoaList } from "@/app/utils/api/soaApi";
 
-function createData(soa_id, name_of_insured, period_start, period_end) {
-  return { soa_id, name_of_insured, period_start, period_end };
-}
 
-const soaData = [
-  createData(
-    "SOA-001",
-    "PT. Garuda Indonesia",
-    dayjs("2024-05-07").toISOString(),
-    dayjs("2026-06-08").toISOString()
-  ),
-  createData(
-    "SOA-002",
-    "PT. Sriwijaya",
-    dayjs("2024-04-10").toISOString(),
-    dayjs("2025-05-05").toISOString()
-  ),
-  createData(
-    "SOA-003",
-    "PT. Alda Air",
-    dayjs("2024-12-30").toISOString(),
-    dayjs("2026-07-12").toISOString()
-  ),
-  createData(
-    "SOA-004",
-    "PT. Citilink",
-    dayjs("2023-02-05").toISOString(),
-    dayjs("2024-06-11").toISOString()
-  ),
-  createData(
-    "SOA-005",
-    "PT. Air Asia",
-    dayjs("2022-02-02").toISOString(),
-    dayjs("2023-03-03").toISOString()
-  ),
-  createData(
-    "SOA-006",
-    "PT. Lion Air",
-    dayjs("2024-11-20").toISOString(),
-    dayjs("2026-10-19").toISOString()
-  ),
-  createData(
-    "SOA-007",
-    "PT. Garuda Indonesia",
-    dayjs("2024-04-04").toISOString(),
-    dayjs("2026-06-06").toISOString()
-  ),
-  createData(
-    "SOA-008",
-    "PT. Garuda Indonesia",
-    dayjs("2024-09-16").toISOString(),
-    dayjs("2026-11-20").toISOString()
-  ),
-];
 export default function soaList() {
   //fetch data ////////////////////////////////////////////////////////////
   const [soaListData, setSoaListData] = useState([]);
@@ -81,28 +28,6 @@ export default function soaList() {
     fetchSoa();
   }, []);
 
-  const headerSoaList = [
-    {
-      key: "invoice_id",
-      title: "Invoice Number",
-    },
-    {
-      key: "recipient",
-      title: "Recipient",
-    },
-    {
-      key: "issued_date",
-      title: "Issued Date",
-    },
-    {
-      key: "policy_period",
-      title: "Policy Period",
-    },
-    {
-      key: "amount",
-      title: "Amount",
-    },
-  ];
 
   ////////////////////////////////////////////////////////////
   // filter control ////////////////////////////////////////////////////////////
