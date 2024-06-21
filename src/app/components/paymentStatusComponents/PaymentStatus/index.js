@@ -57,7 +57,7 @@ export default function TablePaymentStatus({
                   </Link>
                 </TableCell>
                 <TableCell align="left">{row.invoice_id}</TableCell>
-                <TableCell align="left">{row.invoice_recipient}</TableCell>
+                <TableCell align="left">{row.invoice}</TableCell>
                 <TableCell align="left">
                   {" "}
                   {dayjs(row.period_start).format("DD/MM/YYYY")}-

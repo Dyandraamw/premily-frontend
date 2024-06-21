@@ -68,7 +68,7 @@ export default function AddItem({
           <TableBody>
             {tableData.map((row) => (
               <TableRow
-                key={row.name}
+                key={row.Invoice_ID}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell align="left">

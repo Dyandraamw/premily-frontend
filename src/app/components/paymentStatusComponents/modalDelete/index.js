@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { deletePaymentStatus } from "@/app/utils/api/psApi";
 
 const style = {
   position: "absolute",
@@ -21,8 +22,9 @@ export default function DeletePsModal({
   detailPaymentStatus,
   setdetailPaymentStatus,
 }) {
-  const handleSubmit = (e) => {
+  const handleDelete = async (e) => {
     e.preventDefault();
+    await deletePaymentStatus(detailPaymentStatus.payment_status_id)
   };
 
   // console.log(editStatementOfAccount.payment_start)
@@ -34,7 +36,6 @@ export default function DeletePsModal({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form onSubmit={handleSubmit}>
             <div className="">
               <div>
                 <h1 className="flex w-full justify-center text-2xl  font-semibold">
@@ -53,13 +54,12 @@ export default function DeletePsModal({
                   >
                     Cancel
                   </button>
-                  <button className="w-1/2 my-5 mx-1 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600">
+                  <button onClick={handleDelete} className="w-1/2 my-5 mx-1 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600">
                     Delete
                   </button>
                 </div>
               </div>
             </div>
-          </form>
         </Box>
       </Modal>
     </div>
