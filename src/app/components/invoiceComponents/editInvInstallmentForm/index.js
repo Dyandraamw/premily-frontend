@@ -71,22 +71,27 @@ export default function editInvInstallmentForm({ invoiceData }) {
               />
             </div>
           </div>
-          {i != 0 ? (
+          {/* {i != 0 ? (
             <button
               onClick={() => handleDeleteRow(i)}
               className="flex text-red-600 hover:text-red-500 ml-2 text-md font-bold "
             >
               Delete
             </button>
-          ) : null}
+          ) : null} */}
         </div>
       ))}
+<<<<<<< Updated upstream
       <button
+=======
+      {/* <button
+        type="button"
+>>>>>>> Stashed changes
         onClick={handleClick}
         className="text-black hover:text-green-700 text-md font-bold"
       >
         + add new installment
-      </button>
+      </button> */}
       {/* <p>{JSON.stringify(insData)}</p> */}
     </div>
   );

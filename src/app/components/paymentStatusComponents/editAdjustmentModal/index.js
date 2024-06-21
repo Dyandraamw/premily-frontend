@@ -14,6 +14,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Radio from "@mui/material/Radio";
 import dayjs from "dayjs";
+import { editAdjustmentApi } from "@/app/utils/api/psApi";
 
 const style = {
   position: "absolute",
@@ -45,6 +46,7 @@ const theme = createTheme({
 
 
 export default function editAdjustmentModal({
+  psID,
   modalState,
   handleCloseModal,
   instalment_data,
@@ -68,8 +70,25 @@ export default function editAdjustmentModal({
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (title, amount, id) => {
+
+    // editAdjustment.adjustment_id.map((adj,i)=>{
+      let adjForm = new FormData();
+      adjForm.append("title", title)
+      adjForm.append("amount",amount)
+      await editAdjustmentApi(adjForm, id,psID)
+    // })
+  };
+
+  const handleClickSubmit =  (e) => {
     e.preventDefault();
+    const adjLen = editAdjustment.adjustment_id.length
+    const adj = editAdjustment
+
+    for (let i = 0; i < adjLen; i++) {
+      handleSubmit(adj.adjustment_title, adj.adjustment_amount[i], adj.adjustment_id[i])
+    }
+    
   };
 
   //console.log(editAdjustment);
@@ -82,8 +101,9 @@ export default function editAdjustmentModal({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleClickSubmit}>
             <button
+            type="button"
               onClick={handleCloseModal}
               className="flex justify-end w-full text-xl font-bold  hover:text-green-700"
             >
@@ -120,7 +140,7 @@ export default function editAdjustmentModal({
                         <TableBody>
                           {instalment_data.map((row, i) => (
                             <TableRow
-                              key={row.instalment_id}
+                              key={i}
                               sx={{
                                 "&:last-child td, &:last-child th": {
                                   border: 0,
@@ -128,7 +148,7 @@ export default function editAdjustmentModal({
                               }}
                             >
                               <TableCell component="th" scope="row">
-                                {row.instalment_number}
+                                {i+1}
                               </TableCell>
                               <TableCell align="left">
                                 <Textfield

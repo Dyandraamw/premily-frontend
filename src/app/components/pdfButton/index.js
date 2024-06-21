@@ -6,8 +6,18 @@ export default function pdfButton({ invoice_data }) {
   const pdfRef = useRef();
   const handleGeneratePdf = useReactToPrint({
     content: () => pdfRef.current,
-    documentTitle: "test",
-    bodyClass: 'p-1'
+    documentTitle: invoice_data.invoice_id,
+    bodyClass: 'p-0',
+    pageStyle: `
+      @media print {
+        @page { margin: 0; 
+        background-color: white;
+        }
+      }
+      body {
+        -webkit-print-color-adjust: exact;
+      }
+    `,
   });
   return (
     <div className="w-full">

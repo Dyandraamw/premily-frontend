@@ -6,6 +6,10 @@ import DatePickerMUI from "../../../../components/datePickerMUI";
 import SumInsuredForm from "../../../../components/invoiceComponents/editSumInsuredForm";
 import InvInstallmentForm from "../../../../components/invoiceComponents/editInvInstallmentForm";
 import dayjs from "dayjs";
+<<<<<<< Updated upstream
+=======
+import { fetchInvoiceDetail, updateInvoiceApi } from "@/app/utils/api/invApi";
+>>>>>>> Stashed changes
 
 export default function editInvoice({ params }) {
   const [invoiceData, setinvoiceData] = useState({
@@ -68,8 +72,46 @@ export default function editInvoice({ params }) {
     setinvoiceData({ ...invoiceData, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
+    let invForm = new FormData();
+    // invForm.append("typeInvoice", "credit");
+    invForm.append("recipient", invoiceData.recipient);
+    invForm.append("address", invoiceData.recipient_address);
+    invForm.append("net_premium", invoiceData.net_premium);
+    invForm.append("desc_discount", invoiceData.discount);
+    invForm.append("desc_admin_cost", invoiceData.admin_cost);
+    invForm.append("desc_risk_management", invoiceData.risk_management);
+    invForm.append("desc_brokage", invoiceData.brokerage);
+    invForm.append("desc_pph", invoiceData.pph);
+    invForm.append("total_premium_due", invoiceData.total_premium_due);
+    invForm.append("policy_number", invoiceData.policy_number);
+    invForm.append("name_of_insured", invoiceData.name_of_insured);
+    invForm.append("address_of_insured", invoiceData.address_of_insured);
+    invForm.append("type_of_insurance", invoiceData.insurance_type);
+
+    invForm.append("periode_start", dayjs(invoiceData.start_date).format("YYYY-MM-DD"));
+    invForm.append("periode_end", dayjs(invoiceData.end_date).format("YYYY-MM-DD"));
+
+    invForm.append("terms_of_period", invoiceData.terms_of_payment);
+    invForm.append("remarks", invoiceData.remarks);
+    insData.map((data) => {
+      invForm.append("due_date", dayjs(data.Due_Date).format("YYYY-MM-DD"));
+      invForm.append("ins_amount", data.Ins_Amount);
+    });
+
+    // invForm.append("company_pict", imgValue);
+    invForm.append("comp_name", invoiceData.company_name);
+    invForm.append("comp_address", invoiceData.company_address);
+    invForm.append("comp_contact", invoiceData.company_number);
+
+    siData.map((data) => {
+      invForm.append("items_name", data.Items_Name);
+      invForm.append("sum_ins_amount", data.Sum_Insured_Amount);
+      invForm.append("notes", data.Notes);
+    });
+    
+    await updateInvoiceApi(invForm,params.invoiceId)
   };
 
   const handleStartDate = (e) => {
@@ -81,12 +123,18 @@ export default function editInvoice({ params }) {
     const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
     setinvoiceData({ ...invoiceData, end_date: dateformat });
   };
+<<<<<<< Updated upstream
   
 
+=======
+  //console.log(invoiceData);
+>>>>>>> Stashed changes
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <div className="mb-2">
-        <h1 className="text-4xl text-green-700 font-bold">Credit Note</h1>
+        <h1 className="text-4xl text-green-700 font-bold">
+          {params.invoiceId.startsWith("CN")?"Credit":"Debit"} Note
+        </h1>
         <p className="ml-1 font-medium text-gray-600">
           Create a new Credit Note
         </p>
