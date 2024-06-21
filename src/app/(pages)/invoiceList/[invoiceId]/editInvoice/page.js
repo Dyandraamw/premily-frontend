@@ -6,10 +6,7 @@ import DatePickerMUI from "../../../../components/datePickerMUI";
 import SumInsuredForm from "../../../../components/invoiceComponents/editSumInsuredForm";
 import InvInstallmentForm from "../../../../components/invoiceComponents/editInvInstallmentForm";
 import dayjs from "dayjs";
-<<<<<<< Updated upstream
-=======
 import { fetchInvoiceDetail, updateInvoiceApi } from "@/app/utils/api/invApi";
->>>>>>> Stashed changes
 
 export default function editInvoice({ params }) {
   const [invoiceData, setinvoiceData] = useState({
@@ -123,12 +120,7 @@ export default function editInvoice({ params }) {
     const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
     setinvoiceData({ ...invoiceData, end_date: dateformat });
   };
-<<<<<<< Updated upstream
-  
-
-=======
   //console.log(invoiceData);
->>>>>>> Stashed changes
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <div className="mb-2">

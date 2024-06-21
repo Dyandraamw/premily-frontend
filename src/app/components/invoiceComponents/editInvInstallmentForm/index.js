@@ -81,12 +81,8 @@ export default function editInvInstallmentForm({ invoiceData }) {
           ) : null} */}
         </div>
       ))}
-<<<<<<< Updated upstream
-      <button
-=======
       {/* <button
         type="button"
->>>>>>> Stashed changes
         onClick={handleClick}
         className="text-black hover:text-green-700 text-md font-bold"
       >

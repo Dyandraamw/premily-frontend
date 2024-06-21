@@ -4,13 +4,8 @@ import React from 'react'
 
 export default function invoicePdfTemplate({invoice_data}) {
   return (
-<<<<<<< Updated upstream
-    <div className='bg-white'>
-      <div className="bg-white "> 
-=======
     <div className="bg-white w-full h-full p-0">
       <div className="bg-white ">
->>>>>>> Stashed changes
         {/* top half */}
         <div>
           <h1 className="text-3xl text-black font-bold mb-2">
