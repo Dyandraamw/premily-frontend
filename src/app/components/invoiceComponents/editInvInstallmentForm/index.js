@@ -81,7 +81,8 @@ export default function editInvInstallmentForm({ invoiceData }) {
           ) : null}
         </div>
       ))}
-      <button
+      {/* <button
+        type="button"
         onClick={handleClick}
         className="text-black hover:text-green-700 text-md font-bold"
       >

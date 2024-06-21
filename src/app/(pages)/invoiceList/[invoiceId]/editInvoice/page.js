@@ -6,6 +6,7 @@ import DatePickerMUI from "../../../../components/datePickerMUI";
 import SumInsuredForm from "../../../../components/invoiceComponents/editSumInsuredForm";
 import InvInstallmentForm from "../../../../components/invoiceComponents/editInvInstallmentForm";
 import dayjs from "dayjs";
+import { fetchInvoiceDetail, updateInvoiceApi } from "@/app/utils/api/invApi";
 
 export default function editInvoice({ params }) {
   const [invoiceData, setinvoiceData] = useState({
@@ -81,8 +82,7 @@ export default function editInvoice({ params }) {
     const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
     setinvoiceData({ ...invoiceData, end_date: dateformat });
   };
-  
-
+  //console.log(invoiceData);
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <div className="mb-2">

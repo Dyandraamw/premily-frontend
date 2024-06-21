@@ -58,7 +58,8 @@ export default function EditSumInsuredForm({ invoiceData  }) {
           ) : null}
         </div>
       ))}
-      <button
+      {/* <button
+        type="button"
         onClick={handleClick}
         className="text-black hover:text-green-700 text-md font-bold"
       >
