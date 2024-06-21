@@ -4,8 +4,8 @@ import Textfield from "../../textfield";
 import DatePickerMUI from "../../datePickerMUI";
 import dayjs from "dayjs";
 
-export default function invInstallmentForm({  }) {
-  const [insData, setInsData] = useState([{ due_date: null, amount: "" }]);
+export default function invInstallmentForm({ insData, setInsData, setInsDueDate, insDueDate,setInsAmount, insAmount }) {
+  // const [insData, setInsData] = useState([{ due_date: null, amount: "" }]);
 
   const handleClick = () => {
     setInsData([
@@ -14,11 +14,26 @@ export default function invInstallmentForm({  }) {
     ]);
   };
 
+  const handleInsDueDate = (data) => {
+    setInsDueDate(dueDateArr)
+  };
+
+  const handleInsArr = (data) => {
+    let amountArr = data.map(a=>a.amount)
+    setInsAmount(amountArr)
+  };
+
+
   const handleChange = (e, i) => {
+    e.preventDefault();
     const { value } = e.target;
     const changeValue = [...insData];
     changeValue[i]["amount"] = value;
     setInsData(changeValue);
+    
+    const changedValue2 = [...insAmount];
+    changedValue2[i] = value;
+    setInsAmount(changedValue2)
   };
 
   const handleDateChange = (e, i) => {
@@ -28,6 +43,9 @@ export default function invInstallmentForm({  }) {
     changedValue[i]["due_date"] = dvalue;
     // console.log(changedValue)
     setInsData(changedValue);
+    const changedValue2 = [...insDueDate];
+    changedValue2[i] = dvalue;
+    setInsDueDate(changedValue2)
   };
 
   const handleDeleteRow = (i) => {
@@ -35,11 +53,11 @@ export default function invInstallmentForm({  }) {
     delRow.splice(i, 1);
     setInsData(delRow);
   };
-  console.log(insData)
+  //console.log(insData)
   return (
     <div>
       {insData.map((val, i) => (
-        <div className="flex items-center">
+        <div className="flex items-center" key={i} >
           <div className="grid grid-cols-11 gap-2 w-[85%]">
             <div>
               {i == 0 ? (
@@ -73,6 +91,7 @@ export default function invInstallmentForm({  }) {
           </div>
           {i != 0 ? (
             <button
+            type="button"
               onClick={() => handleDeleteRow(i)}
               className="flex text-red-600 hover:text-red-500 ml-2 text-md font-bold "
             >
@@ -82,6 +101,7 @@ export default function invInstallmentForm({  }) {
         </div>
       ))}
       <button
+      type="button"
         onClick={handleClick}
         className="text-black hover:text-green-700 text-md font-bold"
       >

@@ -6,6 +6,8 @@ import Textfield from "../../textfield";
 import DatePickerMUI from "../../datePickerMUI";
 import Modal from "@mui/material/Modal";
 import dayjs from "dayjs";
+import axios from "axios";
+import { createSoa } from "@/app/utils/api/soaApi";
 
 const style = {
   position: "absolute",
@@ -21,12 +23,28 @@ const style = {
 
 export default function createSoaModal({ modalState, handleCloseModal }) {
   const [statementOfAccount, setStatementOfAccount] = useState({
-    soa_id: "SOA-001",
-    name_of_insured: "",
-    period_start: null,
-    period_end: null,
+    name_of_insured_soa: "",
+    periode_start_soa: null,
+    periode_end_soa: null,
   });
+  ///////////////////////////////////////////////////
 
+  const FormData = require("form-data");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let soaForm = new FormData();
+    soaForm.append(
+      "name_of_insured_soa",
+      statementOfAccount.name_of_insured_soa
+    );
+    soaForm.append("periode_start_soa", statementOfAccount.periode_start_soa);
+    soaForm.append("periode_end_soa", statementOfAccount.periode_end_soa);
+
+    await createSoa(soaForm);
+    handleCloseModal();
+  };
+  ///////////////////////////////////////////////////
   const handleTextfield = (e) => {
     setStatementOfAccount({
       ...statementOfAccount,
@@ -38,7 +56,7 @@ export default function createSoaModal({ modalState, handleCloseModal }) {
     const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
     setStatementOfAccount({
       ...statementOfAccount,
-      period_start: dateformat,
+      periode_start_soa: dateformat,
     });
   };
 
@@ -46,13 +64,10 @@ export default function createSoaModal({ modalState, handleCloseModal }) {
     const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
     setStatementOfAccount({
       ...statementOfAccount,
-      period_end: dateformat,
+      periode_end_soa: dateformat,
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
   return (
     <div>
       <Modal
@@ -80,20 +95,20 @@ export default function createSoaModal({ modalState, handleCloseModal }) {
               </div>
               <div className="mx-5">
                 <div className="w-1/2 mt-5">
-                  <Textfield
+                  {/* <Textfield
                     label={"Statement of Account Number"}
                     id={"soa_id"}
                     placeholder={"insert soa number..."}
                     onChange={handleTextfield}
                     value={statementOfAccount.soa_id}
                     disabled={true}
-                  />
+                  /> */}
                   <Textfield
                     label={"Name of Insured"}
-                    id={"name_of_insured"}
+                    id={"name_of_insured_soa"}
                     placeholder={"Insert name of insured..."}
                     onChange={handleTextfield}
-                    value={statementOfAccount.name_of_insured}
+                    value={statementOfAccount.name_of_insured_soa}
                   />
                 </div>
                 <div className="flex justify-between ">
@@ -112,7 +127,10 @@ export default function createSoaModal({ modalState, handleCloseModal }) {
                     onChange={handleDateEnd}
                   />
                 </div>
-                <button className=" w-full my-5 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">
+                <button
+                  type="submit"
+                  className=" w-full my-5 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
+                >
                   Submit
                 </button>
               </div>

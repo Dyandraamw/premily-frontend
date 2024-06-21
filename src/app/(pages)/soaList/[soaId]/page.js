@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import TableMUI from "../../../components/soaComponents/soaDetailTable";
 import Textfield from "../../../components/textfield";
@@ -7,212 +7,188 @@ import DatePickerMUI from "../../../components/datePickerMUI";
 import { FaSearch } from "react-icons/fa";
 import dayjs from "dayjs";
 import Link from "next/link";
-import CreateSoaModal from "../../../components/soaComponents/createSoaModal";
 import EditItemModal from "../../../components/soaComponents/editItemModal";
+import axios from "axios";
+import { fetchSoaDetails } from "@/app/utils/api/soaApi";
 
-function createData(
-  soa_id_details,
-  invoice_id,
-  recipient,
-  instalment_id,
-  instalment_number,
-  due_date,
-  currency,
-  amount,
-  payment_date,
-  payment_amount,
-  alocation,
-  balance,
-  payment_status,
-  aging
-) {
-  return {
-    soa_id_details,
-    invoice_id,
-    recipient,
-    instalment_id,
-  instalment_number,
-    due_date,
-    currency,
-    amount,
-    payment_date,
-    payment_amount,
-    alocation,
-    balance,
-    payment_status,
-    aging,
-  };
-}
-
-const soaData = [
-  createData(
-    "SOAD-001",
-    "DN-001",
-    "PT. Garuda Indonesia",
-    'INS-001',
-    1,
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
-    "USD",
-    1000,
-    dayjs("06/07/2026").format("DD/MM/YYYY"),
-    1000,
-    1000,
-    0,
-    "Paid",
-    0
-  ),
-  createData(
-    "SOAD-002",
-    "CN-001",
-    "PT. Garuda Indonesia",
-    'INS-002',
-    2,
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
-    "USD",
-    1000,
-    dayjs("06/07/2026").format("DD/MM/YYYY"),
-    1000,
-    1000,
-    0,
-    "Outstanding",
-    0
-  ),
-  createData(
-    "SOAD-003",
-    "DN-001",
-    "PT. Garuda Indonesia",
-    'INS-001',
-    1,
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
-    "USD",
-    1000,
-    dayjs("06/07/2026").format("DD/MM/YYYY"),
-    1000,
-    1000,
-    0,
-    "Overdue",
-    0
-  ),
-  createData(
-    "SOAD-004",
-    "CN-001",
-    "PT. Garuda Indonesia",
-    'INS-002',
-    2,
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
-    "USD",
-    1000,
-    dayjs("06/07/2026").format("DD/MM/YYYY"),
-    1000,
-    1000,
-    0,
-    "Paid",
-    0
-  ),
-  createData(
-    "SOAD-005",
-    "DN-001",
-    "PT. Garuda Indonesia",
-    'INS-001',
-    1,
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
-    "USD",
-    1000,
-    dayjs("06/07/2026").format("DD/MM/YYYY"),
-    1000,
-    1000,
-    0,
-    "Paid",
-    0
-  ),
-  createData(
-    "SOAD-006",
-    "CN-001",
-    "PT. Garuda Indonesia",
-    'INS-002',
-    2,
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
-    "USD",
-    1000,
-    dayjs("06/07/2026").format("DD/MM/YYYY"),
-    1000,
-    1000,
-    0,
-    "Paid",
-    0
-  ),
-  createData(
-    "SOAD-007",
-    "DN-001",
-    "PT. Garuda Indonesia",
-    'INS-001',
-    1,
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
-    "USD",
-    1000,
-    dayjs("06/07/2026").format("DD/MM/YYYY"),
-    1000,
-    1000,
-    0,
-    "Paid",
-    0
-  ),
-  createData(
-    "SOAD-008",
-    "CN-001",
-    "PT. Garuda Indonesia",
-    'INS-002',
-    2,
-    dayjs("05/07/2024").format("DD/MM/YYYY"),
-    "USD",
-    1000,
-    dayjs("06/07/2026").format("DD/MM/YYYY"),
-    1000,
-    1000,
-    0,
-    "Paid",
-    0
-  ),
-];
 export default function statementOfAccount({ params }) {
   const [query, setQuery] = useState("");
-  const [filteredData, setFilteredData] = useState(soaData);
+  const [soaDetails, setSoaDetails] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [calcValues, setCalcValues] = useState([]);
+
+  useEffect(() => {
+    const fetchSoa = async () => {
+      const response = await fetchSoaDetails(params.soaId);
+      setSoaDetails(response);
+      setFilteredData(response);
+      //console.log(response);
+    };
+    fetchSoa();
+  }, []);
 
   const handleSearch = (e) => {
     const searchQuery = e.target.value;
     //console.log(e.target.value)
     setQuery(searchQuery);
 
-    const filteredSoa = soaData.filter(
+    const filteredSoa = soaDetails.filter(
       (data) =>
-        data.invoice_id.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
-        data.recipient.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        data.payment_status.toLowerCase().includes(searchQuery.toLowerCase()) 
+        data.Invoice_ID.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.Recipient.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.Status.toLowerCase().includes(searchQuery.toLowerCase())
       // data.period_end.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredData(filteredSoa);
   };
 
+  const searchPrev = (invID, insNum, currID) => {
+    const filteredSoa = soaDetails.filter(
+      (data) =>
+        data.Invoice_ID.toLowerCase().includes(invID.toLowerCase()) &&
+        data.Installment_Standing == insNum
+    );
+    return filteredSoa;
+  };
+
+  const searchCalc = (invID, insNum, currID, searchArr) => {
+    const filteredSoa = searchArr.filter(
+      (data) =>
+        data.Invoice_ID.toLowerCase().includes(invID.toLowerCase()) &&
+        data.Installment_Standing == insNum &&
+        data.SOA_Details_ID !== currID
+      // data.period_end.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    return filteredSoa;
+  };
+
+  // useEffect(() => {
+    const handleCalc = (soaData) => {
+      let arr = [];
+      soaData.map((data, i) => {
+        const prevData = searchPrev(
+          data.Invoice_ID,
+          data.Installment_Standing,
+          data.SOA_Details_ID
+        );
+        //console.log(prevData);
+        if (prevData[0].SOA_Details_ID == data.SOA_Details_ID) {
+          const balance =
+            parseInt(data.Payment_Amount) - parseInt(data.SOA_Amount);
+          {
+            balance < 0
+              ? arr.push({
+                Invoice_ID: data.Invoice_ID,
+                Installment_Standing: data.Installment_Standing,
+                item_id: data.SOA_Details_ID,
+                alocation: data.Payment_Amount,
+                balance: balance,
+                status: "OUTSTANDING"
+              })
+              : arr.push({
+                Invoice_ID: data.Invoice_ID,
+                Installment_Standing: data.Installment_Standing,
+                item_id: data.SOA_Details_ID,
+                alocation: data.Payment_Amount,
+                balance: balance,
+                status: "PAID"
+              })
+          }
+
+          // console.log;
+        } else if (prevData[0].SOA_Details_ID != data.SOA_Details_ID) {
+          const prevCalc = searchCalc(
+            data.Invoice_ID,
+            data.Installment_Standing,
+            data.SOA_Details_ID,
+            arr
+          );
+          const previdx = prevCalc.length - 1;
+          //console.log(prevCalc)
+          if (prevCalc[previdx].balance < 0) {
+            const alocation = parseInt(data.Payment_Amount);
+            const balance = parseInt(prevCalc[previdx].balance) + alocation;
+            // console.log(prevCalc[previdx])
+            {
+              balance < 0
+                ? arr.push({
+                  Invoice_ID: data.Invoice_ID,
+                  Installment_Standing: data.Installment_Standing,
+                  item_id: data.SOA_Details_ID,
+                  alocation: data.Payment_Amount,
+                  balance: balance,
+                  status: "OUTSTANDING"
+                })
+                : arr.push({
+                  Invoice_ID: data.Invoice_ID,
+                  Installment_Standing: data.Installment_Standing,
+                  item_id: data.SOA_Details_ID,
+                  alocation: data.Payment_Amount,
+                  balance: balance,
+                  status: "PAID"
+                })
+            }
+          } else if (prevCalc[previdx].balance >= 0) {
+            const alocation = parseInt(data.Payment_Amount) + parseInt(arr[previdx].balance);
+            const balance = alocation - parseInt(data.SOA_Amount);
+            {
+              balance < 0
+                ? arr.push({
+                  Invoice_ID: data.Invoice_ID,
+                  Installment_Standing: data.Installment_Standing,
+                  item_id: data.SOA_Details_ID,
+                  alocation: data.Payment_Amount,
+                  balance: balance,
+                  status: "OUTSTANDING"
+                })
+                : arr.push({
+                  Invoice_ID: data.Invoice_ID,
+                  Installment_Standing: data.Installment_Standing,
+                  item_id: data.SOA_Details_ID,
+                  alocation: data.Payment_Amount,
+                  balance: balance,
+                  status: "PAID"
+                })
+            }
+          }
+        }
+
+
+        // console.log(arr)
+      });
+
+      setCalcValues(arr)
+    }
+
+    
+  // }, []);
+
+  useEffect(()=>{
+    handleCalc(soaDetails)
+  },[soaDetails])
+
+
+
   const [modalState, setModalState] = useState(false);
   const [editSoaItem, setEditSoaItem] = useState({
-    soa_id_details: '',
-    invoice_id: '',
-    instalment_id: '',
+    soa_id_details: "",
+    invoice_id: "",
+    instalment_id: "",
     payment_date: null,
     payment_amount: 0,
   });
   const handleOpenModal = (data) => {
     setModalState(true);
-    setEditSoaItem({ ...editSoaItem,
+    setEditSoaItem({
+      ...editSoaItem,
       soa_id_details: data[0],
       invoice_id: data[1],
       instalment_id: data[2],
       payment_date: data[3],
       payment_amount: data[4],
-    })
+    });
   };
   const handleCloseModal = () => setModalState(false);
-
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <EditItemModal
@@ -220,8 +196,6 @@ export default function statementOfAccount({ params }) {
         handleCloseModal={handleCloseModal}
         editSoaItem={editSoaItem}
         setEditSoaItem={setEditSoaItem}
-        // statementOfAccount={statementOfAccount}
-        // setStatementOfAccount={setEditStatementOfAccount}
       />
       <div className="flex justify-between mb-2">
         <div className="">
@@ -249,22 +223,6 @@ export default function statementOfAccount({ params }) {
             icon={<FaSearch />}
           />
         </div>
-        <div className="w-1/3 flex justify-end ">
-          
-          <select
-            id="currency"
-            name="currency"
-            className="drop-shadow-md focus:border-green-700 focus:border-[3px] border-[2.5px] border-gray-500 rounded-lg  h-[40px]  text-gray-700  focus:outline-none focus:shadow-outline mt-2"
-            placeholder="sort"
-          >
-            <option value="" selected disabled>
-              Sort
-            </option>
-            <option value="invoice_id">Invoice Number</option>
-            <option value="issued_date">Issued Date</option>
-            <option value="amount">Amount</option>
-          </select>
-        </div>
       </div>
 
       {/* table */}
@@ -283,7 +241,7 @@ export default function statementOfAccount({ params }) {
             <p>:&emsp;{dayjs().format("DD/MM/YYYY")}</p>
           </div>
         </div>
-        <TableMUI tableData={filteredData} handleOpenModal={handleOpenModal} />
+        <TableMUI tableData={filteredData} handleOpenModal={handleOpenModal} calcValues={calcValues} />
       </div>
     </div>
   );

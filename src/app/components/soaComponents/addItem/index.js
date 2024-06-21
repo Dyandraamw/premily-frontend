@@ -32,26 +32,30 @@ export default function AddItem({
   handleRadioChange,
   selectedValue,
 }) {
-  //   const [selectedValue, setSelectedValue] = useState(0);
+    // const [selectedValue, setSelectedValue] = useState(0);
 
-  //   const handleRadioChange = (event) => {
-  //     setSelectedValue(event.target.value);
-  //   };
+    // const handleRadioChange = (event) => {
+    //   setSelectedValue(event.target.value);
+    // };
+    const handleStartPeriod = (data) => {
+      if (data!=null) {
+        const start = dayjs(data.slice(0,10)).format('DD/MM/YYYY')
+        return start
+      }
+      return
+    };
+  
+    const handleEndPeriod = (data) => {
+      if (data!=null) {
+        const end = dayjs(data.slice(13,23)).format('DD/MM/YYYY')
+        return end
+      }
+      return
+    };
 
   console.log(selectedValue);
   return (
-    // <div>
-    //   <DataGrid
-    //     rows={rows}
-    //     columns={columns}
-    //     hideFooterPagination={isLoading}
-    //     pageSizeOptions={[5]}
 
-    //   />
-    //   <div >
-    //     You have selected: {selectedValue[0].firstName} {selectedValue[0].lastName}
-    //   </div>
-    // </div>
     <ThemeProvider theme={theme}>
       <TableContainer>
         <Table aria-label="simple table">
@@ -73,20 +77,20 @@ export default function AddItem({
               >
                 <TableCell align="left">
                   <Radio
-                    checked={row.invoice_id == selectedValue}
+                    checked={row.Invoice_ID == selectedValue}
                     onChange={handleRadioChange}
-                    value={row.invoice_id}
+                    value={row.Invoice_ID}
                   />
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {row.invoice_id}
+                  {row.Invoice_ID}
                 </TableCell>
-                <TableCell align="left">{row.recipient}</TableCell>
-                <TableCell align="left">{row.issued_date}</TableCell>
+                <TableCell align="left">{row.Recipient}</TableCell>
+                <TableCell align="left">{dayjs(row.Created_At).format('DD/MM/YYYY')}</TableCell>
                 <TableCell align="left">
-                  {row.start_date}-{row.end_date}
+                  {handleStartPeriod(row.Period)} - {handleEndPeriod(row.Period)}
                 </TableCell>
-                <TableCell align="left">{row.amount}</TableCell>
+                <TableCell align="left">{row.Total_Premium_Due}</TableCell>
               </TableRow>
             ))}
           </TableBody>

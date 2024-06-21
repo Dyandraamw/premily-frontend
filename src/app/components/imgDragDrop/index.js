@@ -1,17 +1,17 @@
 import Image from "next/image";
 import React, { useRef, useState } from "react";
 
-export default function imgDragDrop({ className }) {
+export default function imgDragDrop({ className, imgValue, setImgValue }) {
   const fileRef = useRef(null);
   const [dragState, setDragState] = useState(false);
-  const [imgValue, setImgValue] = useState(null);
 
   const uploadImg = (e, data) => {
     e.preventDefault();
     const file = data;
     const imgUrl = URL.createObjectURL(file);
     document.querySelector("img").src = imgUrl;
-    setImgValue(imgUrl);
+    setImgValue(data);
+    console.log(imgUrl)
   };
 
   const handleDrag = (e) => {
@@ -44,7 +44,7 @@ export default function imgDragDrop({ className }) {
     fileRef.current.click();
   };
 
-  console.log("imgvalue " + imgValue);
+  console.log(imgValue);
   return (
     <div
       className={
@@ -82,7 +82,9 @@ export default function imgDragDrop({ className }) {
               Drag to upload image, or
             </p>
             <button
+            type="button"
               onClick={handleClick}
+              type="button"
               className="p-2 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
             >
               Select Image

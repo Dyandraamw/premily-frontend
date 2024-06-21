@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import dayjs from "dayjs";
 import axios from "axios";
+import { deleteSoa } from "@/app/utils/api/soaApi";
 
 const style = {
   position: "absolute",
@@ -22,25 +23,10 @@ export default function deleteSoaModal({
   detailStatementOfAccount,
   setdetailStatementOfAccount,
 }) {
-  const url = "/api/delete-soa/";
-  const authToken =
-    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYzI0ZTdiODEtMzQ0MS00MGI2LThiZjgtZTU0NDFlMjNlZTVlIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzE4NjM3MjI2fQ.-Bq4dPdBWjUa9cB-2IlF8W6oKieB0SCC_PXx0IcRh-Y";
-
-  const handleDelete = () => {
-    axios.delete(url + `${detailStatementOfAccount}`, {
-        headers: {
-          Authorization: authToken,
-        },
-      })
-      .then((response) => {
-        handleCloseModal()
-        alert(response.data)
-        //console.log(response.data);
-        location.reload('/soaList');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  
+  const handleDelete = async () => {
+    await deleteSoa(detailStatementOfAccount)
+    handleCloseModal()
   };
 
   // console.log(editStatementOfAccount.payment_start)

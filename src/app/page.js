@@ -1,9 +1,9 @@
-import Dashboard from "./(pages)/dashboard";
+// import Dashboard from "./(pages)/dashboard/page";
 
 export default function Home() {
   return (
     <main >
-      <Dashboard/>
+      {/* <Dashboard/> */}
     </main>
   );
 }

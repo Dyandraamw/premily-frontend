@@ -11,6 +11,7 @@ import Link from "next/link";
 import CreateSoaModal from "../../components/soaComponents/createSoaModal";
 import DeleteSoaModal from "../../components/soaComponents/deleteSoaModal";
 import axios from "axios";
+import { fetchSoaList } from "@/app/utils/api/soaApi";
 
 
 export default function soaList() {
@@ -18,27 +19,13 @@ export default function soaList() {
   const [soaListData, setSoaListData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 
-  const url = "/api/retrive-soa";
-  const authToken =
-    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYzI0ZTdiODEtMzQ0MS00MGI2LThiZjgtZTU0NDFlMjNlZTVlIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzE4NjM3MjI2fQ.-Bq4dPdBWjUa9cB-2IlF8W6oKieB0SCC_PXx0IcRh-Y";
-
   useEffect(() => {
-    const fetchSoaList = () => {
-      axios.get(url, {
-          headers: {
-            Authorization: authToken,
-          },
-        })
-        .then((response) => {
-          setSoaListData(response.data)
-          setFilteredData(response.data)
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    const fetchSoa = async () => {
+      const soaArr = await fetchSoaList();
+      setSoaListData(soaArr);
+      setFilteredData(soaArr);
     };
-    fetchSoaList();
+    fetchSoa();
   }, []);
 
 
@@ -49,19 +36,19 @@ export default function soaList() {
   const [sortQuery, setSortQuery] = useState("");
 
   const handleStartPeriod = (data) => {
-    if (data!=null) {
-      const start = dayjs(data.slice(0,10)).format('DD/MM/YYYY')
-      return start
+    if (data != null) {
+      const start = dayjs(data.slice(0, 10)).format("DD/MM/YYYY");
+      return start;
     }
-    return
+    return;
   };
 
   const handleEndPeriod = (data) => {
-    if (data!=null) {
-      const end = dayjs(data.slice(13,23)).format('DD/MM/YYYY')
-      return end
+    if (data != null) {
+      const end = dayjs(data.slice(13, 23)).format("DD/MM/YYYY");
+      return end;
     }
-    return
+    return;
   };
 
   const handleSearch = (e) => {
@@ -72,9 +59,15 @@ export default function soaList() {
     const filteredSoa = soaListData.filter(
       (data) =>
         data.SOA_ID.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        data.Name_Of_Insured.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        handleStartPeriod(data.Period).toLowerCase().includes(searchQuery.toLowerCase()) ||
-        handleEndPeriod(data.Period).toLowerCase().includes(searchQuery.toLowerCase()) 
+        data.Name_Of_Insured.toLowerCase().includes(
+          searchQuery.toLowerCase()
+        ) ||
+        handleStartPeriod(data.Period)
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
+        handleEndPeriod(data.Period)
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
     );
     setFilteredData(filteredSoa);
   };
@@ -100,9 +93,13 @@ export default function soaList() {
     } else if (sortQuery == "desc_company") {
       data.sort((a, b) => b.Name_Of_Insured.localeCompare(a.Name_Of_Insured));
     } else if (sortQuery == "new_start") {
-      data.sort((a, b) => -(a.Period.slice(0,10)).localeCompare(b.Period.slice(0,10)));
+      data.sort(
+        (a, b) => -a.Period.slice(0, 10).localeCompare(b.Period.slice(0, 10))
+      );
     } else if (sortQuery == "old_start") {
-      data.sort((a, b) => (a.Period.slice(0,10)).localeCompare(b.Period.slice(0,10)));
+      data.sort((a, b) =>
+        a.Period.slice(0, 10).localeCompare(b.Period.slice(0, 10))
+      );
     }
   };
 
@@ -165,13 +162,13 @@ export default function soaList() {
         </div>
         <div className="w-1/3 flex justify-end ">
           <select
-              id="sort_soa"
-              name="sort_soa"
-              className="drop-shadow-md focus:border-green-700 focus:border-[3px] border-[2.5px] border-gray-500 rounded-lg  h-[40px]  text-gray-700  focus:outline-none focus:shadow-outline mt-2"
-              placeholder="sort"
-              onChange={handleSortQuery}
-              defaultValue="sortHeader"
-            >
+            id="sort_soa"
+            name="sort_soa"
+            className="drop-shadow-md focus:border-green-700 focus:border-[3px] border-[2.5px] border-gray-500 rounded-lg  h-[40px]  text-gray-700  focus:outline-none focus:shadow-outline mt-2"
+            placeholder="sort"
+            onChange={handleSortQuery}
+            defaultValue="sortHeader"
+          >
             <option value="sortHeader" disabled>
               Sort
             </option>

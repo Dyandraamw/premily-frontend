@@ -6,43 +6,115 @@ import DatePickerMUI from "../../components/datePickerMUI";
 import SumInsuredForm from "@/app/components/invoiceComponents/sumInsuredForm";
 import InvInstallmentForm from "../../components/invoiceComponents/invInstallmentForm";
 import ImgDragDrop from "../../components/imgDragDrop";
+import axios from "axios";
+import dayjs from "dayjs";
+import { createInvoiceApi } from "@/app/utils/api/invApi";
 
 export default function creditNote() {
+  const [imgValue, setImgValue] = useState(null);
+  const [siData, setSiData] = useState([
+    { item: "", sum_insured: "", notes: "" },
+  ]);
+  const [insData, setInsData] = useState([{ due_date: null, amount: "" }]);
   const [creditNote, setCreditNote] = useState({
-    company_name: "",
-    company_address: "",
-    company_number: "",
+    typeInvoice: "credit",
     recipient: "",
     recipient_address: "",
-    invoice_id: "DN-001",
-    currency: "",
     net_premium: "",
-    brokerage: "",
     discount: "",
-    pph: "",
-    risk_management: "",
     admin_cost: "",
+    risk_management: "",
+    brokerage: "",
+    pph: "",
     total_premium_due: "",
     policy_number: "",
     name_of_insured: "",
     address_of_insured: "",
     insurance_type: "",
-    // start_date:"",
-    // end_date:"",
-    // sum_insured_form:[],
-    terms_of_payment: "",
+    //////
+    company_pict: "",
+    company_name: "",
+    company_number: "",
+    company_address: "",
+    company_contact: "",
+    currency: "IDR",
+    terms_of_period: "",
     remarks: "",
+    end_date: null,
+    start_date: null,
   });
+
+  ///////////////////////////////////////////////////
+
+  const [insDueDate, setInsDueDate] = useState([]);
+  const [insAmount, setInsAmount] = useState([]);
+
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let invForm = new FormData();
+    invForm.append("typeInvoice", "credit");
+    invForm.append("recipient", creditNote.recipient);
+    invForm.append("address", creditNote.recipient_address);
+    invForm.append("desc_premium", creditNote.net_premium);
+    invForm.append("desc_discount", creditNote.discount);
+    invForm.append("desc_admin_cost", creditNote.admin_cost);
+    invForm.append("desc_risk_management", creditNote.risk_management);
+    invForm.append("desc_brokage", creditNote.brokerage);
+    invForm.append("desc_pph", creditNote.pph);
+    invForm.append("total_premium_due", creditNote.total_premium_due);
+    invForm.append("policy_number", creditNote.policy_number);
+    invForm.append("name_of_insured", creditNote.name_of_insured);
+    invForm.append("address_of_insured", creditNote.address_of_insured);
+    invForm.append(
+      "type_of_insurance",
+      creditNote.insurance_type
+    );
+    invForm.append("periode_start", creditNote.start_date);
+    invForm.append("periode_end", creditNote.end_date);
+    invForm.append(
+      "terms_of_period",
+      creditNote.terms_of_period
+    );
+    invForm.append("remarks", "1st Instalment has to be paid before Inception");
+    insData.map((data) => {
+      invForm.append("due_date", data.due_date);
+      invForm.append("ins_amount", data.amount);
+    });
+    
+    invForm.append("company_pict", imgValue);
+    invForm.append("comp_name", creditNote.company_name);
+    invForm.append("comp_address", creditNote.company_address);
+    invForm.append("comp_contact", creditNote.company_number);
+
+    siData.map((data)=>{
+      invForm.append("items_name", data.item);
+      invForm.append("sum_ins_amount", data.sum_insured);
+      invForm.append("notes", data.notes);
+    })
+    
+    await createInvoiceApi(invForm)
+    
+  };
+  ///////////////////////////////////////////////////
 
   const handleTextChange = (e) => {
     setCreditNote({ ...creditNote, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleStartDate = (e) => {
+    const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
+    setCreditNote({ ...creditNote, start_date: dateformat });
   };
 
-
+  const handleEndDate = (e) => {
+    const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
+    setCreditNote({ ...creditNote, end_date: dateformat });
+    // console.log(dateformat)
+  };
+  
+  console.log(creditNote)
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <div className="mb-2">
@@ -61,7 +133,11 @@ export default function creditNote() {
             {/* company details */}
             <div className="flex justify-between">
               <div>
-                <ImgDragDrop className={'w-[250px]  h-[260px]'}/>
+                <ImgDragDrop
+                  className={"w-[250px]  h-[260px]"}
+                  imgValue={imgValue}
+                  setImgValue={setImgValue}
+                />
               </div>
               <div className="flex flex-col w-96 mt-5">
                 <Textfield
@@ -89,7 +165,7 @@ export default function creditNote() {
             </div>
 
             {/* invoice main details */}
-            <div className="grid grid-cols-4 gap-6 mt-5">
+            <div className="grid grid-cols-3 gap-6 mt-5">
               <Textfield
                 label={"Invoice Recipient"}
                 id={"recipient"}
@@ -113,7 +189,7 @@ export default function creditNote() {
                 disabled={true}
               />
               {/* currency dropdown */}
-              <div>
+              {/* <div>
                 <label
                   for="currency"
                   className="block text-black text-lg font-bold mb-2"
@@ -130,56 +206,56 @@ export default function creditNote() {
                   <option value="myr">MYR</option>
                   <option value="SGD">SGD</option>
                 </select>
-              </div>
+              </div> */}
             </div>
 
             {/* Description */}
             <div className="my-2">
               <label
                 className="block text-black text-xl font-bold mb-2"
-                for="desription"
+                htmlFor="desription"
               >
                 Description
               </label>
 
               <div className="grid grid-cols-2 gap-6 mt-5 p-4 border-[3px] border-green-700 rounded-xl">
                 <SideTextfield
-                  label={"Net Premium :"}
+                  label={`Net Premium (${creditNote.currency}) :`}
                   id={"net_premium"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
                   value={creditNote.net_premium}
                 />
                 <SideTextfield
-                  label={"Brokerage :"}
+                  label={`Brokerage (${creditNote.currency}) :`}
                   id={"brokerage"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
                   value={creditNote.brokerage}
                 />
                 <SideTextfield
-                  label={"Discount :"}
+                  label={`Discount (${creditNote.currency}) :`}
                   id={"discount"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
                   value={creditNote.discount}
                 />
                 <SideTextfield
-                  label={"PPH :"}
+                  label={`PPH (${creditNote.currency}) :`}
                   id={"pph"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
                   value={creditNote.pph}
                 />
                 <SideTextfield
-                  label={"Risk Management :"}
+                  label={`Risk Management (${creditNote.currency}) :`}
                   id={"risk_management"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
                   value={creditNote.risk_management}
                 />
                 <SideTextfield
-                  label={"Admin Cost :"}
+                  label={`Admin Cost (${creditNote.currency}) :`}
                   id={"admin_cost"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
@@ -189,9 +265,9 @@ export default function creditNote() {
             </div>
 
             {/* premium due */}
-            <div className="w-1/4 my-4">
+            <div className="w-[30%] my-4">
               <Textfield
-                label={"Total Premium Due"}
+                label={`Total Premium Due (${creditNote.currency}) :`}
                 id={"total_premium_due"}
                 placeholder={"insert amount..."}
                 onChange={handleTextChange}
@@ -247,12 +323,13 @@ export default function creditNote() {
                 <DatePickerMUI
                   bigLabel={"Period of Policy"}
                   label={"start date"}
+                  onChange={handleStartDate}
                 />
 
                 <p className="flex justify-center mt-10 text-black text-lg font-bold w-1/3">
                   to
                 </p>
-                <DatePickerMUI bigLabel={<p>&nbsp;</p>} label={"end date"} />
+                <DatePickerMUI bigLabel={<p>&nbsp;</p>} label={"end date"} onChange={handleEndDate}/>
               </div>
             </div>
 
@@ -264,22 +341,23 @@ export default function creditNote() {
 
               <div className="border-[3px] border-green-700 rounded-xl mt-5 py-4 pl-5">
                 <SumInsuredForm
-                // siData={siData}
-                // handleChange={handleSiChange}
-                // handleClick={handleAddSiRow}
-                // handleDeleteRow={handleDeleteSiRow}
+                  siData={siData}
+                  setSiData={setSiData}
+                  // handleChange={handleSiChange}
+                  // handleClick={handleAddSiRow}
+                  // handleDeleteRow={handleDeleteSiRow}
                 />
               </div>
             </div>
 
             {/* premium due */}
-            <div className="w-1/4 my-4">
+            <div className="w-[30%] my-4">
               <Textfield
                 label={"Terms of Payment"}
-                id={"terms_of_payment"}
+                id={"terms_of_period"}
                 placeholder={"insert terms of payment..."}
                 onChange={handleTextChange}
-                value={creditNote.terms_of_payment}
+                value={creditNote.terms_of_period}
               />
             </div>
 
@@ -291,7 +369,14 @@ export default function creditNote() {
                 </label>
 
                 <div className="border-[3px] border-green-700 rounded-xl mt-2 py-4 pl-5">
-                  <InvInstallmentForm />
+                  <InvInstallmentForm
+                    insAmount={insAmount}
+                    setInsAmount={setInsAmount}
+                    setInsDueDate={setInsDueDate}
+                    insDueDate={insDueDate}
+                    insData={insData}
+                    setInsData={setInsData}
+                  />
                 </div>
               </div>
               <div className="w-full">
@@ -306,7 +391,10 @@ export default function creditNote() {
             </div>
 
             <div className="flex w-full justify-end mt-5">
-              <button className="p-2 border-[3px] drop-shadow-lg font-bold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">
+              <button
+                type="submit"
+                className="p-2 border-[3px] drop-shadow-lg font-bold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
+              >
                 Submit
               </button>
             </div>
