@@ -5,15 +5,7 @@ export const TokenSignIn = async (data) => {
   try {
     const response = await axios.post(url, data);
 
-    const res = response.data;
-
-    // if (isVerified) {
-    //   // alert("Statement of Account Sucessfully Created!");
-    //   window.location("/dashboard");
-    // } else {
-    //   alert("Your account is not verified. Please verify your account.");
-    //   location.reload("/SignIn");
-    // }
+    // 
 
     return response.data;
   } catch (error) {

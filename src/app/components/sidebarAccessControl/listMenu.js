@@ -8,11 +8,13 @@ import { IoLogOut } from "react-icons/io5";
 import Link from "next/link";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-const userRole = Cookies.get("userRole");
+//const userRole = Cookies.get("userRole");
 export default function listMenu() {
   const router = useRouter();
 
   const handleSignOut = () => {
+    Cookies.remove("userRole");
+    Cookies.remove("userID");
     Cookies.remove("jwtToken");
     router.push("/SignIn");
   };
