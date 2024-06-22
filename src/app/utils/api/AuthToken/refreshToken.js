@@ -9,12 +9,14 @@ export const TokenSignIn = async (data) => {
     // 
 
     return response.data;
+
   } catch (error) {
-    console.log(error);
-    // alert("Statement of Account failed to be created");
-    // throw error;
-    alert(error.response.data + "Please wait for verification!")
-    return null
+//     if (error.response && error.response.status === 500) {
+//       alert("Email and password not found!");
+//     }
+//     // console.log(error);
+    alert(error.response.data + "Please wait for verification");
+    return null;
   }
 };
 
@@ -27,7 +29,11 @@ export const FetchSignUp = async (data) => {
     console.log("data API", response.data);
     return response.data;
   } catch (error) {
-    alert("Your account failed to created");
+    if (error.response && error.response.status == 400) {
+      alert(
+        "Image should be insert & password contains 8 characters having an uppercase, lowercase, and symbols (@#$) "
+      );
+    }
     throw error;
     // throw error;
   }
