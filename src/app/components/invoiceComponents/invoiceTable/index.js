@@ -9,6 +9,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import dayjs from "dayjs";
 import Link from "next/link";
 import Cookies from "js-cookie";
+import useMounted from "@/app/utils/hooks/useMounted";
 
 const theme = createTheme({
   components: {
@@ -29,6 +30,7 @@ const theme = createTheme({
 const userRole = Cookies.get("userRole");
 
 export default function tableMUI({ tableData, handleOpenModal }) {
+  const mounted = useMounted()
   const currency = "IDR";
   const handleStartPeriod = (data) => {
     if (data != null) {
@@ -83,7 +85,7 @@ export default function tableMUI({ tableData, handleOpenModal }) {
                 <TableCell align="left">
                   {currency} {parseInt(row.Total_Premium_Due).toLocaleString()}
                 </TableCell>
-                {userRole == "staff" ? null : (
+                {mounted && userRole == "staff" ? null : (
                   <TableCell sx={{ borderBottom: "none" }} align="center">
                     <button
                       onClick={(e) => handleOpenModal(row.Invoice_ID)}

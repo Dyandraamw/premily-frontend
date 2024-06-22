@@ -8,6 +8,7 @@ import { IoLogOut } from "react-icons/io5";
 import Link from "next/link";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+
 const userRole = Cookies.get("userRole");
 export default function listMenu() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function listMenu() {
     Cookies.remove("jwtToken");
     router.push("/SignIn");
   };
+
   return (
     <div className="h-full w-5/6 flex flex-col justify-between">
       <div className="w-full">

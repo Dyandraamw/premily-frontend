@@ -16,6 +16,7 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp, MdEdit } from "react-icons/md";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import dayjs from "dayjs";
 import Cookies from "js-cookie";
+import useMounted from "@/app/utils/hooks/useMounted";
 
 const theme = createTheme({
   components: {
@@ -37,7 +38,7 @@ const userRole = Cookies.get("userRole");
 function Row(props) {
   const { row } = props;
   const [open, setOpen] = useState(false);
-
+  const mounted = useMounted()
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
@@ -117,7 +118,7 @@ function Row(props) {
                               {nestedrow.pay_balance}
                             </TableCell>
                             <TableCell align="right">
-                              {userRole == "staff" ? null : (
+                              {mounted && userRole == "staff" ? null : (
                                 <button
                                   type="button"
                                   onClick={(e) =>
@@ -175,7 +176,7 @@ export default function paymentStatusDetailTable({
                 <TableCell key={data.adjustment_itr} align="left">
                   <div className="flex items-center">
                     {data.adjustment_title}
-                    {userRole == "staff" ? null : (
+                    {mounted && userRole == "staff" ? null : (
                       <FaEdit
                         className="text-yellow-600 hover:text-gray-700 ml-2 text-2xl"
                         onClick={(e) =>

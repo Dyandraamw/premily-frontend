@@ -9,10 +9,12 @@ import EditPaymentModal from "../../../components/paymentStatusComponents/editPa
 import EditAdjustmentModal from "../../../components/paymentStatusComponents/editAdjustmentModal";
 import { fetchPaymentStatusDetail } from "@/app/utils/api/psApi";
 import Cookies from "js-cookie";
+import useMounted from "@/app/utils/hooks/useMounted";
 
 const userRole = Cookies.get("userRole");
 
 export default function paymentStatusDetail({ params }) {
+  const mounted = useMounted()
   const [paymentStatus, setPaymentStatus] = useState([]);
   const [adjustmentData, setAdjustmentData] = useState([]);
   const [invoiceDet, setInvoiceDet] = useState([]);
@@ -142,7 +144,7 @@ export default function paymentStatusDetail({ params }) {
           </p>
         </div>
         <div>
-          {userRole == "staff" ? null : (
+          {mounted && userRole == "staff" ? null : (
             <div>
               <button
                 onClick={handleOpenPaymentModal}

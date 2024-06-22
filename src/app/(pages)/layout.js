@@ -4,7 +4,7 @@ import Sidebar from "../components/sidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function RootLayout({ children }) {
+export default function PagesLayout({ children }) {
   return (
     <div className="flex w-screen overflow-hidden h-screen">
       <Sidebar />

@@ -6,9 +6,11 @@ import PdfButton from "../../../components/pdfButton";
 import { fetchInvoiceDetail } from "../../../utils/api/invApi";
 import Image from "next/image";
 import Cookies from "js-cookie";
+import useMounted from "@/app/utils/hooks/useMounted";
 
 const userRole = Cookies.get("userRole");
 export default function invoiceDetail({ params }) {
+  const mounted = useMounted()
   const [invoice_data, setInvDetail] = useState({
     recipient_address: "",
     address_of_insured: "",
@@ -362,7 +364,7 @@ export default function invoiceDetail({ params }) {
         {/* bottom half */}
 
         <div className="flex justify-end mt-5 p-2 ">
-          {userRole == "staff" ? null : (
+          {mounted && userRole == "staff" ? null : (
             <button className="p-2 border-[3px] mr-3 drop-shadow-lg font-bold text-white hover:bg-white hover:text-black rounded-lg bg-yellow-600 border-yellow-600">
               <Link
                 href={params.invoiceId + "/editInvoice"}

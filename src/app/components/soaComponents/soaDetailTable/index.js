@@ -9,6 +9,7 @@ import Paper from "@mui/material/Paper";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import dayjs from "dayjs";
 import Cookies from "js-cookie";
+import useMounted from "@/app/utils/hooks/useMounted";
 
 const theme = createTheme({
   components: {
@@ -27,6 +28,7 @@ const theme = createTheme({
 });
 const userRole = Cookies.get("userRole");
 export default function tableMUI({ tableData, handleOpenModal, calcValues }) {
+  const mounted = useMounted()
   const handleAging = (data, bal) => {
     if (bal >= 0) {
       return "-";
@@ -115,7 +117,7 @@ export default function tableMUI({ tableData, handleOpenModal, calcValues }) {
                     ? handleAging(row.Due_Date, calcValues[i].balance)
                     : null}
                 </TableCell>
-                {userRole == "staff" ? null : (
+                {mounted && userRole == "staff" ? null : (
                   <TableCell align="center">
                     <button
                       onClick={(e) =>

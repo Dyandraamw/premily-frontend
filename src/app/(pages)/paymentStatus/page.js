@@ -11,10 +11,12 @@ import TablePaymentStatus from "@/app/components/paymentStatusComponents/Payment
 import DeletePsModal from "@/app/components/paymentStatusComponents/modalDelete";
 import { fetchPaymentStatusList } from "@/app/utils/api/psApi";
 import Cookies from "js-cookie";
+import useMounted from "@/app/utils/hooks/useMounted";
 
 const userRole = Cookies.get("userRole");
 
 export default function PaymentStatus() {
+  const mounted = useMounted()
   const [query, setQuery] = useState("");
   const [paymentStatusList, setPaymentStatusList] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -134,7 +136,7 @@ export default function PaymentStatus() {
           </p>
         </div>
         <div>
-          {userRole == "staff" ? null : (
+          {mounted && userRole == "staff" ? null : (
             <Link href={"/SelectInvoicesPS"}>
               <button
                 href={"/SelectInvoicesPS"}

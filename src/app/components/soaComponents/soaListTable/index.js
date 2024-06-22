@@ -9,6 +9,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import dayjs from "dayjs";
 import Link from "next/link";
 import Cookies from "js-cookie";
+import useMounted from "@/app/utils/hooks/useMounted";
 
 const theme = createTheme({
   components: {
@@ -29,6 +30,7 @@ const theme = createTheme({
 const userRole = Cookies.get("userRole")
 
 export default function tableMUI({ tableData, handleOpenDeleteSoaModal }) {
+  const mounted = useMounted()
   const handleStartPeriod = (data) => {
     if (data != null) {
       const start = dayjs(data.slice(0, 10)).format("DD/MM/YYYY");
@@ -73,7 +75,7 @@ export default function tableMUI({ tableData, handleOpenDeleteSoaModal }) {
                 <TableCell align="left">
                   {handleStartPeriod(row.Period)}-{handleEndPeriod(row.Period)}
                 </TableCell>
-                {userRole == "staff" ? null : (
+                {mounted && userRole == "staff" ? null : (
                   <TableCell sx={{ borderBottom: "none" }} align="center">
                     <button
                       onClick={(e) => handleOpenDeleteSoaModal(row.SOA_ID)}

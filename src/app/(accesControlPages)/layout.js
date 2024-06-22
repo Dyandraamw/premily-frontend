@@ -4,7 +4,7 @@ import Sidebar from "../components/sidebarAccessControl";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function RootLayout({ children }) {
+export default function ProfileLayout({ children }) {
   return (
     <div className="flex w-screen overflow-hidden h-screen">
       <Sidebar />

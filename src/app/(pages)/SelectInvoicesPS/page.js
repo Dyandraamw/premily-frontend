@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import Link from "next/link";
-import TableSelectInvoice from "@/app/components/paymentStatusComponents/TableSelectInvoice/page";
-import AddInvoice from "@/app/components/paymentStatusComponents/TableSelectInvoice/page";
+import TableSelectInvoice from "@/app/components/paymentStatusComponents/TableSelectInvoice/index";
+import AddInvoice from "@/app/components/paymentStatusComponents/TableSelectInvoice/index";
 import { createPaymentStatusApi } from "@/app/utils/api/psApi";
 import { fetchInvoiceList } from "@/app/utils/api/invApi";
 

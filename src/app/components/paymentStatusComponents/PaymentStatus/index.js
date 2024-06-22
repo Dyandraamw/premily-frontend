@@ -10,6 +10,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Cookies from "js-cookie";
+import useMounted from "@/app/utils/hooks/useMounted";
 
 const theme = createTheme({
   components: {
@@ -33,6 +34,7 @@ export default function TablePaymentStatus({
   tableData,
   handleOpenDetailPsModal,
 }) {
+  const mounted = useMounted();
   return (
     <ThemeProvider theme={theme}>
       <TableContainer>
@@ -66,7 +68,7 @@ export default function TablePaymentStatus({
                   {dayjs(row.period_start).format("DD/MM/YYYY")}-
                   {dayjs(row.period_end).format("DD/MM/YYYY")}
                 </TableCell>
-                {userRole == "staff" ? null : (
+                {mounted && userRole == "staff" ? null : (
                   <TableCell sx={{ borderBottom: "none" }} align="center">
                     <button
                       onClick={(e) =>
