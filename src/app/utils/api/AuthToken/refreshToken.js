@@ -74,3 +74,40 @@ export const updateUserPic = async (userID,picForm) => {
   }
 };
 
+export const forgotPasswordApi = async (data) => {
+  const url = "/api/forgot-password?email=";
+  try {
+    const response = await axios.post(url + `${data}`);
+
+    // 
+    
+    return response.data;
+  } catch (error) {
+//     if (error.response && error.response.status === 500) {
+//       alert("Email and password not found!");
+//     }
+//     // console.log(error);
+    alert(error.response.data);
+    return null;
+  }
+};
+
+export const resetPasswordApi = async (resetToken, newPass) => {
+  const url = "/api/reset-password?token=";
+  try {
+    const response = await axios.post(
+      url + `${resetToken}` + "&new_password=" + `${newPass}`
+    );
+
+    //
+
+    return response.data;
+  } catch (error) {
+    //     if (error.response && error.response.status === 500) {
+    //       alert("Email and password not found!");
+    //     }
+    //     // console.log(error);
+    alert(error.response.data);
+    return null;
+  }
+};
