@@ -7,9 +7,8 @@ export const TokenSignIn = async (data) => {
     const response = await axios.post(url, data);
 
     // 
-
+    
     return response.data;
-
   } catch (error) {
 //     if (error.response && error.response.status === 500) {
 //       alert("Email and password not found!");
@@ -39,7 +38,7 @@ export const FetchSignUp = async (data) => {
   }
 };
 
-export const fetchUserSidebar = async (userID) => {
+export const fetchUserApi = async (userID) => {
   const url = "/api/user/";
   try {
     const response = await axios.get(url + `${userID}`,{
@@ -48,10 +47,29 @@ export const fetchUserSidebar = async (userID) => {
       },
     });
 
+    
     return response.data;
   } catch (error) {
-    alert("Your account failed to created");
-    throw error;
+    alert("Your user cannot be fetched");
+    console.log(error)
+    // throw error;
+  }
+};
+
+export const updateUserPic = async (userID,picForm) => {
+  const url = "/api/update-profile-picture/";
+  try {
+    const response = await axios.put(url + `${userID}`,picForm,{
+      headers: {
+        Authorization: authToken,
+      },
+    });
+
+    
+    return response.data;
+  } catch (error) {
+    alert("Your user cannot be fetched");
+    console.log(error)
     // throw error;
   }
 };

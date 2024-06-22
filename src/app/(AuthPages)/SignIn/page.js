@@ -51,6 +51,7 @@ export default function SignIn() {
       Cookies.set("userRole",tokenDecoded.role)
       Cookies.set("userID",tokenDecoded.user_id)
       Cookies.set("jwtToken",tokenRes.token)
+      // location.reload("/dashboard")
       router.push("/dashboard")
     }
     // console.log(Cookies.get("jwtToken"))
