@@ -1,5 +1,6 @@
 import axios from "axios";
-
+import Cookies from "js-cookie";
+const authToken = Cookies.get("jwtToken")
 export const TokenSignIn = async (data) => {
   const url = "/api/sign-in";
   try {
@@ -32,15 +33,16 @@ export const FetchSignUp = async (data) => {
   }
 };
 
-export const fetchUserVerification = async (userID) => {
+export const fetchUserSidebar = async (userID) => {
   const url = "/api/user/";
   try {
-    const response = await axios.post(url + `${userID}`);
-    // alert("Your account has been created, please wait for verification user");
-    // window.location.replace("/SignIn");
-    // console.log("data API", response.data);
-    //const res = response.data
-    return response.data.role;
+    const response = await axios.get(url + `${userID}`,{
+      headers: {
+        Authorization: authToken,
+      },
+    });
+
+    return response.data;
   } catch (error) {
     alert("Your account failed to created");
     throw error;
