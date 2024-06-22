@@ -4,22 +4,18 @@ export const TokenSignIn = async (data) => {
   const url = "/api/sign-in";
   try {
     const response = await axios.post(url, data);
-    if (response.status === 200) {
-      const { isVerified } = response.data;
-      if (isVerified) {
-        window.location("/dashboard");
-      } else {
-        alert("Your account is not verified. Please verify your account.");
-        location.reload("/SignIn");
-      }
-    }
+
+    // 
+
+    return response.data;
+
   } catch (error) {
-    if (error.response && error.response.status === 500) {
-      alert("Email and password not found!");
-    }
-    // console.log(error);
-    // alert("Statement of Account failed to be created");
-    throw error;
+//     if (error.response && error.response.status === 500) {
+//       alert("Email and password not found!");
+//     }
+//     // console.log(error);
+    alert(error.response.data + "Please wait for verification");
+    return null;
   }
 };
 

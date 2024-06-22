@@ -17,6 +17,8 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
 export default function SignIn() {
+  Cookies.set("userRole",null)
+  Cookies.set("userID",null)
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false);
   const [token, setToken] = useState(null);
@@ -51,8 +53,10 @@ export default function SignIn() {
       Cookies.set("jwtToken",tokenRes.token)
       router.push("/dashboard")
     }
-    console.log(token)
-    setToken(token);
+    // console.log(Cookies.get("jwtToken"))
+    // console.log(Cookies.get("userRole"))
+    // console.log(Cookies.get("userID"))
+    // setToken(token);
   };
 
   const handleCheckBox = () => {
