@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchPaymentStatusList } from "@/app/utils/api/psApi";
+import Cookies from "js-cookie";
 
 export default function Dashboard() {
   const [creditSummary, setCreditSummary] = useState([
@@ -82,6 +83,7 @@ export default function Dashboard() {
 
   // console.log(creditSummary);
   // console.log(debitSummary);
+  // console.log(Cookies.get("userRole"))
   return (
     <div className="flex flex-grow flex-col px-10 py-5 min-h-screen w-full">
       <div className="mb-5">

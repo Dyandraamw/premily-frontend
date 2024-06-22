@@ -13,6 +13,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import { FetchSignUp } from "@/app/utils/api/AuthToken/refreshToken";
 import ImgDragDrop from "../../components/imgDragDrop/index";
+import Cookies from "js-cookie";
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PASS_REGEX = /^(?=.*[a-z])(?=.*[A-Z)(?=.*[0-9])(?=.*[!@#%]).{8,24}$/;
@@ -184,6 +185,17 @@ export default function SignUp() {
             imgValue={image}
             className="w-30 h-30 "
           />
+          <div className="mt-3">
+              <p className="flex justify-center text-black text-sm">
+                Already have an account?
+                <Link
+                  href="/SignIn"
+                  className="text-gray-500 hover:text-green-800 font-semibold"
+                >
+                  Sign In
+                </Link>
+              </p>
+            </div>
           <div className="mt-8 mb-3">
             <button
               href="/SignIn"
@@ -194,6 +206,7 @@ export default function SignUp() {
             </button>
           </div>
         </form>
+        
       </div>
     </div>
   );
