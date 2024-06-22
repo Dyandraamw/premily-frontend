@@ -9,6 +9,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Cookies from "js-cookie";
 
 const theme = createTheme({
   components: {
@@ -25,6 +26,8 @@ const theme = createTheme({
     },
   },
 });
+
+const userRole = Cookies.get("userRole");
 
 export default function TablePaymentStatus({
   tableData,
@@ -63,22 +66,24 @@ export default function TablePaymentStatus({
                   {dayjs(row.period_start).format("DD/MM/YYYY")}-
                   {dayjs(row.period_end).format("DD/MM/YYYY")}
                 </TableCell>
-                <TableCell sx={{ borderBottom: "none" }} align="center">
-                  <button
-                    onClick={(e) =>
-                      handleOpenDetailPsModal([
-                        row.payment_status_id,
-                        row.invoice_id,
-                        row.invoice_recipient,
-                        row.period_start,
-                        row.period_end,
-                      ])
-                    }
-                    className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600"
-                  >
-                    Delete
-                  </button>
-                </TableCell>
+                {userRole == "staff" ? null : (
+                  <TableCell sx={{ borderBottom: "none" }} align="center">
+                    <button
+                      onClick={(e) =>
+                        handleOpenDetailPsModal([
+                          row.payment_status_id,
+                          row.invoice_id,
+                          row.invoice_recipient,
+                          row.period_start,
+                          row.period_end,
+                        ])
+                      }
+                      className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600"
+                    >
+                      Delete
+                    </button>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

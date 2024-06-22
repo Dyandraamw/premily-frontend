@@ -8,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import dayjs from "dayjs";
+import Cookies from "js-cookie";
 
 const theme = createTheme({
   components: {
@@ -24,7 +25,7 @@ const theme = createTheme({
     },
   },
 });
-
+const userRole = Cookies.get("userRole");
 export default function tableMUI({ tableData, handleOpenModal, calcValues }) {
   const handleAging = (data, bal) => {
     if (bal >= 0) {
@@ -93,7 +94,11 @@ export default function tableMUI({ tableData, handleOpenModal, calcValues }) {
                 <TableCell align="left">
                   <div
                     className={
-                      (calcValues.length != 0 ? (calcValues[i].status == "PAID" ? "bg-green-700": "bg-yellow-600") : null) +
+                      (calcValues.length != 0
+                        ? calcValues[i].status == "PAID"
+                          ? "bg-green-700"
+                          : "bg-yellow-600"
+                        : null) +
                       // (row.Status == "PAID"
                       //   ? "bg-green-700"
                       //   : row.Status == "OUTSTANDING"
@@ -110,22 +115,24 @@ export default function tableMUI({ tableData, handleOpenModal, calcValues }) {
                     ? handleAging(row.Due_Date, calcValues[i].balance)
                     : null}
                 </TableCell>
-                <TableCell align="center">
-                  <button
-                    onClick={(e) =>
-                      handleOpenModal([
-                        row.SOA_Details_ID,
-                        row.Invoice_ID,
-                        row.Installment_Standing,
-                        row.Payment_Date,
-                        row.Payment_Amount,
-                      ])
-                    }
-                    className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-black hover:bg-white hover:text-black rounded-lg bg-yellow-500 border-yellow-500"
-                  >
-                    Edit
-                  </button>
-                </TableCell>
+                {userRole == "staff" ? null : (
+                  <TableCell align="center">
+                    <button
+                      onClick={(e) =>
+                        handleOpenModal([
+                          row.SOA_Details_ID,
+                          row.Invoice_ID,
+                          row.Installment_Standing,
+                          row.Payment_Date,
+                          row.Payment_Amount,
+                        ])
+                      }
+                      className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-black hover:bg-white hover:text-black rounded-lg bg-yellow-500 border-yellow-500"
+                    >
+                      Edit
+                    </button>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

@@ -10,26 +10,25 @@ import DatePickerMUI from "../../components/datePickerMUI";
 import TablePaymentStatus from "@/app/components/paymentStatusComponents/PaymentStatus";
 import DeletePsModal from "@/app/components/paymentStatusComponents/modalDelete";
 import { fetchPaymentStatusList } from "@/app/utils/api/psApi";
+import Cookies from "js-cookie";
 
+const userRole = Cookies.get("userRole");
 
 export default function PaymentStatus() {
   const [query, setQuery] = useState("");
-  const [paymentStatusList,setPaymentStatusList] = useState([])
+  const [paymentStatusList, setPaymentStatusList] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [sortQuery, setSortQuery] = useState("");
 
   useEffect(() => {
-
     const fetchList = async () => {
-      const psList = await fetchPaymentStatusList()
-      setPaymentStatusList(psList)
-      setFilteredData(psList)
+      const psList = await fetchPaymentStatusList();
+      setPaymentStatusList(psList);
+      setFilteredData(psList);
       // console.log(invList)
     };
-    fetchList()
-
+    fetchList();
   }, []);
-
 
   const handleSearch = (e) => {
     const searchQuery = e.target.value;
@@ -54,7 +53,6 @@ export default function PaymentStatus() {
   };
 
   const handleSort = (data) => {
-    
     if (sortQuery == "asc_ps_id") {
       data.sort(
         (a, b) =>
@@ -80,13 +78,9 @@ export default function PaymentStatus() {
           parseInt(a.invoice_id.slice(4, 9))
       );
     } else if (sortQuery == "asc_recipient") {
-      data.sort((a, b) =>
-        a.invoice.localeCompare(b.invoice)
-      );
+      data.sort((a, b) => a.invoice.localeCompare(b.invoice));
     } else if (sortQuery == "desc_recipient") {
-      data.sort((a, b) =>
-        b.invoice.localeCompare(a.invoice)
-      );
+      data.sort((a, b) => b.invoice.localeCompare(a.invoice));
     } else if (sortQuery == "new_start") {
       data.sort((a, b) => -a.period_start.localeCompare(b.period_start));
     } else if (sortQuery == "old_start") {
@@ -140,14 +134,16 @@ export default function PaymentStatus() {
           </p>
         </div>
         <div>
-          <Link href={"/SelectInvoicesPS"}>
-            <button
-              href={"/SelectInvoicesPS"}
-              className="p-2 px-4 border-[3px] mt-2 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700 "
-            >
-              Create Payment Status
-            </button>
-          </Link>
+          {userRole == "staff" ? null : (
+            <Link href={"/SelectInvoicesPS"}>
+              <button
+                href={"/SelectInvoicesPS"}
+                className="p-2 px-4 border-[3px] mt-2 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700 "
+              >
+                Create Payment Status
+              </button>
+            </Link>
+          )}
         </div>
       </div>
       <div className="flex justify-between">
@@ -174,12 +170,8 @@ export default function PaymentStatus() {
             </option>
             <option value="asc_ps_id">Ascending Payment Status Number</option>
             <option value="desc_ps_id">Descending Payment Status Number</option>
-            <option value="asc_invoice_id">
-              Ascending Invoice Number
-            </option>
-            <option value="desc_invoice_id">
-              Descending Invoice Number
-            </option>
+            <option value="asc_invoice_id">Ascending Invoice Number</option>
+            <option value="desc_invoice_id">Descending Invoice Number</option>
             <option value="asc_recipient">Asccending Invoice recipient</option>
             <option value="desc_recipient">Descending Invoice recipient</option>
             <option value="new_start">Newest Period Start</option>

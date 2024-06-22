@@ -8,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import dayjs from "dayjs";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 const theme = createTheme({
   components: {
@@ -25,21 +26,23 @@ const theme = createTheme({
   },
 });
 
+const userRole = Cookies.get("userRole")
+
 export default function tableMUI({ tableData, handleOpenDeleteSoaModal }) {
   const handleStartPeriod = (data) => {
-    if (data!=null) {
-      const start = dayjs(data.slice(0,10)).format('DD/MM/YYYY')
-      return start
+    if (data != null) {
+      const start = dayjs(data.slice(0, 10)).format("DD/MM/YYYY");
+      return start;
     }
-    return
+    return;
   };
 
   const handleEndPeriod = (data) => {
-    if (data!=null) {
-      const end = dayjs(data.slice(13,23)).format('DD/MM/YYYY')
-      return end
+    if (data != null) {
+      const end = dayjs(data.slice(13, 23)).format("DD/MM/YYYY");
+      return end;
     }
-    return
+    return;
   };
   return (
     <ThemeProvider theme={theme}>
@@ -67,17 +70,19 @@ export default function tableMUI({ tableData, handleOpenDeleteSoaModal }) {
                   </Link>
                 </TableCell>
                 <TableCell align="left">{row.Name_Of_Insured}</TableCell>
-                <TableCell align="left">{handleStartPeriod(row.Period)}-{handleEndPeriod(row.Period)}</TableCell>
-                <TableCell sx={{ borderBottom: "none" }} align="center">
-                  <button
-                    onClick={(e) =>
-                      handleOpenDeleteSoaModal(row.SOA_ID)
-                    }
-                    className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600"
-                  >
-                    Delete
-                  </button>
+                <TableCell align="left">
+                  {handleStartPeriod(row.Period)}-{handleEndPeriod(row.Period)}
                 </TableCell>
+                {userRole == "staff" ? null : (
+                  <TableCell sx={{ borderBottom: "none" }} align="center">
+                    <button
+                      onClick={(e) => handleOpenDeleteSoaModal(row.SOA_ID)}
+                      className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600"
+                    >
+                      Delete
+                    </button>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

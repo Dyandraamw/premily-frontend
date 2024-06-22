@@ -12,8 +12,9 @@ import CreateSoaModal from "../../components/soaComponents/createSoaModal";
 import DeleteSoaModal from "../../components/soaComponents/deleteSoaModal";
 import axios from "axios";
 import { fetchSoaList } from "@/app/utils/api/soaApi";
+import Cookies from "js-cookie";
 
-
+const userRole = Cookies.get("userRole");
 export default function soaList() {
   //fetch data ////////////////////////////////////////////////////////////
   const [soaListData, setSoaListData] = useState([]);
@@ -27,7 +28,6 @@ export default function soaList() {
     };
     fetchSoa();
   }, []);
-
 
   ////////////////////////////////////////////////////////////
   // filter control ////////////////////////////////////////////////////////////
@@ -143,12 +143,14 @@ export default function soaList() {
           </p>
         </div>
         <div>
-          <button
-            onClick={handleOpenModal}
-            className="p-2 px-4 border-[3px] mt-2 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
-          >
-            Create Statement of Account
-          </button>
+          {userRole == "staff" ? null : (
+            <button
+              onClick={handleOpenModal}
+              className="p-2 px-4 border-[3px] mt-2 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
+            >
+              Create Statement of Account
+            </button>
+          )}
         </div>
       </div>
       <div className="flex justify-between">
