@@ -1,16 +1,15 @@
 export default function middleware(req) {
-  let verify = req.cookies.get("jwtToken");
+  let token = req.cookies.getAll();
   let url = req.url;
+  const baseUrl = "http://localhost:3000/";
 
-  if (!verify && url.includes("/dashboard")) {
-    return res.redirect("http://localhost:3000/");
+  if (!token && url.includes("/dashboard")) {
+    return res.redirect(baseUrl + "SignIn");
   }
 
-  if (verify && url ==== "http://localhost:3000/" && userRole === "admin") {
-    return res.redirect("http://localhost:3000/dashboard");
-  }
+  let role = req.cookies.get("userRole");
 
-  if (verify && url ==== "http://localhost:3000/" && userRole === "staff") {
-    return res.redirect("http://localhost:3000/dashboard");
+  if (role === "admin" || role === "staff") && url.includes("/profile") || url.includes("/StaffAccess") {
+    return res.redirect(baseUrl + "dashboard");
   }
 }
