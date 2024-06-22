@@ -1,10 +1,10 @@
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/sidebarAccessControl";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function PagesLayout({ children }) {
+export default function ProfileLayout({ children }) {
   return (
     <div className="flex w-screen overflow-hidden h-screen">
       <Sidebar />

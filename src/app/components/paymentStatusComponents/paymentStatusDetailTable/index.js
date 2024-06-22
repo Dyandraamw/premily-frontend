@@ -15,6 +15,8 @@ import { FaEdit } from "react-icons/fa";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp, MdEdit } from "react-icons/md";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import dayjs from "dayjs";
+import Cookies from "js-cookie";
+import useMounted from "@/app/utils/hooks/useMounted";
 
 const theme = createTheme({
   components: {
@@ -32,14 +34,15 @@ const theme = createTheme({
   },
 });
 
+const userRole = Cookies.get("userRole");
 function Row(props) {
   const { row } = props;
   const [open, setOpen] = useState(false);
-
+  const mounted = useMounted()
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
-        <TableRow  sx={{ "& > *": { borderBottom: "unset" } }}>
+        <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
           <TableCell key={"icon_space"}>
             <IconButton
               aria-label="expand row"
@@ -49,28 +52,34 @@ function Row(props) {
               {open ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
             </IconButton>
           </TableCell>
-          <TableCell  key={"ins_idx"} component="th" scope="row">
+          <TableCell key={"ins_idx"} component="th" scope="row">
             {props.instalmentidx}
           </TableCell>
-          <TableCell  key={"due_date_data"} align="left">
+          <TableCell key={"due_date_data"} align="left">
             {dayjs(row.due_date).format("DD/MM/YYYY")}
           </TableCell>
-          <TableCell  key={"ins_amount"} align="left">{row.ins_amount}</TableCell>
-          {props.adjustment_data.map((data,i) => (
-            <TableCell  key={i} align="left">
+          <TableCell key={"ins_amount"} align="left">
+            {row.ins_amount}
+          </TableCell>
+          {props.adjustment_data.map((data, i) => (
+            <TableCell key={i} align="left">
               {data.adjustment_amount[props.rowIndex]}
             </TableCell>
           ))}
-          <TableCell key={"ins_total"} align="left">{row.ins_total}</TableCell>
-          <TableCell  align="left">
+          <TableCell key={"ins_total"} align="left">
+            {row.ins_total}
+          </TableCell>
+          <TableCell align="left">
             <div
-              className={ row.installment_status!=""?
-                ((row.installment_status == "PAID"
-                  ? "bg-green-700"
-                  : row.installment_status == "OUTSTANDING"
-                  ? "bg-yellow-600"
-                  : "bg-red-700") +
-                " flex justify-center rounded-2xl p-2 text-white "):null
+              className={
+                row.installment_status != ""
+                  ? (row.installment_status == "PAID"
+                      ? "bg-green-700"
+                      : row.installment_status == "OUTSTANDING"
+                      ? "bg-yellow-600"
+                      : "bg-red-700") +
+                    " flex justify-center rounded-2xl p-2 text-white "
+                  : null
               }
             >
               {row.installment_status}
@@ -109,20 +118,22 @@ function Row(props) {
                               {nestedrow.pay_balance}
                             </TableCell>
                             <TableCell align="right">
-                              <button
-                                type="button"
-                                onClick={(e) =>
-                                  props.handleOpenEditPaymentModal([
-                                    nestedrow.pay_detail_id,
-                                    nestedrow.pd_ins_id,
-                                    nestedrow.pay_date,
-                                    nestedrow.pay_amount,
-                                  ])
-                                }
-                                className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-black hover:bg-white hover:text-black rounded-lg bg-yellow-500 border-yellow-500"
-                              >
-                                Edit
-                              </button>
+                              {mounted && userRole == "staff" ? null : (
+                                <button
+                                  type="button"
+                                  onClick={(e) =>
+                                    props.handleOpenEditPaymentModal([
+                                      nestedrow.pay_detail_id,
+                                      nestedrow.pd_ins_id,
+                                      nestedrow.pay_date,
+                                      nestedrow.pay_amount,
+                                    ])
+                                  }
+                                  className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-black hover:bg-white hover:text-black rounded-lg bg-yellow-500 border-yellow-500"
+                                >
+                                  Edit
+                                </button>
+                              )}
                             </TableCell>
                           </TableRow>
                         ) : null
@@ -165,22 +176,28 @@ export default function paymentStatusDetailTable({
                 <TableCell key={data.adjustment_itr} align="left">
                   <div className="flex items-center">
                     {data.adjustment_title}
-                    <FaEdit
-                      className="text-yellow-600 hover:text-gray-700 ml-2 text-2xl"
-                      onClick={(e) =>
-                        handleOpenEditAdjustmentModal([
-                          data.adjustment_itr,
-                          data.adjustment_id,
-                          data.adjustment_title,
-                          data.adjustment_amount,
-                        ])
-                      }
-                    />
+                    {mounted && userRole == "staff" ? null : (
+                      <FaEdit
+                        className="text-yellow-600 hover:text-gray-700 ml-2 text-2xl"
+                        onClick={(e) =>
+                          handleOpenEditAdjustmentModal([
+                            data.adjustment_itr,
+                            data.adjustment_id,
+                            data.adjustment_title,
+                            data.adjustment_amount,
+                          ])
+                        }
+                      />
+                    )}
                   </div>
                 </TableCell>
               ))}
-              <TableCell key={"total_space"} align="left">Total (IDR)</TableCell>
-              <TableCell key={"status_space"} align="left">Status</TableCell>
+              <TableCell key={"total_space"} align="left">
+                Total (IDR)
+              </TableCell>
+              <TableCell key={"status_space"} align="left">
+                Status
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

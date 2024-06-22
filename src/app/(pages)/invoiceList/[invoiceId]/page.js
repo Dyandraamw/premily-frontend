@@ -5,8 +5,12 @@ import Link from "next/link";
 import PdfButton from "../../../components/pdfButton";
 import { fetchInvoiceDetail } from "../../../utils/api/invApi";
 import Image from "next/image";
+import Cookies from "js-cookie";
+import useMounted from "@/app/utils/hooks/useMounted";
 
+const userRole = Cookies.get("userRole");
 export default function invoiceDetail({ params }) {
+  const mounted = useMounted()
   const [invoice_data, setInvDetail] = useState({
     recipient_address: "",
     address_of_insured: "",
@@ -98,7 +102,7 @@ export default function invoiceDetail({ params }) {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
-  console.log(invoice_data.company_pict)
+  //console.log(invoice_data.company_pict);
 
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
@@ -118,7 +122,11 @@ export default function invoiceDetail({ params }) {
           {/* company details */}
           <div className="flex justify-between">
             <div className="w-[200px]  h-[200px]">
-              <img className="w-[200px] h-[200px]" src={invoice_data.company_pict} alt="company logo" />
+              <img
+                className="w-[200px] h-[200px]"
+                src={invoice_data.company_pict}
+                alt="company logo"
+              />
             </div>
           </div>
           {/* invoice details */}
@@ -341,7 +349,9 @@ export default function invoiceDetail({ params }) {
                       </td>
                       <td className="border-2 border-black font-bold">
                         {invoice_data.currency}&emsp;
-                        {parseInt(invoice_data.total_premium_due).toLocaleString()}
+                        {parseInt(
+                          invoice_data.total_premium_due
+                        ).toLocaleString()}
                       </td>
                       <td className="border-2 border-black "></td>
                     </tr>
@@ -354,11 +364,17 @@ export default function invoiceDetail({ params }) {
         {/* bottom half */}
 
         <div className="flex justify-end mt-5 p-2 ">
-          <button className="p-2 border-[3px] mr-3 drop-shadow-lg font-bold text-white hover:bg-white hover:text-black rounded-lg bg-yellow-600 border-yellow-600">
-            <Link href={params.invoiceId + "/editInvoice"} state={invoice_data}>
-              Edit
-            </Link>
-          </button>
+          {mounted && userRole == "staff" ? null : (
+            <button className="p-2 border-[3px] mr-3 drop-shadow-lg font-bold text-white hover:bg-white hover:text-black rounded-lg bg-yellow-600 border-yellow-600">
+              <Link
+                href={params.invoiceId + "/editInvoice"}
+                state={invoice_data}
+              >
+                Edit
+              </Link>
+            </button>
+          )}
+
           <div className="w-[130px]">
             <PdfButton invoice_data={invoice_data} />
           </div>

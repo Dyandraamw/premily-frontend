@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import TableUser from "@/app/components/StaffAccessComponents/page";
-import TableStaff from "@/app/components/StaffAccessComponents/TableAccessRequest/page";
+import TableUser from "@/app/components/StaffAccessComponents/index";
+import TableStaff from "@/app/components/StaffAccessComponents/TableAccessRequest";
 import DeleteStaffAccessModal from "@/app/components/StaffAccessComponents/Modal";
 import ChangeRole from "@/app/components/StaffAccessComponents/ModalRole";
 // import DeleteChangeRoleModal from "@/app/components/StaffAccessComponents/RoleModal";

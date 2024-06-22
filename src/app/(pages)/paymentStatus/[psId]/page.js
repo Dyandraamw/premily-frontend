@@ -8,10 +8,13 @@ import AddAdjustmentModal from "../../../components/paymentStatusComponents/addA
 import EditPaymentModal from "../../../components/paymentStatusComponents/editPaymentModal";
 import EditAdjustmentModal from "../../../components/paymentStatusComponents/editAdjustmentModal";
 import { fetchPaymentStatusDetail } from "@/app/utils/api/psApi";
+import Cookies from "js-cookie";
+import useMounted from "@/app/utils/hooks/useMounted";
 
-
+const userRole = Cookies.get("userRole");
 
 export default function paymentStatusDetail({ params }) {
+  const mounted = useMounted()
   const [paymentStatus, setPaymentStatus] = useState([]);
   const [adjustmentData, setAdjustmentData] = useState([]);
   const [invoiceDet, setInvoiceDet] = useState([]);
@@ -141,18 +144,22 @@ export default function paymentStatusDetail({ params }) {
           </p>
         </div>
         <div>
-          <button
-            onClick={handleOpenPaymentModal}
-            className="p-2 px-4 border-[3px] mt-2 mr-5 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
-          >
-            Add Payment
-          </button>
-          <button
-            onClick={handleOpenAdjustmentModal}
-            className="p-2 px-4 border-[3px] mt-2 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
-          >
-            Add Adjustment
-          </button>
+          {mounted && userRole == "staff" ? null : (
+            <div>
+              <button
+                onClick={handleOpenPaymentModal}
+                className="p-2 px-4 border-[3px] mt-2 mr-5 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
+              >
+                Add Payment
+              </button>
+              <button
+                onClick={handleOpenAdjustmentModal}
+                className="p-2 px-4 border-[3px] mt-2 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
+              >
+                Add Adjustment
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

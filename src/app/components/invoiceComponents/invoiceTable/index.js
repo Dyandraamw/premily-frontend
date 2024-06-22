@@ -8,7 +8,8 @@ import TableRow from "@mui/material/TableRow";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import dayjs from "dayjs";
 import Link from "next/link";
-
+import Cookies from "js-cookie";
+import useMounted from "@/app/utils/hooks/useMounted";
 
 const theme = createTheme({
   components: {
@@ -26,24 +27,25 @@ const theme = createTheme({
   },
 });
 
+const userRole = Cookies.get("userRole");
 
-
-export default function tableMUI({tableData, handleOpenModal}) {
-  const currency = 'IDR'
+export default function tableMUI({ tableData, handleOpenModal }) {
+  const mounted = useMounted()
+  const currency = "IDR";
   const handleStartPeriod = (data) => {
-    if (data!=null) {
-      const start = dayjs(data.slice(0,10)).format('DD/MM/YYYY')
-      return start
+    if (data != null) {
+      const start = dayjs(data.slice(0, 10)).format("DD/MM/YYYY");
+      return start;
     }
-    return
+    return;
   };
 
   const handleEndPeriod = (data) => {
-    if (data!=null) {
-      const end = dayjs(data.slice(13,23)).format('DD/MM/YYYY')
-      return end
+    if (data != null) {
+      const end = dayjs(data.slice(13, 23)).format("DD/MM/YYYY");
+      return end;
     }
-    return
+    return;
   };
   return (
     <ThemeProvider theme={theme}>
@@ -51,8 +53,7 @@ export default function tableMUI({tableData, handleOpenModal}) {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell align="left">
-                Invoice Number</TableCell>
+              <TableCell align="left">Invoice Number</TableCell>
               <TableCell align="left">Recipient</TableCell>
               <TableCell align="left">Issued Date</TableCell>
               <TableCell align="left">Policy Period</TableCell>
@@ -65,19 +66,35 @@ export default function tableMUI({tableData, handleOpenModal}) {
                 key={row.Invoice_ID}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row"><Link className="hover:font-semibold hover:text-green-700" href={'/invoiceList/'+row.Invoice_ID}>
-                  {row.Invoice_ID}</Link>
+                <TableCell component="th" scope="row">
+                  <Link
+                    className="hover:font-semibold hover:text-green-700"
+                    href={"/invoiceList/" + row.Invoice_ID}
+                  >
+                    {row.Invoice_ID}
+                  </Link>
                 </TableCell>
                 <TableCell align="left">{row.Recipient}</TableCell>
-                <TableCell align="left">{dayjs(row.Created_At).format('DD/MM/YYYY')}</TableCell>
-                <TableCell align="left">{handleStartPeriod(row.Period)}-{handleEndPeriod(row.Period)}</TableCell>
-                {/* <TableCell align="left">{dayjs(row.period_start).format('DD/MM/YYYY')}-{dayjs(row.period_end).format('DD/MM/YYYY')}</TableCell> */}
-                <TableCell align="left">{currency} {row.Total_Premium_Due}</TableCell>
-                <TableCell sx={{ borderBottom: "none" }} align="center">
-                  <button onClick={(e)=>handleOpenModal(row.Invoice_ID)} className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600">
-                    Delete
-                  </button>
+                <TableCell align="left">
+                  {dayjs(row.Created_At).format("DD/MM/YYYY")}
                 </TableCell>
+                <TableCell align="left">
+                  {handleStartPeriod(row.Period)}-{handleEndPeriod(row.Period)}
+                </TableCell>
+                {/* <TableCell align="left">{dayjs(row.period_start).format('DD/MM/YYYY')}-{dayjs(row.period_end).format('DD/MM/YYYY')}</TableCell> */}
+                <TableCell align="left">
+                  {currency} {parseInt(row.Total_Premium_Due).toLocaleString()}
+                </TableCell>
+                {mounted && userRole == "staff" ? null : (
+                  <TableCell sx={{ borderBottom: "none" }} align="center">
+                    <button
+                      onClick={(e) => handleOpenModal(row.Invoice_ID)}
+                      className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600"
+                    >
+                      Delete
+                    </button>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

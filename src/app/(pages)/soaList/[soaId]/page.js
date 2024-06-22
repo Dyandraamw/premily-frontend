@@ -10,8 +10,12 @@ import Link from "next/link";
 import EditItemModal from "../../../components/soaComponents/editItemModal";
 import axios from "axios";
 import { fetchSoaDetails } from "@/app/utils/api/soaApi";
+import Cookies from "js-cookie";
+import useMounted from "@/app/utils/hooks/useMounted";
 
+const userRole = Cookies.get("userRole");
 export default function statementOfAccount({ params }) {
+  const mounted = useMounted()
   const [query, setQuery] = useState("");
   const [soaDetails, setSoaDetails] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -63,111 +67,108 @@ export default function statementOfAccount({ params }) {
   };
 
   // useEffect(() => {
-    const handleCalc = (soaData) => {
-      let arr = [];
-      soaData.map((data, i) => {
-        const prevData = searchPrev(
+  const handleCalc = (soaData) => {
+    let arr = [];
+    soaData.map((data, i) => {
+      const prevData = searchPrev(
+        data.Invoice_ID,
+        data.Installment_Standing,
+        data.SOA_Details_ID
+      );
+      //console.log(prevData);
+      if (prevData[0].SOA_Details_ID == data.SOA_Details_ID) {
+        const balance =
+          parseInt(data.Payment_Amount) - parseInt(data.SOA_Amount);
+        {
+          balance < 0
+            ? arr.push({
+                Invoice_ID: data.Invoice_ID,
+                Installment_Standing: data.Installment_Standing,
+                item_id: data.SOA_Details_ID,
+                alocation: data.Payment_Amount,
+                balance: balance,
+                status: "OUTSTANDING",
+              })
+            : arr.push({
+                Invoice_ID: data.Invoice_ID,
+                Installment_Standing: data.Installment_Standing,
+                item_id: data.SOA_Details_ID,
+                alocation: data.Payment_Amount,
+                balance: balance,
+                status: "PAID",
+              });
+        }
+
+        // console.log;
+      } else if (prevData[0].SOA_Details_ID != data.SOA_Details_ID) {
+        const prevCalc = searchCalc(
           data.Invoice_ID,
           data.Installment_Standing,
-          data.SOA_Details_ID
+          data.SOA_Details_ID,
+          arr
         );
-        //console.log(prevData);
-        if (prevData[0].SOA_Details_ID == data.SOA_Details_ID) {
-          const balance =
-            parseInt(data.Payment_Amount) - parseInt(data.SOA_Amount);
+        const previdx = prevCalc.length - 1;
+        //console.log(prevCalc)
+        if (prevCalc[previdx].balance < 0) {
+          const alocation = parseInt(data.Payment_Amount);
+          const balance = parseInt(prevCalc[previdx].balance) + alocation;
+          // console.log(prevCalc[previdx])
           {
             balance < 0
               ? arr.push({
-                Invoice_ID: data.Invoice_ID,
-                Installment_Standing: data.Installment_Standing,
-                item_id: data.SOA_Details_ID,
-                alocation: data.Payment_Amount,
-                balance: balance,
-                status: "OUTSTANDING"
-              })
+                  Invoice_ID: data.Invoice_ID,
+                  Installment_Standing: data.Installment_Standing,
+                  item_id: data.SOA_Details_ID,
+                  alocation: data.Payment_Amount,
+                  balance: balance,
+                  status: "OUTSTANDING",
+                })
               : arr.push({
-                Invoice_ID: data.Invoice_ID,
-                Installment_Standing: data.Installment_Standing,
-                item_id: data.SOA_Details_ID,
-                alocation: data.Payment_Amount,
-                balance: balance,
-                status: "PAID"
-              })
+                  Invoice_ID: data.Invoice_ID,
+                  Installment_Standing: data.Installment_Standing,
+                  item_id: data.SOA_Details_ID,
+                  alocation: data.Payment_Amount,
+                  balance: balance,
+                  status: "PAID",
+                });
           }
-
-          // console.log;
-        } else if (prevData[0].SOA_Details_ID != data.SOA_Details_ID) {
-          const prevCalc = searchCalc(
-            data.Invoice_ID,
-            data.Installment_Standing,
-            data.SOA_Details_ID,
-            arr
-          );
-          const previdx = prevCalc.length - 1;
-          //console.log(prevCalc)
-          if (prevCalc[previdx].balance < 0) {
-            const alocation = parseInt(data.Payment_Amount);
-            const balance = parseInt(prevCalc[previdx].balance) + alocation;
-            // console.log(prevCalc[previdx])
-            {
-              balance < 0
-                ? arr.push({
+        } else if (prevCalc[previdx].balance >= 0) {
+          const alocation =
+            parseInt(data.Payment_Amount) + parseInt(arr[previdx].balance);
+          const balance = alocation - parseInt(data.SOA_Amount);
+          {
+            balance < 0
+              ? arr.push({
                   Invoice_ID: data.Invoice_ID,
                   Installment_Standing: data.Installment_Standing,
                   item_id: data.SOA_Details_ID,
                   alocation: data.Payment_Amount,
                   balance: balance,
-                  status: "OUTSTANDING"
+                  status: "OUTSTANDING",
                 })
-                : arr.push({
+              : arr.push({
                   Invoice_ID: data.Invoice_ID,
                   Installment_Standing: data.Installment_Standing,
                   item_id: data.SOA_Details_ID,
                   alocation: data.Payment_Amount,
                   balance: balance,
-                  status: "PAID"
-                })
-            }
-          } else if (prevCalc[previdx].balance >= 0) {
-            const alocation = parseInt(data.Payment_Amount) + parseInt(arr[previdx].balance);
-            const balance = alocation - parseInt(data.SOA_Amount);
-            {
-              balance < 0
-                ? arr.push({
-                  Invoice_ID: data.Invoice_ID,
-                  Installment_Standing: data.Installment_Standing,
-                  item_id: data.SOA_Details_ID,
-                  alocation: data.Payment_Amount,
-                  balance: balance,
-                  status: "OUTSTANDING"
-                })
-                : arr.push({
-                  Invoice_ID: data.Invoice_ID,
-                  Installment_Standing: data.Installment_Standing,
-                  item_id: data.SOA_Details_ID,
-                  alocation: data.Payment_Amount,
-                  balance: balance,
-                  status: "PAID"
-                })
-            }
+                  status: "PAID",
+                });
           }
         }
+      }
 
+      // console.log(arr)
+    });
 
-        // console.log(arr)
-      });
+    setCalcValues(arr);
+  };
 
-      setCalcValues(arr)
-    }
-
-    
   // }, []);
 
-  useEffect(()=>{
-    handleCalc(soaDetails)
-  },[soaDetails])
-
-
+  useEffect(() => {
+    handleCalc(soaDetails);
+  }, [soaDetails]);
 
   const [modalState, setModalState] = useState(false);
   const [editSoaItem, setEditSoaItem] = useState({
@@ -207,9 +208,11 @@ export default function statementOfAccount({ params }) {
           </p>
         </div>
         <div>
-          <button className="p-2 px-4 border-[3px] mt-2 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">
-            <Link href={params.soaId + "/soaAddItem"}>Add Item</Link>
-          </button>
+          {mounted && userRole == "staff" ? null : (
+            <button className="p-2 px-4 border-[3px] mt-2 drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700">
+              <Link href={params.soaId + "/soaAddItem"}>Add Item</Link>
+            </button>
+          )}
         </div>
       </div>
 
@@ -241,7 +244,11 @@ export default function statementOfAccount({ params }) {
             <p>:&emsp;{dayjs().format("DD/MM/YYYY")}</p>
           </div>
         </div>
-        <TableMUI tableData={filteredData} handleOpenModal={handleOpenModal} calcValues={calcValues} />
+        <TableMUI
+          tableData={filteredData}
+          handleOpenModal={handleOpenModal}
+          calcValues={calcValues}
+        />
       </div>
     </div>
   );

@@ -9,16 +9,20 @@ import Link from "next/link";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
+const userRole = Cookies.get("userRole");
 export default function listMenu() {
   const router = useRouter();
+
   const handleSignOut = () => {
     Cookies.remove("jwtToken");
     router.push("/SignIn");
   };
+
   return (
     <div className="h-full w-5/6 flex flex-col justify-between">
       <div className="w-full">
         {/* Dashboard button */}
+        
         <Link href={"/dashboard"}>
           <div className="flex items-center w-full hover:bg-green-700 hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold rounded-lg">
             <BiSolidDashboard className="mx-5 text-3xl" />
@@ -27,12 +31,15 @@ export default function listMenu() {
         </Link>
 
         {/* Invoice List button */}
-        {/* <Link href={"/invoiceList"}> */}
-          <button onClick={()=>{router.push('/invoiceList')}} className="flex items-center w-full hover:bg-green-700 hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold rounded-lg">
-            <FaFileInvoiceDollar className="mx-5 text-3xl" />
-            Invoice List
-          </button>
-        {/* </Link> */}
+        <Link
+          href={"/invoiceList"}
+          className="flex items-center w-full hover:bg-green-700
+          hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold
+          rounded-lg"
+        >
+          <FaFileInvoiceDollar className="mx-5 text-3xl" />
+          Invoice List
+        </Link>
 
         {/* Statement of Account button */}
         <Link href={"/soaList"}>
@@ -52,30 +59,17 @@ export default function listMenu() {
       </div>
 
       <div className="w-full">
-        {/* Staff Access button */}
-        <Link href={"/StaffAccess"}>
-          <div className="flex items-center w-full  hover:bg-green-700 hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold rounded-lg">
-            <FaUserGear className="mx-5 text-3xl" />
-            Staff Access
-          </div>
-        </Link>
-
-        {/* Profile button */}
-        <Link href={"/Profile"}>
-          <div className="flex items-center w-full  hover:bg-green-700 hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold rounded-lg">
-            <FaCircleUser className="mx-5 text-3xl" />
-            Profile
-          </div>
-        </Link>
 
         {/* Sign Out button */}
-        <button
-          onClick={handleSignOut}
-          className="flex items-center w-full  hover:bg-green-700 hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold rounded-lg"
-        >
-          <IoLogOut className="mx-5 text-3xl" />
-          Sign Out
-        </button>
+        <div>
+          <button
+            onClick={handleSignOut}
+            className="flex items-center w-full  hover:bg-green-700 hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold rounded-lg"
+          >
+            <IoLogOut className="mx-5 text-3xl" />
+            Sign Out
+          </button>
+        </div>
       </div>
     </div>
   );

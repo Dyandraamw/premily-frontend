@@ -3,8 +3,11 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchPaymentStatusList } from "@/app/utils/api/psApi";
 import Cookies from "js-cookie";
+import useMounted from "@/app/utils/hooks/useMounted";
 
+const userRole = Cookies.get("userRole");
 export default function Dashboard() {
+  const mounted = useMounted()
   const [creditSummary, setCreditSummary] = useState([
     {
       paid: 0,
@@ -70,10 +73,6 @@ export default function Dashboard() {
   }, []);
 
   const handleFilter = (query, psList) => {
-    // const searchQuery = e.target.value;
-    // //console.log(e.target.value)
-    // setQuery(searchQuery);
-
     const filteredData = psList.filter((data) =>
       data.invoice_id.toLowerCase().includes(query.toLowerCase())
     );
@@ -83,7 +82,7 @@ export default function Dashboard() {
 
   // console.log(creditSummary);
   // console.log(debitSummary);
-  // console.log(Cookies.get("userRole"))
+  console.log(Cookies.get("userRole"));
   return (
     <div className="flex flex-grow flex-col px-10 py-5 min-h-screen w-full">
       <div className="mb-5">
@@ -92,20 +91,21 @@ export default function Dashboard() {
           View your total summary of transaction
         </p>
       </div>
+       {mounted && userRole == "staff" ? null : (
+         <div className="flex mt-5">
+           <Link href={"/creditNote"}>
+             <button className="justify-center py-3 border-[3px] drop-shadow-lg font-semibold w-64 text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700 mr-5">
+               Create New Credit Note
+             </button>
+           </Link>
 
-      <div className="flex mt-5">
-        <Link href={"/creditNote"}>
-          <button className="justify-center py-3 border-[3px] drop-shadow-lg font-semibold w-64 text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700 mr-5">
-            Create New Credit Note
-          </button>
-        </Link>
-
-        <Link href={"/debitNote"}>
-          <button className="justify-center py-3 border-[3px] drop-shadow-lg font-semibold w-64 text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700 mr-5">
-            Create New Debit Note
-          </button>
-        </Link>
-      </div>
+           <Link href={"/debitNote"}>
+             <button className="justify-center py-3 border-[3px] drop-shadow-lg font-semibold w-64 text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700 mr-5">
+               Create New Debit Note
+             </button>
+           </Link>
+         </div>
+       )}
 
       <div className="bg-white mt-10 p-5 rounded-xl drop-shadow-lg">
         {/* Insured Data */}

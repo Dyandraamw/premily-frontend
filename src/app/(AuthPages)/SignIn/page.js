@@ -44,10 +44,11 @@ export default function SignIn() {
 
     const tokenRes = await TokenSignIn(data);
     if (tokenRes!=null) {
-      Cookies.set("jwtToken",tokenRes.token)
+      
       const tokenDecoded = jwtDecode(tokenRes.token)
       Cookies.set("userRole",tokenDecoded.role)
       Cookies.set("userID",tokenDecoded.user_id)
+      Cookies.set("jwtToken",tokenRes.token)
       router.push("/dashboard")
     }
     console.log(token)
