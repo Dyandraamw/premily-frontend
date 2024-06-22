@@ -91,6 +91,7 @@ export default function SignUp() {
             required
             id="outlined-Email"
             label="Email"
+            color="success"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             className="w-full mt-3 mb-5"
@@ -99,6 +100,7 @@ export default function SignUp() {
             required
             id="outlined-username"
             label="Username"
+            color="success"
             ref={userRef}
             autoComplete="off"
             onChange={(e) => setUser(e.target.value)}
@@ -109,6 +111,7 @@ export default function SignUp() {
           <TextField
             id="outlined-name"
             label="Name"
+            color="success"
             onChange={(e) => setName(e.target.value)}
             value={name}
             className="w-full mb-5"
@@ -116,6 +119,7 @@ export default function SignUp() {
           <TextField
             id="outlined-phone"
             label="Phone Number"
+            color="success"
             onChange={(e) => setPhoneNumber(e.target.value)}
             value={phoneNumber}
             className="w-full mb-5"
@@ -125,6 +129,7 @@ export default function SignUp() {
             variant="outlined-password"
             required
             autoComplete="off"
+            color="success"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             className="w-full mb-5"
@@ -155,6 +160,7 @@ export default function SignUp() {
             variant="outlined=confirm-password"
             required
             autoComplete="off"
+            color="success"
             onChange={(e) => setConfirmPassword(e.target.value)}
             value={confirmPassword}
             className="w-full mb-5"
@@ -180,22 +186,17 @@ export default function SignUp() {
               label="Confirm Password"
             />
           </FormControl>
-          <ImgDragDrop
-            setImgValue={setImageValue}
-            imgValue={image}
-            className="w-30 h-30 "
-          />
           <div className="mt-3">
-              <p className="flex justify-center text-black text-sm">
-                Already have an account?
-                <Link
-                  href="/SignIn"
-                  className="text-gray-500 hover:text-green-800 font-semibold"
-                >
-                  Sign In
-                </Link>
-              </p>
-            </div>
+            <p className="flex justify-center text-black text-sm">
+              Already have an account?
+              <Link
+                href="/SignIn"
+                className="text-gray-500 hover:text-green-800 font-semibold"
+              >
+                Sign In
+              </Link>
+            </p>
+          </div>
           <div className="mt-8 mb-3">
             <button
               href="/SignIn"
@@ -206,7 +207,6 @@ export default function SignUp() {
             </button>
           </div>
         </form>
-        
       </div>
     </div>
   );

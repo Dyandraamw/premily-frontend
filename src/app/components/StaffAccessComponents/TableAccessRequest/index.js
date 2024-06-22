@@ -53,14 +53,14 @@ export default function TableStaff({
           <TableBody>
             {tableData.map((row) => (
               <TableRow
-                key={row.name}
+                key={row.UserID}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.username}
+                  {row.Username}
                 </TableCell>
-                <TableCell align="left">{row.email}</TableCell>
-                <TableCell align="left">{row.phone}</TableCell>
+                <TableCell align="left">{row.Email}</TableCell>
+                <TableCell align="left">{row.Phone}</TableCell>
                 <TableCell sx={{ borderBottom: "none" }} align="center">
                   <button
                     onClick={() => onAccept(row)}
