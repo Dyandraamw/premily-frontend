@@ -12,20 +12,6 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import dayjs from "dayjs";
 import Modal from "../Modal/Modal";
 
-function createData(username, email, phone, role) {
-  return { username, email, phone, role };
-}
-
-const tableData = [
-  createData(
-    "John_Williams",
-    "John.williams@gmail.com",
-    "081234218765",
-    "Admin"
-  ),
-  createData("Alexander", "G.Alex@gmail.com", "081234218765", "Guest"),
-];
-
 const theme = createTheme({
   components: {
     MuiTableCell: {
@@ -60,15 +46,15 @@ export default function TableUser({ tableData }) {
           <TableBody>
             {tableData.map((row) => (
               <TableRow
-                key={row.name}
+                key={row.userID}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
                   {row.username}
                 </TableCell>
-                <TableCell align="left">{row.email}</TableCell>
-                <TableCell align="left">{row.phone}</TableCell>
-                <TableCell align="left">{row.role}</TableCell>
+                <TableCell align="left">{row.Email}</TableCell>
+                <TableCell align="left">{row.Phone}</TableCell>
+                <TableCell align="left">{row.Role}</TableCell>
                 <TableCell sx={{ borderBottom: "none" }} align="center">
                   <button
                     onClick={() => setShowModal(true)}

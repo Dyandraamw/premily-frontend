@@ -1,57 +1,39 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TableUser from "@/app/components/StaffAccessComponents/index";
 import TableStaff from "@/app/components/StaffAccessComponents/TableAccessRequest";
 import DeleteStaffAccessModal from "@/app/components/StaffAccessComponents/Modal";
 import ChangeRole from "@/app/components/StaffAccessComponents/ModalRole";
+import {
+  fetchUnroleUser,
+  fetchUnverifyUser,
+} from "@/app/utils/api/roleApi/role";
 // import DeleteChangeRoleModal from "@/app/components/StaffAccessComponents/RoleModal";
-
-function createData(user_id, username, email, phone, role) {
-  return { user_id, username, email, phone, role };
-}
-
-const dataAccess = [
-  createData("John_Williams", "John.williams@gmail.com", "081234218765"),
-  createData("John_Williams", "John.williams@gmail.com", "081234218765"),
-  createData("John_Williams", "John.williams@gmail.com", "081234218765"),
-  createData("John_Williams", "John.williams@gmail.com", "081234218765"),
-  createData("John_Williams", "John.williams@gmail.com", "081234218765"),
-];
-
-const dataUser = [
-  createData(
-    "USR-001",
-    "John_Williams",
-    "John.williams@gmail.com",
-    "081234218765",
-    "Admin"
-  ),
-  createData(
-    "John_Williams",
-    "John.williams@gmail.com",
-    "081234218765",
-    "Admin"
-  ),
-  createData(
-    "John_Williams",
-    "John.williams@gmail.com",
-    "081234218765",
-    "Admin"
-  ),
-  createData(
-    "John_Williams",
-    "John.williams@gmail.com",
-    "081234218765",
-    "Admin"
-  ),
-];
 
 export default function StaffAcces() {
   const [showModal, setShowModal] = useState(false);
+  const [unrole, setUnrole] = useState([]);
+  const [unverifyUser, setUnverifyUser] = useState([]);
 
-  const [accessRequests, setAccessRequests] = useState(dataAccess);
+  useEffect(() => {
+    const fetchunrole = async () => {
+      const fetchUnrole = await fetchUnroleUser();
+      // console.log(fetchUnrole);
+      setUnrole(fetchUnrole);
+    };
+    fetchunrole();
 
-  const [userList, setUserList] = useState(dataUser);
+    const fetchunverify = async () => {
+      const fetchUnverif = await fetchUnverifyUser();
+      // console.log(fetchUnverif);
+      setUnverifyUser(fetchUnverif);
+    };
+    fetchunverify();
+  });
+
+  const [accessRequests, setAccessRequests] = useState();
+
+  const [userList, setUserList] = useState();
 
   const [modalState, setModalState] = useState(false);
   const handleOpenModal = () => setModalState(true);
@@ -77,29 +59,6 @@ export default function StaffAcces() {
     });
   };
   const handleCloseDetailSAModal = () => setDetailSAModal(false);
-
-  // const [changeRoleModalState, setchangeRoleModalState] = useState(false);
-  // const handleOpenCRModal = () => setchangeRoleModalState(true);
-  // const handleCloseCRModal = () => setchangeRoleModalState(false);
-
-  // const [editCRModal, setEditCRModal] = useState(false);
-  // const [editCR, setEditCR] = useState({
-  //   user_id: "",
-  //   role: "",
-  // });
-
-  // const handleOpenEditCRModal = (data) => {
-  //   setEditCRModal(true);
-  //   // console.log(data)
-  //   setEditCR({
-  //     ...editCR,
-  //     user_id: data[0],
-  //     role: data[4],
-  //   });
-  // };
-
-  // const handleCloseEditCRModal = () => setEditCRModal(false);
-
   const handleAccept = (user) => {
     setUserList([...userList, { ...user, role: "User" }]);
     setAccessRequests(
@@ -121,18 +80,6 @@ export default function StaffAcces() {
         detailStaffAccess={detailStaffAccess}
         setdetailStaffAccess={setdetailStaffAccess}
       />
-      {/* <ChangeRole
-        modalState={changeRoleModalState}
-        handleCloseModal={handleCloseCRModal}
-        role={dataUser}
-      /> */}
-      {/* <DeleteChangeRoleModal
-        detailCRModal={detailCRModal}
-        handleCloseModal={handleCloseDetailCRModal}
-        detailChangeRole={detailChangeRole}
-        handleOpenDetailChangeRoleModal={setDetailChangeRole}
-      /> */}
-
       <div className="mb-2">
         <h1 className="text-4xl text-green-700 font-bold">Staff Acces</h1>
         <p className="ml-1 font-medium text-gray-600">
@@ -144,7 +91,7 @@ export default function StaffAcces() {
           Access Request
         </h1>
         <TableStaff
-          tableData={dataAccess}
+          tableData={unverifyUser}
           handleOpenDetailStaffAccessModal={handleOpenDetailStaffAccessModal}
           onAccept={handleAccept}
           onReject={handleReject}
@@ -156,7 +103,7 @@ export default function StaffAcces() {
         </h1>
         <TableUser
           onClick={() => setShowModal(true)}
-          tableData={dataUser}
+          tableData={unrole}
           // handleOpenDetailCRModal={handleOpenCRModal}
           // handleOpenEditCRModal={handleOpenEditCRModal}
         />

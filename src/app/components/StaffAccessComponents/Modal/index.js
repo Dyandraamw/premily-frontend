@@ -28,7 +28,7 @@ export default function DeleteStaffAccessModal({
   return (
     <div>
       <Modal
-        open={detailSAModal}
+        open={Boolean(detailSAModal)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -41,7 +41,7 @@ export default function DeleteStaffAccessModal({
                 </h1>
                 <p className=" w-full text-center justify-center font-medium text-md text-gray-500">
                   Are you sure you want to delete access request{" "}
-                  {/* <b>{detailStaffAccess.username[0]}</b> */}
+                  {/* <b>{detailStaffAccess.UserID}</b> */}
                 </p>
               </div>
               <div className="mx-5">

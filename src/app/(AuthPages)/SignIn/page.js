@@ -17,9 +17,9 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
 export default function SignIn() {
-  Cookies.set("userRole",null)
-  Cookies.set("userID",null)
-  const router = useRouter()
+  Cookies.set("userRole", null);
+  Cookies.set("userID", null);
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [token, setToken] = useState(null);
 
@@ -35,7 +35,6 @@ export default function SignIn() {
   const [userError, setUserError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const FormData = require("form-data");
@@ -45,14 +44,13 @@ export default function SignIn() {
     data.append("remember_me", rememberMe);
 
     const tokenRes = await TokenSignIn(data);
-    if (tokenRes!=null) {
-      
-      const tokenDecoded = jwtDecode(tokenRes.token)
-      Cookies.set("userRole",tokenDecoded.role)
-      Cookies.set("userID",tokenDecoded.user_id)
-      Cookies.set("jwtToken",tokenRes.token)
+    if (tokenRes != null) {
+      const tokenDecoded = jwtDecode(tokenRes.token);
+      Cookies.set("userRole", tokenDecoded.role);
+      Cookies.set("userID", tokenDecoded.user_id);
+      Cookies.set("jwtToken", tokenRes.token);
       // location.reload("/dashboard")
-      router.push("/dashboard")
+      router.push("/dashboard");
     }
     // console.log(Cookies.get("jwtToken"))
     // console.log(Cookies.get("userRole"))
@@ -61,13 +59,13 @@ export default function SignIn() {
   };
 
   const handleCheckBox = () => {
-    var checkValidate = document.getElementById("remember")
-    if(checkValidate.checked==true){
-      setRememberMe(true)
-    }else{
-      setRememberMe(false)
+    var checkValidate = document.getElementById("remember");
+    if (checkValidate.checked == true) {
+      setRememberMe(true);
+    } else {
+      setRememberMe(false);
     }
-  }
+  };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -143,7 +141,12 @@ export default function SignIn() {
 
               <div className="mt-3 flex justify-between items-center ">
                 <div className="mr-3">
-                  <input onClick={handleCheckBox} id="remember" className="mr-2" type="checkbox"></input>
+                  <input
+                    onClick={handleCheckBox}
+                    id="remember"
+                    className="mr-2"
+                    type="checkbox"
+                  ></input>
                   <label>Remember me</label>
                 </div>
                 <div>
