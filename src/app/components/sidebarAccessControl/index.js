@@ -4,7 +4,7 @@ import ListMenu from "./listMenu";
 import { FaCircleUser } from "react-icons/fa6";
 import Image from "next/image";
 import Cookies from "js-cookie";
-import { fetchUserSidebar } from "@/app/utils/api/AuthToken/refreshToken";
+import { fetchUserApi } from "@/app/utils/api/AuthToken/refreshToken";
 import useMounted from "@/app/utils/hooks/useMounted";
 const userid = Cookies.get("userID");
 
@@ -13,13 +13,16 @@ export default function sidebar() {
   const [sidebar, setSidebar] = useState([]);
   useEffect(() => {
     const fetchsidebar = async () => {
-      const res = await fetchUserSidebar(userid);
+      const res = await fetchUserApi(userid);
       setSidebar(res);
       // setInvoiceList(invList)
       // setFilteredData(invList)
       console.log(res);
     };
-    fetchsidebar();
+    // fetchsidebar();
+    if(userid!=null){
+      fetchsidebar();
+    }
   }, []);
   return (
     <div className="w-96 drop-shadow-xl ">

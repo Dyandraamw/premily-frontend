@@ -31,7 +31,7 @@ export default function listMenu() {
           </Link>
           <div>
             {/* Profile button */}
-            <Link href={"/Profile"}>
+            <Link href={"/ProfileAccess"}>
               <div className="flex items-center w-full  hover:bg-green-700 hover:text-white text-green-800 p-3 mb-5 text-lg font-semibold rounded-lg">
                 <FaCircleUser className="mx-5 text-3xl" />
                 Profile

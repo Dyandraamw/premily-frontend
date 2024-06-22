@@ -20,7 +20,7 @@ export default function middleware(req) {
       url.includes("/debitNote") ||
       url.includes(
         "/SelectInvoicesPS" ||
-          url.includes("/Profile") ||
+          url.includes("/ProfileUser") ||
           url.includes("/StaffAccess")
       ))
   ) {
@@ -31,7 +31,7 @@ export default function middleware(req) {
     //admin and staff banned dari access-control
     if (
       (role.value == "admin" || role.value == "staff") &&
-      (url.includes("/Profile") || url.includes("/StaffAccess"))
+      (url.includes("/StaffAccess"))
     ) {
       return NextResponse.redirect(baseUrl + "/dashboard");
     } else if (

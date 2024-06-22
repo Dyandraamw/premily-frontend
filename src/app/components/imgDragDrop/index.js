@@ -84,7 +84,6 @@ export default function imgDragDrop({ className, imgValue, setImgValue }) {
             <button
             type="button"
               onClick={handleClick}
-              type="button"
               className="p-2 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
             >
               Select Image
