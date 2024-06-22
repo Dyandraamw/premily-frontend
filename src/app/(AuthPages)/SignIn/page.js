@@ -12,8 +12,12 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { FormHelperText } from "@mui/material";
 import { TokenSignIn } from "@/app/utils/api/AuthToken/refreshToken";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 export default function SignIn() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false);
   const [token, setToken] = useState(null);
 
@@ -22,11 +26,13 @@ export default function SignIn() {
 
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
 
   const [userError, setUserError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,17 +40,35 @@ export default function SignIn() {
     let data = new FormData();
     data.append("email", user);
     data.append("password", password);
-    data.append("remember_me", "true");
+    data.append("remember_me", rememberMe);
 
-    const token = await TokenSignIn(data);
+    const tokenRes = await TokenSignIn(data);
+    if (tokenRes!=null) {
+      Cookies.set("jwtToken",tokenRes.token)
+      const tokenDecoded = jwtDecode(tokenRes.token)
+      Cookies.set("userRole",tokenDecoded.role)
+      Cookies.set("userID",tokenDecoded.user_id)
+      router.push("/dashboard")
+    }
+    console.log(token)
     setToken(token);
   };
+
+  const handleCheckBox = () => {
+    var checkValidate = document.getElementById("remember")
+    if(checkValidate.checked==true){
+      setRememberMe(true)
+    }else{
+      setRememberMe(false)
+    }
+  }
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+  //console.log(user)
 
   return (
     <>
@@ -113,7 +137,7 @@ export default function SignIn() {
 
               <div className="mt-3 flex justify-between items-center ">
                 <div className="mr-3">
-                  <input className="mr-2" type="checkbox"></input>
+                  <input onClick={handleCheckBox} id="remember" className="mr-2" type="checkbox"></input>
                   <label>Remember me</label>
                 </div>
                 <div>
