@@ -24,16 +24,18 @@ export const FetchSignUp = async (data) => {
   try {
     const response = await axios.post(url, data);
     alert("Your account has been created, please wait for verification user");
-    window.location.replace("/SignIn");
+    // window.location.replace("/SignIn");
     console.log("data API", response.data);
     return response.data;
   } catch (error) {
-    if (error.response && error.response.status == 400) {
-      alert(
-        "Image should be insert & password contains 8 characters having an uppercase, lowercase, and symbols (@#$) "
-      );
-    }
-    throw error;
+    // if (error.response && error.response.status == 400) {
+    //   alert(
+    //     "Image should be insert & password contains 8 characters having an uppercase, lowercase, and symbols (@#$) "
+    //   );
+    // }
+
+    alert(error.response.data)
+    // throw error;
     // throw error;
   }
 };
@@ -50,7 +52,7 @@ export const fetchUserApi = async (userID) => {
     
     return response.data;
   } catch (error) {
-    alert("Your user cannot be fetched");
+    // alert("Your user cannot be fetched");
     console.log(error)
     // throw error;
   }
@@ -116,6 +118,24 @@ export const setRoleApi = async (user_id,roleForm) => {
   const url = "/api/set-role/";
   try {
     const response = await axios.post(url+ `${user_id}`,roleForm, {
+      headers: {
+        Authorization: authToken,
+      },
+    });
+    alert(response.data)
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    alert(error.response.data)
+    return null
+    // throw error;
+  }
+};
+
+export const verifyUserApi = async (user_id,verForm) => {
+  const url = "/api/verify-user/";
+  try {
+    const response = await axios.post(url+ `${user_id}`,verForm, {
       headers: {
         Authorization: authToken,
       },

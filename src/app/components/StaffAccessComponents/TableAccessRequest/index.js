@@ -64,7 +64,7 @@ export default function TableStaff({
                 <TableCell sx={{ borderBottom: "none" }} align="center">
                   <button
                   type="button"
-                    onClick={() => onAccept(row)}
+                    onClick={(e) => onAccept(e,row.UserID)}
                     className="p-2 px-4 border-[3px] mr-3 drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
                   >
                     Accept
@@ -73,6 +73,7 @@ export default function TableStaff({
                   type="button"
                     onClick={(e) =>
                       handleOpenDetailStaffAccessModal([
+                        row.UserID,
                         row.Username,
                         row.Email,
                         row.Phone,

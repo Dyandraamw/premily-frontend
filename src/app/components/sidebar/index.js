@@ -7,8 +7,9 @@ import Cookies from "js-cookie";
 import { fetchUserApi } from "@/app/utils/api/AuthToken/refreshToken";
 import useMounted from "@/app/utils/hooks/useMounted";
 
-const userid = Cookies.get("userID");
+
 export default function sidebar() {
+  const userid = Cookies.get("userID");
   const mounted =useMounted()
   const [sidebar, setSidebar] = useState([]);
   useEffect(() => {
@@ -19,10 +20,16 @@ export default function sidebar() {
       // setFilteredData(invList)
       console.log(res);
     };
-    if(userid=="null"){
-      location.reload("/dashboard")
-      
-    }else{
+    if (
+      userid == undefined ||
+      userid == null ||
+      userid == "null" ||
+      userid == ""
+    ) {
+      console.log(userid);
+      location.reload("/StaffAccess")
+    } else if(userid!=null) {
+      console.log(userid);
       fetchsidebar();
     }
     

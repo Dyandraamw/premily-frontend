@@ -35,7 +35,7 @@ export default function TableUser({ tableData }) {
     setShowModal(true)
     setUserId(data)
   }
-  console.log(tableData)
+  // console.log(tableData)
   return (
     <ThemeProvider theme={theme}>
       <TableContainer>

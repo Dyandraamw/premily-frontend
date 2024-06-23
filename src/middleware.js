@@ -19,10 +19,10 @@ export default function middleware(req) {
       url.includes("/creditNote") ||
       url.includes("/debitNote") ||
       url.includes(
-        "/SelectInvoicesPS" ||
-          url.includes("/ProfileUser") ||
-          url.includes("/StaffAccess")
-      ))
+        "/SelectInvoicesPS" 
+          
+      )||url.includes("/ProfileUser") ||
+      url.includes("/StaffAccess"))
   ) {
     return NextResponse.redirect(baseUrl + "/SignIn");
   } else if (token) {

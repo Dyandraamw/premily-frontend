@@ -83,9 +83,15 @@ export default function SignUp() {
         Your Account Already Sign Up!
       </Alert> */}
       <div className="w-96 p-6 shadow-lg border-2 border-green-800 bg-white rounded-md">
+        <img
+          src="/Premily-Logo.png"
+          alt="logo"
+          className="ml-[110px] w-[100px]"
+        />
+
         <form onSubmit={handleSubmit}>
           <h1 className="text-xl block text-center font-semibold mb-8 mt-5">
-            Sign Up To Your Account
+            Create a New Account
           </h1>
           <TextField
             required
@@ -135,7 +141,7 @@ export default function SignUp() {
             className="w-full mb-5"
           >
             <InputLabel htmlFor="outlined-adornment-password">
-              Password
+              &emsp;&emsp;&emsp;Password
             </InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"
@@ -166,7 +172,7 @@ export default function SignUp() {
             className="w-full mb-5"
           >
             <InputLabel htmlFor="outlined-adornment-password">
-              Confirm Password
+            &emsp;&emsp;&emsp;Confirm Password
             </InputLabel>
             <OutlinedInput
               id="outlined-adornment-confirm-password"
@@ -201,7 +207,7 @@ export default function SignUp() {
             <button
               href="/SignIn"
               type="submit"
-              className="border-2 border-green-700 bg-green-700 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-green-700 font-semibold"
+              className="border-2 p-2 border-green-700 bg-green-700 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-green-700 font-semibold"
             >
               <Link href="/SignIn">Sign Up</Link>
             </button>

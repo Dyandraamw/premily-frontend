@@ -19,6 +19,7 @@ export default function DeleteStaffAccessModal({
   handleCloseModal,
   detailStaffAccess,
   setdetailStaffAccess,
+  handleReject,
 }) {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -53,7 +54,7 @@ export default function DeleteStaffAccessModal({
                   >
                     Cancel
                   </button>
-                  <button className="w-1/2 my-5 mx-1 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600">
+                  <button onClick={handleReject} className="w-1/2 my-5 mx-1 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600">
                     Delete
                   </button>
                 </div>
