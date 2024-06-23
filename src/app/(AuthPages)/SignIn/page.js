@@ -17,8 +17,8 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
 export default function SignIn() {
-  Cookies.set("userRole", null);
-  Cookies.set("userID", null);
+  // Cookies.set("userRole", null);
+  // Cookies.set("userID", null);
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [token, setToken] = useState(null);
@@ -49,9 +49,19 @@ export default function SignIn() {
       Cookies.set("userRole", tokenDecoded.role);
       Cookies.set("userID", tokenDecoded.user_id);
       Cookies.set("jwtToken", tokenRes.token);
+      if (tokenDecoded.role == "access_control") {
+        router.push("/StaffAccess");
+      }else{
+        router.push("/dashboard")
+      }
+      // router.push("/dashboard")
       // location.reload("/dashboard")
-      router.push("/dashboard");
     }
+
+    // if(Cookies.get("jwtToken")!=null){
+    //   router.push("/dashboard")
+    //    location.reload("/dashboard")
+    // }
     // console.log(Cookies.get("jwtToken"))
     // console.log(Cookies.get("userRole"))
     // console.log(Cookies.get("userID"))
@@ -90,7 +100,11 @@ export default function SignIn() {
             {errMsg}
           </p>
           <div className="w-96 p-8 shadow-lg border-2 border-green-800 bg-white rounded-md">
-            <img src="/Premily-Logo.png" alt="logo" className="ml-[100px] w-[100px]" />
+            <img
+              src="/Premily-Logo.png"
+              alt="logo"
+              className="ml-[100px] w-[100px]"
+            />
             <form onSubmit={handleSubmit}>
               <h1 className="text-xl block text-center font-semibold mb-8 mt-5 tracking-wide">
                 Sign In To Your Account!

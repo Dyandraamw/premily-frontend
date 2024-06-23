@@ -18,6 +18,7 @@ export default function listMenu() {
     Cookies.remove("userID");
     Cookies.remove("jwtToken");
     router.push("/SignIn");
+    location.reload("/SignIn")
   };
 
   return (
