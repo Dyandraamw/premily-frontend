@@ -27,7 +27,7 @@ export default function pdfButton({ invoice_data }) {
         }}
         className="p-2 border-[3px] drop-shadow-lg font-bold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700 "
       >
-        Generate PDF
+        {invoice_data.invoice_id == "" ? "Loading..." : "Generate PDF"}
       </button>
       <PdfTemplate ref={pdfRef} invoice_data={invoice_data}></PdfTemplate>
     </div>
