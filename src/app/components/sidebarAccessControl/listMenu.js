@@ -17,6 +17,7 @@ export default function listMenu() {
     Cookies.remove("userID");
     Cookies.remove("jwtToken");
     router.push("/SignIn");
+    location.reload("/SignIn")
   };
   return (
     <div className="h-full w-5/6 flex flex-col justify-between">
