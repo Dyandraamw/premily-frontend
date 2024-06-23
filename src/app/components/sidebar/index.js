@@ -19,7 +19,10 @@ export default function sidebar() {
       // setFilteredData(invList)
       console.log(res);
     };
-    if(userid!=null){
+    if(userid=="null"){
+      location.reload("/dashboard")
+      
+    }else{
       fetchsidebar();
     }
     
