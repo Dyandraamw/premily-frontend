@@ -20,18 +20,19 @@ export default function sidebar() {
       // setFilteredData(invList)
       console.log(res);
     };
-    if (
-      userid == undefined ||
-      userid == null ||
-      userid == "null" ||
-      userid == ""
-    ) {
-      console.log(userid);
-      location.reload("/StaffAccess")
-    } else if(userid!=null) {
-      console.log(userid);
-      fetchsidebar();
-    }
+    // if (
+    //   userid == undefined ||
+    //   userid == null ||
+    //   userid == "null" ||
+    //   userid == ""
+    // ) {
+    //   console.log(userid);
+    //   location.reload("/StaffAccess")
+    // } else if(userid!=null) {
+    //   console.log(userid);
+    //   fetchsidebar();
+    // }
+    fetchsidebar();
     
   }, []);
   return (

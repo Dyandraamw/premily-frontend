@@ -4,7 +4,7 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "http://localhost:2024/:path*",
+        destination: "https://premily-premily-d67f7a97.koyeb.app/:path*",
       },
     ];
   },

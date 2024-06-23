@@ -1,19 +1,19 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-const authToken = Cookies.get("jwtToken")
+const authToken = Cookies.get("jwtToken");
 export const TokenSignIn = async (data) => {
   const url = "/api/sign-in";
   try {
     const response = await axios.post(url, data);
 
-    // 
-    
+    //
+
     return response.data;
   } catch (error) {
-//     if (error.response && error.response.status === 500) {
-//       alert("Email and password not found!");
-//     }
-//     // console.log(error);
+    //     if (error.response && error.response.status === 500) {
+    //       alert("Email and password not found!");
+    //     }
+    //     // console.log(error);
     alert(error.response.data + "Please wait for verification");
     return null;
   }
@@ -34,7 +34,7 @@ export const FetchSignUp = async (data) => {
     //   );
     // }
 
-    alert(error.response.data)
+    alert(error.response.data);
     // throw error;
     // throw error;
   }
@@ -42,36 +42,42 @@ export const FetchSignUp = async (data) => {
 
 export const fetchUserApi = async (userID) => {
   const url = "/api/user/";
-  try {
-    const response = await axios.get(url + `${userID}`,{
-      headers: {
-        Authorization: authToken,
-      },
-    });
-
-    
-    return response.data;
-  } catch (error) {
-    // alert("Your user cannot be fetched");
-    console.log(error)
-    // throw error;
-  }
+  // if (userID == null || userID == undefined) {
+  //   window.location.reload();
+  // } else {
+    try {
+      const response = await axios.get(url + `${userID}`, {
+        headers: {
+          Authorization: authToken,
+        },
+      });
+  
+      return response.data;
+    } catch (error) {
+      if (error.response.status==401) {
+        window.location.reload();
+      }
+      // alert("Your user cannot be fetched");
+      console.log(error.response);
+      // throw error;
+    }
+  // }
+  
 };
 
-export const updateUserPic = async (userID,picForm) => {
+export const updateUserPic = async (userID, picForm) => {
   const url = "/api/update-profile-picture/";
   try {
-    const response = await axios.put(url + `${userID}`,picForm,{
+    const response = await axios.put(url + `${userID}`, picForm, {
       headers: {
         Authorization: authToken,
       },
     });
 
-    
     return response.data;
   } catch (error) {
     alert("Your user cannot be fetched");
-    console.log(error)
+    console.log(error);
     // throw error;
   }
 };
@@ -81,14 +87,14 @@ export const forgotPasswordApi = async (data) => {
   try {
     const response = await axios.post(url + `${data}`);
 
-    // 
-    
+    //
+
     return response.data;
   } catch (error) {
-//     if (error.response && error.response.status === 500) {
-//       alert("Email and password not found!");
-//     }
-//     // console.log(error);
+    //     if (error.response && error.response.status === 500) {
+    //       alert("Email and password not found!");
+    //     }
+    //     // console.log(error);
     alert(error.response.data);
     return null;
   }
@@ -114,38 +120,38 @@ export const resetPasswordApi = async (resetToken, newPass) => {
   }
 };
 
-export const setRoleApi = async (user_id,roleForm) => {
+export const setRoleApi = async (user_id, roleForm) => {
   const url = "/api/set-role/";
   try {
-    const response = await axios.post(url+ `${user_id}`,roleForm, {
+    const response = await axios.post(url + `${user_id}`, roleForm, {
       headers: {
         Authorization: authToken,
       },
     });
-    alert(response.data)
+    alert(response.data);
     return response.data;
   } catch (error) {
     console.log(error);
-    alert(error.response.data)
-    return null
+    alert(error.response.data);
+    return null;
     // throw error;
   }
 };
 
-export const verifyUserApi = async (user_id,verForm) => {
+export const verifyUserApi = async (user_id, verForm) => {
   const url = "/api/verify-user/";
   try {
-    const response = await axios.post(url+ `${user_id}`,verForm, {
+    const response = await axios.post(url + `${user_id}`, verForm, {
       headers: {
         Authorization: authToken,
       },
     });
-    alert(response.data)
+    alert(response.data);
     return response.data;
   } catch (error) {
     console.log(error);
-    alert(error.response.data)
-    return null
+    alert(error.response.data);
+    return null;
     // throw error;
   }
 };

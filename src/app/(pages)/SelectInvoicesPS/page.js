@@ -68,7 +68,7 @@ export default function PaymentStatusDetail() {
       </div>
 
       <div className="flex justify-end ">
-        <Link href={"/paymentStatusDetail"}>
+        <Link href={"/paymentStatus"}>
           <button
             className={`py-3 border-[3px] drop-shadow-lg font-semibold w-28 rounded-lg ${
               selectedValue!=""
