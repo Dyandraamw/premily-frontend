@@ -20,7 +20,10 @@ export default function sidebar() {
       console.log(res);
     };
     // fetchsidebar();
-    if(userid!=null){
+    if(userid=="null"){
+      location.reload("/StaffAccess")
+      
+    }else{
       fetchsidebar();
     }
   }, []);
