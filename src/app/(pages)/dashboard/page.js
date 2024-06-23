@@ -24,14 +24,6 @@ export default function Dashboard() {
   ]);
 
   useEffect(() => {
-    const fetchList = async () => {
-      const psList = await fetchPaymentStatusList();
-      // setPaymentStatusList(psList);
-      //console.log(psList)
-      calcData(psList);
-    };
-    fetchList();
-
     const calcData = (psList) => {
       //calc summary
       const cnFilter = handleFilter("CN", psList);
@@ -70,6 +62,16 @@ export default function Dashboard() {
         overdue: dnOverdueSum,
       });
     };
+    
+    const fetchList = async () => {
+      const psList = await fetchPaymentStatusList();
+      // setPaymentStatusList(psList);
+      //console.log(psList)
+      calcData(psList);
+    };
+    fetchList();
+
+    
   }, []);
 
   const handleFilter = (query, psList) => {

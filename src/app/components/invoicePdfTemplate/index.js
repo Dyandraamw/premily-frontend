@@ -13,9 +13,9 @@ export default function invoicePdfTemplate({ invoice_data }) {
           </h1>
           {/* company details */}
           <div className="flex justify-between">
-            <div className="w-[200px]  h-[200px]">
+            <div className="">
               <img
-                className="w-[200px] h-[200px]"
+                className="w-[130px] h-[130px]"
                 src={invoice_data.company_pict}
                 alt="company logo"
               />
@@ -51,7 +51,7 @@ export default function invoicePdfTemplate({ invoice_data }) {
           </div>
 
           {/* description */}
-          <div class="rounded-t-lg mt-5 grid grid-cols-7 divide-x-[2.5px] border-[3px] border-black divide-black">
+          <div class="rounded-t-lg mt-2 grid grid-cols-7 divide-x-[2.5px] border-[3px] border-black divide-black">
             <div class="grid grid-cols-1 divide-y-[2.5px]  divide-black">
               <div className="flex justify-center font-bold py-2">NO</div>
               <div className="flex flex-col items-center">
@@ -110,7 +110,7 @@ export default function invoicePdfTemplate({ invoice_data }) {
           </div>
 
           {/* premium due */}
-          <div class="grid grid-cols-7 divide-x-[2.5px] rounded-b-lg mb-2 border-t-0 border-[3px] border-black divide-black">
+          <div class="grid grid-cols-7 divide-x-[2.5px] rounded-b-lg mb-1 border-t-0 border-[3px] border-black divide-black">
             <div class="col-span-5 grid grid-cols-1 divide-y-[2.5px]  divide-black">
               <div className="flex justify-center font-bold py-2">
                 {invoice_data.invoice_id.includes("CN")
@@ -130,32 +130,32 @@ export default function invoicePdfTemplate({ invoice_data }) {
         </div>
 
         {/* content */}
-        <div className=" rounded-lg mt-5 mb-10 border-[3px] border-black p-3">
+        <div className=" rounded-lg mt-2 mb-1 border-[3px] border-black p-3">
           <div className="grid grid-cols-7 p-2 ">
             <b className="col-span-2">Policy No</b>
             <p className="col-span-5">: &emsp;{invoice_data.policy_number}</p>
           </div>
 
-          <div className="grid grid-cols-7 p-2">
+          <div className="grid grid-cols-7 px-2">
             <b className="col-span-2 ">Name of Insured</b>
             <p className="col-span-5">: &emsp;{invoice_data.name_of_insured}</p>
           </div>
 
-          <div className="grid grid-cols-7 p-2">
+          <div className="grid grid-cols-7 px-2">
             <b className="col-span-2 ">Address of Insured</b>
             <div className="col-span-5 flex">
               : &emsp;<p>{invoice_data.address_of_insured}</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-7 p-2">
+          <div className="grid grid-cols-7 px-2">
             <b className="col-span-2 ">Type of insurance</b>
             <div className="col-span-5 flex">
               : &emsp;<b>{invoice_data.insurance_type}</b>
             </div>
           </div>
         </div>
-        <div className=" rounded-lg mt-[100px] border-[3px] border-black p-3">
+        <div className=" rounded-lg mt-1 border-[3px] border-black p-3">
           <div className="grid grid-cols-7 p-2">
             <b className="col-span-2 ">Period of Policy</b>
             <div className="col-span-5 flex">

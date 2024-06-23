@@ -121,16 +121,16 @@ export default function invoiceDetail({ params }) {
           </h1>
           {/* company details */}
           <div className="flex justify-between">
-            <div className="w-[200px]  h-[200px]">
+            <div className="mb-2">
               <img
-                className="w-[200px] h-[200px]"
+                className="w-[130px] h-[130px]"
                 src={invoice_data.company_pict}
                 alt="company logo"
               />
             </div>
           </div>
           {/* invoice details */}
-          <div className="border-[3px] border-black rounded-lg mt-2 p-2 grid grid-cols-2 gap-4 ">
+          <div className="border-[3px] border-black rounded-lg  p-2 grid grid-cols-2 gap-4 ">
             <div className="">
               <div className="flex">
                 <b>FROM:&emsp;</b>

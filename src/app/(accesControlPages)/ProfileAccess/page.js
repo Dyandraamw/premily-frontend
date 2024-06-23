@@ -7,6 +7,7 @@ import ProfileDragDrop from "@/app/components/uploadPhoto/page";
 import useMounted from "@/app/utils/hooks/useMounted";
 import Cookies from "js-cookie";
 import { fetchUserApi, updateUserPic } from "@/app/utils/api/AuthToken/refreshToken";
+import { FaCircleUser } from "react-icons/fa6";
 const userid = Cookies.get("userID");
 
 function Profile({ value, onChange, defaultSrc, click }) {

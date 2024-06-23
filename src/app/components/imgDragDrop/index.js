@@ -4,14 +4,18 @@ import React, { useRef, useState } from "react";
 export default function imgDragDrop({ className, imgValue, setImgValue }) {
   const fileRef = useRef(null);
   const [dragState, setDragState] = useState(false);
-
+  const [imgBlob, setImgBlob] = useState(null);
   const uploadImg = (e, data) => {
     e.preventDefault();
     const file = data;
     const imgUrl = URL.createObjectURL(file);
-    document.querySelector("img").src = imgUrl;
+    // document.querySelector("img").src = imgUrl;
+    const preview = document.getElementById("dragndropPreview")
+    preview.style.backgroundImage = `url(${imgUrl})`
+    preview.style.backgroundSize = "200px 100px"
     setImgValue(data);
-    console.log(imgUrl)
+    setImgBlob(imgUrl);
+    console.log(imgUrl);
   };
 
   const handleDrag = (e) => {
@@ -71,7 +75,8 @@ export default function imgDragDrop({ className, imgValue, setImgValue }) {
           hidden
         />
         <label htmlFor="invoice_logo_upload">
-          <img
+          <div
+            id="dragndropPreview"
             className={
               "w-full h-[100px] outline-0 border-0 border-white" +
               (imgValue == null ? " invisible" : " ")
@@ -82,7 +87,7 @@ export default function imgDragDrop({ className, imgValue, setImgValue }) {
               Drag to upload image, or
             </p>
             <button
-            type="button"
+              type="button"
               onClick={handleClick}
               className="p-2 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
             >
