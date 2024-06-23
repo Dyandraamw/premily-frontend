@@ -158,6 +158,7 @@ export default function paymentStatusDetailTable({
   handleOpenEditPaymentModal,
   handleOpenEditAdjustmentModal,
 }) {
+  const mounted = useMounted()
   return (
     <ThemeProvider theme={theme}>
       <TableContainer>

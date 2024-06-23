@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import EditItemModal from "../../../components/soaComponents/editItemModal";
 import axios from "axios";
-import { fetchSoaDetails } from "@/app/utils/api/soaApi";
+import { fetchSoaDetails, fetchSoaList } from "@/app/utils/api/soaApi";
 import Cookies from "js-cookie";
 import useMounted from "@/app/utils/hooks/useMounted";
 
@@ -18,6 +18,10 @@ export default function statementOfAccount({ params }) {
   const mounted = useMounted()
   const [query, setQuery] = useState("");
   const [soaDetails, setSoaDetails] = useState([]);
+  const [soaData, setSoaData] = useState({
+    Name_Of_Insured: "",
+    Period: ""
+  })
   const [filteredData, setFilteredData] = useState([]);
   const [calcValues, setCalcValues] = useState([]);
 
@@ -29,6 +33,19 @@ export default function statementOfAccount({ params }) {
       //console.log(response);
     };
     fetchSoa();
+
+    const fetchSoaData = async () => {
+      const soaArr = await fetchSoaList();
+      const filteredSoa = soaArr.filter(
+        (data) =>
+          data.SOA_ID.toLowerCase().includes(params.soaId.toLowerCase()) 
+        // data.period_end.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      console.log(filteredSoa)
+      setSoaData(filteredSoa[0]);
+    };
+    fetchSoaData();
+
   }, []);
 
   const handleSearch = (e) => {
@@ -233,11 +250,12 @@ export default function statementOfAccount({ params }) {
         <div className="ml-3 my-5">
           <div className="flex">
             <p className="font-semibold">Name of Insured&nbsp;</p>
-            <p>:&emsp;PT.Garuda Indonesia</p>
+            <p>:&emsp;{soaData.Name_Of_Insured
+            }</p>
           </div>
           <div className="flex">
             <p className="font-semibold">Policy Period&nbsp;</p>
-            <p>:&emsp;05/07/2024 - 06/08/2025</p>
+            <p>:&emsp;{soaData.Period}</p>
           </div>
           <div className="flex">
             <p className="font-semibold">Current Date&nbsp;</p>
