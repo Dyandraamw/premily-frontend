@@ -29,23 +29,23 @@ export default function StaffAcces() {
       setUnverifyUser(fetchUnverif);
     };
     fetchunverify();
-  });
+  },[]);
 
   const [accessRequests, setAccessRequests] = useState();
 
   const [userList, setUserList] = useState();
 
   const [modalState, setModalState] = useState(false);
-  const handleOpenModal = () => setModalState(true);
+  const handleOpenModal = () => {setModalState(true);}
   const handleCloseModal = () => setModalState(false);
 
-  const [detailStaffAccess, setdetailStaffAccess] = useState({
+  const [detailStaffAccess, setdetailStaffAccess] = useState([{
     username: "",
     email: "",
     phone: "",
     role: "",
     soa_id: "",
-  });
+  }]);
 
   const [detailSAModal, setDetailSAModal] = useState(false);
   const handleOpenDetailStaffAccessModal = (data) => {

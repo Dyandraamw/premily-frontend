@@ -111,3 +111,21 @@ export const resetPasswordApi = async (resetToken, newPass) => {
     return null;
   }
 };
+
+export const setRoleApi = async (user_id,roleForm) => {
+  const url = "/api/set-role/";
+  try {
+    const response = await axios.post(url+ `${user_id}`,roleForm, {
+      headers: {
+        Authorization: authToken,
+      },
+    });
+    alert(response.data)
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    alert(error.response.data)
+    return null
+    // throw error;
+  }
+};

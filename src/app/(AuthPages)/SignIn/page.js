@@ -102,6 +102,7 @@ export default function SignIn() {
                 autoComplete="off"
                 onChange={(e) => setUser(e.target.value)}
                 value={user}
+                color="success"
                 error={!!userError}
                 helperText={userError}
                 className="w-full mt-3 mb-5"
@@ -113,6 +114,7 @@ export default function SignIn() {
                 autoComplete="off"
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
+                color="success"
                 className="w-full mb-5"
               >
                 <InputLabel htmlFor="outlined-adornment-password">
