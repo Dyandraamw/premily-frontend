@@ -19,21 +19,22 @@ export default function DeleteStaffAccessModal({
   handleCloseModal,
   detailStaffAccess,
   setdetailStaffAccess,
+  handleReject,
 }) {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
 
-  // console.log(editStatementOfAccount.payment_start)
+  //console.log(detailStaffAccess)
   return (
     <div>
       <Modal
-        open={Boolean(detailSAModal)}
+        open={detailSAModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form onSubmit={handleSubmit}>
+          {/* <form onSubmit={handleSubmit}> */}
             <div className="">
               <div>
                 <h1 className="flex w-full justify-center text-2xl  font-semibold">
@@ -41,24 +42,25 @@ export default function DeleteStaffAccessModal({
                 </h1>
                 <p className=" w-full text-center justify-center font-medium text-md text-gray-500">
                   Are you sure you want to delete access request{" "}
-                  {/* <b>{detailStaffAccess.UserID}</b> */}
+                  <b>{detailStaffAccess.username}</b>
                 </p>
               </div>
               <div className="mx-5">
                 <div className="flex justify-between">
                   <button
+                  type="button"
                     onClick={handleCloseModal}
                     className="w-1/2 my-5 mx-1 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-slate-700 border-slate-700"
                   >
                     Cancel
                   </button>
-                  <button className="w-1/2 my-5 mx-1 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600">
+                  <button onClick={handleReject} className="w-1/2 my-5 mx-1 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600">
                     Delete
                   </button>
                 </div>
               </div>
             </div>
-          </form>
+          {/* </form> */}
         </Box>
       </Modal>
     </div>

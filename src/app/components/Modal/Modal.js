@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import Button from "../Button.js/page";
 import SelectFields from "../SelectedFields";
+import { setRoleApi } from "@/app/utils/api/AuthToken/refreshToken";
+import Cookies from "js-cookie";
 
-const Modal = ({ isVisible, onClose }) => {
-  const [modal, setModal] = useState();
+
+const Modal = ({ isVisible, onClose,userid }) => {
+  const [roleValue, setRoleValue] = useState();
 
   const handleChange = (e) => {
-    setModal(e.target.value);
+    setRoleValue(e.target.value);
+    // console.log("called");
+    // console.log(e.target.value);
   };
 
   const style = {
@@ -21,10 +26,13 @@ const Modal = ({ isVisible, onClose }) => {
     borderRadius: 3,
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log("Role submitted:", modal);
+    let roleForm  = new FormData()
+    roleForm.append("role",roleValue)
+    await setRoleApi(userid,roleForm)
     onClose();
+    location.reload("/StaffAccess")
   };
 
   if (!isVisible) return null;
@@ -41,7 +49,8 @@ const Modal = ({ isVisible, onClose }) => {
     >
       <div className="w-1/3 bg-white rounded-md p-8">
         <button
-          className="flex justify-end w-full mb-2 hover:text-red-700 text-black text-xl"
+          type="button"
+          className="flex justify-end w-full mb-2 font-semibold hover:text-green-700 text-black text-xl"
           onClick={() => onClose()}
         >
           X
@@ -51,11 +60,25 @@ const Modal = ({ isVisible, onClose }) => {
           <p>Change your role to control your access</p>
         </div>
         {/* <p className="font-semibold mt-5 mb-3 text-xl">Change Role</p> */}
-        <SelectFields
-          value={modal}
+        {/* <SelectFields
+          roleValue={roleValue}
           label="Change Role"
+          handleChange={handleChange}
+        ></SelectFields> */}
+        <select
+          id="role_select"
+          name="role_select"
+          className="w-full drop-shadow-md focus:border-green-700 focus:border-[3px] border-[2.5px] border-gray-500 rounded-lg  h-[43px]  text-gray-700  focus:outline-none focus:shadow-outline mt-2"
+          placeholder="Role Select"
           onChange={handleChange}
-        ></SelectFields>
+          defaultValue="Header"
+        >
+          <option value="Header" disabled>
+            Select your role
+          </option>
+          <option value="admin">Admin</option>
+          <option value="staff">Staff</option>
+        </select>
         <div className="">
           <button
             className="w-full my-5 mb-5 p-2 px-4 border-[3px] drop-shadow-lg font-medium text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"

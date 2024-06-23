@@ -90,6 +90,7 @@ export default function SignIn() {
             {errMsg}
           </p>
           <div className="w-96 p-8 shadow-lg border-2 border-green-800 bg-white rounded-md">
+            <img src="/Premily-Logo.png" alt="logo" className="ml-[100px] w-[100px]" />
             <form onSubmit={handleSubmit}>
               <h1 className="text-xl block text-center font-semibold mb-8 mt-5 tracking-wide">
                 Sign In To Your Account!
@@ -102,6 +103,7 @@ export default function SignIn() {
                 autoComplete="off"
                 onChange={(e) => setUser(e.target.value)}
                 value={user}
+                color="success"
                 error={!!userError}
                 helperText={userError}
                 className="w-full mt-3 mb-5"
@@ -113,6 +115,7 @@ export default function SignIn() {
                 autoComplete="off"
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
+                color="success"
                 className="w-full mb-5"
               >
                 <InputLabel htmlFor="outlined-adornment-password">
@@ -139,12 +142,12 @@ export default function SignIn() {
                 <FormHelperText>{passwordError}</FormHelperText>
               </FormControl>
 
-              <div className="mt-3 flex justify-between items-center ">
-                <div className="mr-3">
+              <div className=" flex justify-between items-center ">
+                <div className="mr-3 mt-1">
                   <input
                     onClick={handleCheckBox}
                     id="remember"
-                    className="mr-2"
+                    className="mr-2 "
                     type="checkbox"
                   ></input>
                   <label>Remember me</label>
@@ -152,7 +155,7 @@ export default function SignIn() {
                 <div>
                   <Link
                     href="/ForgotPassword"
-                    className="text-gray-500 font-semibold hover:text-green-800"
+                    className="text-gray-500 text-sm font-medium hover:text-green-700"
                   >
                     Forgot Password?
                   </Link>

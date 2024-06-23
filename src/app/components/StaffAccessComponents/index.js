@@ -30,7 +30,12 @@ const theme = createTheme({
 
 export default function TableUser({ tableData }) {
   const [showModal, setShowModal] = useState(false);
-
+  const [userid, setUserId] = useState("");
+  const handleclick = (data)=>{
+    setShowModal(true)
+    setUserId(data)
+  }
+  // console.log(tableData)
   return (
     <ThemeProvider theme={theme}>
       <TableContainer>
@@ -46,18 +51,19 @@ export default function TableUser({ tableData }) {
           <TableBody>
             {tableData.map((row) => (
               <TableRow
-                key={row.userID}
+                key={row.UserID}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.username}
+                  {row.Username}
                 </TableCell>
                 <TableCell align="left">{row.Email}</TableCell>
                 <TableCell align="left">{row.Phone}</TableCell>
                 <TableCell align="left">{row.Role}</TableCell>
                 <TableCell sx={{ borderBottom: "none" }} align="center">
                   <button
-                    onClick={() => setShowModal(true)}
+                  type="button"
+                    onClick={(e)=>handleclick(row.UserID)}
                     className="p-2 px-4 border-[3px] mr-3 drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
                   >
                     Change Role
@@ -68,6 +74,7 @@ export default function TableUser({ tableData }) {
           </TableBody>
         </Table>
         <Modal
+          userid={userid}
           isVisible={showModal}
           onClose={() => setShowModal(false)}
         ></Modal>

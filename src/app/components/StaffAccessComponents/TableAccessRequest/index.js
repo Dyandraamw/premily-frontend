@@ -63,17 +63,21 @@ export default function TableStaff({
                 <TableCell align="left">{row.Phone}</TableCell>
                 <TableCell sx={{ borderBottom: "none" }} align="center">
                   <button
-                    onClick={() => onAccept(row)}
+                  type="button"
+                    onClick={(e) => onAccept(e,row.UserID)}
                     className="p-2 px-4 border-[3px] mr-3 drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700"
                   >
                     Accept
                   </button>
                   <button
+                  type="button"
                     onClick={(e) =>
                       handleOpenDetailStaffAccessModal([
-                        row.username,
-                        row.email,
-                        row.phone,
+                        row.UserID,
+                        row.Username,
+                        row.Email,
+                        row.Phone,
+                        row.Role,
                       ])
                     }
                     className="p-2 px-4 border-[3px] drop-shadow-lg font-semibold text-white hover:bg-white hover:text-black rounded-lg bg-red-600 border-red-600"
@@ -85,10 +89,10 @@ export default function TableStaff({
             ))}
           </TableBody>
         </Table>
-        <Modal
+        {/* <Modal
           isVisible={showModal}
           onClose={() => setShowModal(false)}
-        ></Modal>
+        ></Modal> */}
       </TableContainer>
     </ThemeProvider>
   );

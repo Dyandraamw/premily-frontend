@@ -8,6 +8,7 @@ import {
   fetchUnroleUser,
   fetchUnverifyUser,
 } from "@/app/utils/api/roleApi/role";
+import { verifyUserApi } from "@/app/utils/api/AuthToken/refreshToken";
 // import DeleteChangeRoleModal from "@/app/components/StaffAccessComponents/RoleModal";
 
 export default function StaffAcces() {
@@ -29,49 +30,63 @@ export default function StaffAcces() {
       setUnverifyUser(fetchUnverif);
     };
     fetchunverify();
-  });
+  },[]);
 
   const [accessRequests, setAccessRequests] = useState();
 
   const [userList, setUserList] = useState();
 
   const [modalState, setModalState] = useState(false);
-  const handleOpenModal = () => setModalState(true);
+  const handleOpenModal = () => {setModalState(true);}
   const handleCloseModal = () => setModalState(false);
 
-  const [detailStaffAccess, setdetailStaffAccess] = useState({
+  const [detailStaffAccess, setdetailStaffAccess] = useState([{
     username: "",
     email: "",
     phone: "",
     role: "",
     soa_id: "",
-  });
+  }]);
 
   const [detailSAModal, setDetailSAModal] = useState(false);
   const handleOpenDetailStaffAccessModal = (data) => {
     setDetailSAModal(true);
     setdetailStaffAccess({
       ...detailStaffAccess,
-      username: data[0],
-      email: data[1],
-      phone: data[2],
-      role: data[3],
+      user_id: data[0],
+      username: data[1],
+      email: data[2],
+      phone: data[3],
+      role: data[4],
     });
   };
   const handleCloseDetailSAModal = () => setDetailSAModal(false);
-  const handleAccept = (user) => {
-    setUserList([...userList, { ...user, role: "User" }]);
-    setAccessRequests(
-      accessRequests.filter((u) => u.username !== user.username)
-    );
+  // const handleAccept = (user) => {
+  //   // setUserList([...userList, { ...user, role: "User" }]);
+  //   // setAccessRequests(
+  //   //   accessRequests.filter((u) => u.username !== user.username)
+  //   // );
+  // };
+
+  const handleAccept = async(e,id) => {
+    e.preventDefault();
+    console.log(id)
+    let roleForm  = new FormData()
+    roleForm.append("verify","active")
+    await verifyUserApi(id,roleForm)
+
+    location.reload("/StaffAccess")
   };
 
-  const handleReject = (user) => {
-    setAccessRequests(
-      accessRequests.filter((u) => u.username !== user.username)
-    );
-  };
+  const handleReject = async(e) => {
+    e.preventDefault();
+    // console.log(id)
+    let roleForm  = new FormData()
+    roleForm.append("verify","decline")
+    await verifyUserApi(detailStaffAccess.user_id,roleForm)
 
+    location.reload("/StaffAccess")
+  };
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <DeleteStaffAccessModal
@@ -79,6 +94,7 @@ export default function StaffAcces() {
         handleCloseModal={handleCloseDetailSAModal}
         detailStaffAccess={detailStaffAccess}
         setdetailStaffAccess={setdetailStaffAccess}
+        handleReject={handleReject}
       />
       <div className="mb-2">
         <h1 className="text-4xl text-green-700 font-bold">Staff Acces</h1>
