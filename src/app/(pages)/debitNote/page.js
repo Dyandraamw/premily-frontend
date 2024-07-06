@@ -49,8 +49,6 @@ export default function debitNote() {
   const [insDueDate, setInsDueDate] = useState([]);
   const [insAmount, setInsAmount] = useState([]);
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     let invForm = new FormData();
@@ -67,35 +65,28 @@ export default function debitNote() {
     invForm.append("policy_number", debitNote.policy_number);
     invForm.append("name_of_insured", debitNote.name_of_insured);
     invForm.append("address_of_insured", debitNote.address_of_insured);
-    invForm.append(
-      "type_of_insurance",
-      debitNote.insurance_type
-    );
+    invForm.append("type_of_insurance", debitNote.insurance_type);
     invForm.append("periode_start", debitNote.start_date);
     invForm.append("periode_end", debitNote.end_date);
-    invForm.append(
-      "terms_of_period",
-      debitNote.terms_of_period
-    );
+    invForm.append("terms_of_period", debitNote.terms_of_period);
     invForm.append("remarks", "1st Instalment has to be paid before Inception");
     insData.map((data) => {
       invForm.append("due_date", data.due_date);
       invForm.append("ins_amount", data.amount);
     });
-    
+
     invForm.append("company_pict", imgValue);
     invForm.append("comp_name", debitNote.company_name);
     invForm.append("comp_address", debitNote.company_address);
     invForm.append("comp_contact", debitNote.company_number);
 
-    siData.map((data)=>{
+    siData.map((data) => {
       invForm.append("items_name", data.item);
       invForm.append("sum_ins_amount", data.sum_insured);
       invForm.append("notes", data.notes);
-    })
-    
-    await createInvoiceApi(invForm)
-    
+    });
+
+    await createInvoiceApi(invForm);
   };
   ///////////////////////////////////////////////////
 
@@ -113,8 +104,8 @@ export default function debitNote() {
     setDebitNote({ ...debitNote, end_date: dateformat });
     // console.log(dateformat)
   };
-  
-  console.log(debitNote)
+
+  console.log(debitNote);
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
       <div className="mb-2">
@@ -220,7 +211,7 @@ export default function debitNote() {
 
               <div className="grid grid-cols-2 gap-6 mt-5 p-4 border-[3px] border-green-700 rounded-xl">
                 <SideTextfield
-                  label={`Net Premium (${debitNote.currency}) :`}
+                  label={`Premium (${debitNote.currency}) :`}
                   id={"net_premium"}
                   placeholder={"insert amount..."}
                   onChange={handleTextChange}
@@ -329,7 +320,11 @@ export default function debitNote() {
                 <p className="flex justify-center mt-10 text-black text-lg font-bold w-1/3">
                   to
                 </p>
-                <DatePickerMUI bigLabel={<p>&nbsp;</p>} label={"end date"} onChange={handleEndDate}/>
+                <DatePickerMUI
+                  bigLabel={<p>&nbsp;</p>}
+                  label={"end date"}
+                  onChange={handleEndDate}
+                />
               </div>
             </div>
 

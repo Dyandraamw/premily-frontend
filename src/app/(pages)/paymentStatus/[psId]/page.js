@@ -14,7 +14,7 @@ import useMounted from "@/app/utils/hooks/useMounted";
 const userRole = Cookies.get("userRole");
 
 export default function paymentStatusDetail({ params }) {
-  const mounted = useMounted()
+  const mounted = useMounted();
   const [paymentStatus, setPaymentStatus] = useState([]);
   const [adjustmentData, setAdjustmentData] = useState([]);
   const [invoiceDet, setInvoiceDet] = useState([]);
@@ -202,7 +202,7 @@ export default function paymentStatusDetail({ params }) {
               Premium Inception Sum (IDR)
             </h3>
             <p className="flex justify-center text-center text-gray-500 mt-1 ">
-              Sum of the premium inception
+              Sum of the premium at inception
             </p>
             <p className="flex justify-center mb-2 text-3xl font-semibold mt-5">
               {parseInt(paymentStatus.inception_sum).toLocaleString()}

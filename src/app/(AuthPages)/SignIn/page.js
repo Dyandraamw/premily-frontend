@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 
 import IconButton from "@mui/material/IconButton";
@@ -16,6 +16,9 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
+const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
+const PASS_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#%]).{8,24}$/;
+
 export default function SignIn() {
   // Cookies.set("userRole", null);
   // Cookies.set("userID", null);
@@ -27,7 +30,11 @@ export default function SignIn() {
   const errRef = useRef();
 
   const [user, setUser] = useState("");
+  const [emailValid, setEmailValid] = useState(false);
+
   const [password, setPassword] = useState("");
+  const [validPassword, setValidPassword] = useState(false);
+
   const [rememberMe, setRememberMe] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
@@ -37,6 +44,16 @@ export default function SignIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!user || !password) {
+      setErrMsg("All fields are required");
+      return;
+    }
+
+    if (!emailValid || !validPassword) {
+      setErrMsg("Invalid Entry");
+      return;
+    }
+
     const FormData = require("form-data");
     let data = new FormData();
     data.append("email", user);
@@ -51,8 +68,8 @@ export default function SignIn() {
       Cookies.set("jwtToken", tokenRes.token);
       if (tokenDecoded.role == "access_control") {
         router.push("/StaffAccess");
-      }else{
-        router.push("/dashboard")
+      } else {
+        router.push("/dashboard");
       }
       // router.push("/dashboard")
       // location.reload("/dashboard")
@@ -66,7 +83,16 @@ export default function SignIn() {
     // console.log(Cookies.get("userRole"))
     // console.log(Cookies.get("userID"))
     // setToken(token);
+    console.log(tokenRes);
   };
+
+  useEffect(() => {
+    setEmailValid(user.includes("@") && user.includes("."));
+  }, [user]);
+
+  useEffect(() => {
+    setValidPassword(PASS_REGEX.test(password));
+  }, [password]);
 
   const handleCheckBox = () => {
     var checkValidate = document.getElementById("remember");
@@ -118,8 +144,6 @@ export default function SignIn() {
                 onChange={(e) => setUser(e.target.value)}
                 value={user}
                 color="success"
-                error={!!userError}
-                helperText={userError}
                 className="w-full mt-3 mb-5"
               />
               <FormControl
@@ -138,7 +162,6 @@ export default function SignIn() {
                 <OutlinedInput
                   id="outlined-adornment-password"
                   type={showPassword ? "text" : "password"}
-                  error={!!passwordError}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
@@ -153,7 +176,6 @@ export default function SignIn() {
                   }
                   label="Password"
                 />
-                <FormHelperText>{passwordError}</FormHelperText>
               </FormControl>
 
               <div className=" flex justify-between items-center ">

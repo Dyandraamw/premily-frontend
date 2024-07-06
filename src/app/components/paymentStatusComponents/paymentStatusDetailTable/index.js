@@ -38,7 +38,7 @@ const userRole = Cookies.get("userRole");
 function Row(props) {
   const { row } = props;
   const [open, setOpen] = useState(false);
-  const mounted = useMounted()
+  const mounted = useMounted();
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
@@ -59,15 +59,17 @@ function Row(props) {
             {dayjs(row.due_date).format("DD/MM/YYYY")}
           </TableCell>
           <TableCell key={"ins_amount"} align="left">
-            {row.ins_amount}
+            {parseInt(row.ins_amount).toLocaleString()}
           </TableCell>
           {props.adjustment_data.map((data, i) => (
             <TableCell key={i} align="left">
-              {data.adjustment_amount[props.rowIndex]}
+              {parseInt(
+                data.adjustment_amount[props.rowIndex]
+              ).toLocaleString()}
             </TableCell>
           ))}
           <TableCell key={"ins_total"} align="left">
-            {row.ins_total}
+            {parseInt(row.ins_total).toLocaleString()}
           </TableCell>
           <TableCell align="left">
             <div
@@ -109,13 +111,15 @@ function Row(props) {
                               {dayjs(nestedrow.pay_date).format("DD/MM/YYYY")}
                             </TableCell>
                             <TableCell align="left">
-                              {nestedrow.pay_amount}
+                              {parseInt(nestedrow.pay_amount).toLocaleString()}
                             </TableCell>
                             <TableCell align="left">
-                              {nestedrow.pay_alocation}
+                              {parseInt(
+                                nestedrow.pay_alocation
+                              ).toLocaleString()}
                             </TableCell>
                             <TableCell align="left">
-                              {nestedrow.pay_balance}
+                              {parseInt(nestedrow.pay_balance).toLocaleString()}
                             </TableCell>
                             <TableCell align="right">
                               {mounted && userRole == "staff" ? null : (
@@ -158,7 +162,7 @@ export default function paymentStatusDetailTable({
   handleOpenEditPaymentModal,
   handleOpenEditAdjustmentModal,
 }) {
-  const mounted = useMounted()
+  const mounted = useMounted();
   return (
     <ThemeProvider theme={theme}>
       <TableContainer>
@@ -171,7 +175,7 @@ export default function paymentStatusDetailTable({
                 Due Date
               </TableCell>
               <TableCell key={"premium_space"} align="left">
-                Premium Inception (IDR)
+                Premium at Inception (IDR)
               </TableCell>
               {adjustment_data.map((data) => (
                 <TableCell key={data.adjustment_itr} align="left">
