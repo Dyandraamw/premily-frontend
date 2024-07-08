@@ -32,30 +32,29 @@ export default function AddItem({
   handleRadioChange,
   selectedValue,
 }) {
-    // const [selectedValue, setSelectedValue] = useState(0);
+  // const [selectedValue, setSelectedValue] = useState(0);
 
-    // const handleRadioChange = (event) => {
-    //   setSelectedValue(event.target.value);
-    // };
-    const handleStartPeriod = (data) => {
-      if (data!=null) {
-        const start = dayjs(data.slice(0,10)).format('DD/MM/YYYY')
-        return start
-      }
-      return
-    };
-  
-    const handleEndPeriod = (data) => {
-      if (data!=null) {
-        const end = dayjs(data.slice(13,23)).format('DD/MM/YYYY')
-        return end
-      }
-      return
-    };
+  // const handleRadioChange = (event) => {
+  //   setSelectedValue(event.target.value);
+  // };
+  const handleStartPeriod = (data) => {
+    if (data != null) {
+      const start = dayjs(data.slice(0, 10)).format("DD/MM/YYYY");
+      return start;
+    }
+    return;
+  };
+
+  const handleEndPeriod = (data) => {
+    if (data != null) {
+      const end = dayjs(data.slice(13, 23)).format("DD/MM/YYYY");
+      return end;
+    }
+    return;
+  };
 
   console.log(selectedValue);
   return (
-
     <ThemeProvider theme={theme}>
       <TableContainer>
         <Table aria-label="simple table">
@@ -86,9 +85,12 @@ export default function AddItem({
                   {row.Invoice_ID}
                 </TableCell>
                 <TableCell align="left">{row.Recipient}</TableCell>
-                <TableCell align="left">{dayjs(row.Created_At).format('DD/MM/YYYY')}</TableCell>
                 <TableCell align="left">
-                  {handleStartPeriod(row.Period)} - {handleEndPeriod(row.Period)}
+                  {dayjs(row.Created_At).format("DD/MM/YYYY")}
+                </TableCell>
+                <TableCell align="left">
+                  {handleStartPeriod(row.Period)} -{" "}
+                  {handleEndPeriod(row.Period)}
                 </TableCell>
                 <TableCell align="left">{row.Total_Premium_Due}</TableCell>
               </TableRow>

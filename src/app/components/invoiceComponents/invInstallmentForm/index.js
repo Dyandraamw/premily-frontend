@@ -4,25 +4,28 @@ import Textfield from "../../textfield";
 import DatePickerMUI from "../../datePickerMUI";
 import dayjs from "dayjs";
 
-export default function invInstallmentForm({ insData, setInsData, setInsDueDate, insDueDate,setInsAmount, insAmount }) {
+export default function invInstallmentForm({
+  insData,
+  setInsData,
+  setInsDueDate,
+  insDueDate,
+  setInsAmount,
+  insAmount,
+}) {
   // const [insData, setInsData] = useState([{ due_date: null, amount: "" }]);
 
   const handleClick = () => {
-    setInsData([
-      ...insData,
-      { due_date: null, amount: "" },
-    ]);
+    setInsData([...insData, { due_date: null, amount: "" }]);
   };
 
   const handleInsDueDate = (data) => {
-    setInsDueDate(dueDateArr)
+    setInsDueDate(dueDateArr);
   };
 
   const handleInsArr = (data) => {
-    let amountArr = data.map(a=>a.amount)
-    setInsAmount(amountArr)
+    let amountArr = data.map((a) => a.amount);
+    setInsAmount(amountArr);
   };
-
 
   const handleChange = (e, i) => {
     e.preventDefault();
@@ -30,14 +33,14 @@ export default function invInstallmentForm({ insData, setInsData, setInsDueDate,
     const changeValue = [...insData];
     changeValue[i]["amount"] = value;
     setInsData(changeValue);
-    
+
     const changedValue2 = [...insAmount];
     changedValue2[i] = value;
-    setInsAmount(changedValue2)
+    setInsAmount(changedValue2);
   };
 
   const handleDateChange = (e, i) => {
-    const dvalue =dayjs(e.$d).format('YYYY-MM-DD')
+    const dvalue = dayjs(e.$d).format("YYYY-MM-DD");
     // console.log(e)
     const changedValue = [...insData];
     changedValue[i]["due_date"] = dvalue;
@@ -45,7 +48,7 @@ export default function invInstallmentForm({ insData, setInsData, setInsDueDate,
     setInsData(changedValue);
     const changedValue2 = [...insDueDate];
     changedValue2[i] = dvalue;
-    setInsDueDate(changedValue2)
+    setInsDueDate(changedValue2);
   };
 
   const handleDeleteRow = (i) => {
@@ -57,7 +60,7 @@ export default function invInstallmentForm({ insData, setInsData, setInsDueDate,
   return (
     <div>
       {insData.map((val, i) => (
-        <div className="flex items-center" key={i} >
+        <div className="flex items-center" key={i}>
           <div className="grid grid-cols-11 gap-2 w-[85%]">
             <div>
               {i == 0 ? (
@@ -91,7 +94,7 @@ export default function invInstallmentForm({ insData, setInsData, setInsDueDate,
           </div>
           {i != 0 ? (
             <button
-            type="button"
+              type="button"
               onClick={() => handleDeleteRow(i)}
               className="flex text-red-600 hover:text-red-500 ml-2 text-md font-bold "
             >
@@ -101,7 +104,7 @@ export default function invInstallmentForm({ insData, setInsData, setInsDueDate,
         </div>
       ))}
       <button
-      type="button"
+        type="button"
         onClick={handleClick}
         className="text-black hover:text-green-700 text-md font-bold"
       >

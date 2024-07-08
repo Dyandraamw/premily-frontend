@@ -65,8 +65,8 @@ export default function TablePaymentStatus({
                 <TableCell align="left">{row.invoice}</TableCell>
                 <TableCell align="left">
                   {" "}
-                  {dayjs(row.period_start).format("DD/MM/YYYY")}-
-                  {dayjs(row.period_end).format("DD/MM/YYYY")}
+                  {dayjs(row.period_start).format("DD MMM YYYY")} -{" "}
+                  {dayjs(row.period_end).format("DD MMM YYYY")}
                 </TableCell>
                 {mounted && userRole == "staff" ? null : (
                   <TableCell sx={{ borderBottom: "none" }} align="center">

@@ -56,7 +56,7 @@ function Row(props) {
             {props.instalmentidx}
           </TableCell>
           <TableCell key={"due_date_data"} align="left">
-            {dayjs(row.due_date).format("DD/MM/YYYY")}
+            {dayjs(row.due_date).format("DD MMM YYYY")}
           </TableCell>
           <TableCell key={"ins_amount"} align="left">
             {parseInt(row.ins_amount).toLocaleString()}
@@ -108,7 +108,7 @@ function Row(props) {
                         nestedrow.pd_ins_id == row.installment_id ? (
                           <TableRow key={nestedrow.pay_detail_id}>
                             <TableCell>
-                              {dayjs(nestedrow.pay_date).format("DD/MM/YYYY")}
+                              {dayjs(nestedrow.pay_date).format("DD MMM YYYY")}
                             </TableCell>
                             <TableCell align="left">
                               {parseInt(nestedrow.pay_amount).toLocaleString()}

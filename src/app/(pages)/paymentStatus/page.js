@@ -16,7 +16,7 @@ import useMounted from "@/app/utils/hooks/useMounted";
 const userRole = Cookies.get("userRole");
 
 export default function PaymentStatus() {
-  const mounted = useMounted()
+  const mounted = useMounted();
   const [query, setQuery] = useState("");
   const [paymentStatusList, setPaymentStatusList] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -152,7 +152,9 @@ export default function PaymentStatus() {
         <div className="w-1/3">
           <Textfield
             id={"search_bar"}
-            placeholder={"search Status Number..."}
+            placeholder={
+              "search payment status number, invoice number, invoice recipient, policy period..."
+            }
             onChange={handleSearch}
             icon={<FaSearch />}
           />

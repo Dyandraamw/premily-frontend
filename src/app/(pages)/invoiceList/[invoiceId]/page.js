@@ -10,7 +10,7 @@ import useMounted from "@/app/utils/hooks/useMounted";
 
 const userRole = Cookies.get("userRole");
 export default function invoiceDetail({ params }) {
-  const mounted = useMounted()
+  const mounted = useMounted();
   const [invoice_data, setInvDetail] = useState({
     recipient_address: "",
     address_of_insured: "",
@@ -268,8 +268,8 @@ export default function invoiceDetail({ params }) {
             <div className="col-span-5 flex">
               : &emsp;
               <p>
-                {dayjs(invoice_data.start_date).format("DD/MM/YYYY")} up to{" "}
-                {dayjs(invoice_data.end_date).format("DD/MM/YYYY")}
+                {dayjs(invoice_data.start_date).format("DD MMM YYYY")} up to{" "}
+                {dayjs(invoice_data.end_date).format("DD MMM YYYY")}
               </p>
             </div>
           </div>

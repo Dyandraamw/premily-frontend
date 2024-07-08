@@ -174,13 +174,13 @@ export default function paymentStatusDetail({ params }) {
             <p className="font-semibold">Policy Period&nbsp;</p>
             <p>
               :&emsp;
-              {dayjs(invoiceDet.period_start).format("DD/MM/YYYY")} -
-              {dayjs(invoiceDet.period_end).format("DD/MM/YYYY")}
+              {dayjs(invoiceDet.period_start).format("DD MMM YYYY")} -{" "}
+              {dayjs(invoiceDet.period_end).format("DD MMM YYYY")}
             </p>
           </div>
           <div className="flex">
             <p className="font-semibold">Current Date&nbsp;</p>
-            <p>:&emsp;{dayjs().format("DD/MM/YYYY")}</p>
+            <p>:&emsp;{dayjs().format("DD MMM YYYY")}</p>
           </div>
         </div>
         <p className="text-xl font-semibold mb-5">Billed Payment Terms</p>

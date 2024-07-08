@@ -75,7 +75,7 @@ export default function tableMUI({ tableData, handleOpenModal, calcValues }) {
                 <TableCell align="left">{row.Recipient}</TableCell>
                 <TableCell align="left">{row.Installment_Standing}</TableCell>
                 <TableCell align="left">
-                  {dayjs(row.Due_Date).format("DD/MM/YYYY")}
+                  {dayjs(row.Due_Date).format("DD MMM YYYY")}
                 </TableCell>
                 <TableCell align="left">IDR</TableCell>
                 <TableCell align="left">
@@ -85,7 +85,7 @@ export default function tableMUI({ tableData, handleOpenModal, calcValues }) {
                   |
                 </TableCell>
                 <TableCell align="left">
-                  {dayjs(row.Payment_Date).format("DD/MM/YYYY")}
+                  {dayjs(row.Payment_Date).format("DD MMM YYYY")}
                 </TableCell>
                 <TableCell align="left">IDR</TableCell>
                 <TableCell align="left">
