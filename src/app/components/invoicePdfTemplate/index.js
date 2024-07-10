@@ -68,7 +68,7 @@ export default function invoicePdfTemplate({ invoice_data }) {
                 DESCRIPTION
               </div>
               <div className="px-3">
-                <p>Net Premium</p>
+                <p>Premium</p>
                 <p>Brokerage</p>
                 <p>Discount</p>
                 <p>PPH</p>
@@ -161,8 +161,8 @@ export default function invoicePdfTemplate({ invoice_data }) {
             <div className="col-span-5 flex">
               : &emsp;
               <p>
-                {dayjs(invoice_data.start_date).format("DD/MM/YYYY")} up to{" "}
-                {dayjs(invoice_data.end_date).format("DD/MM/YYYY")}
+                {dayjs(invoice_data.start_date).format("DD MMM YYYY")} up to{" "}
+                {dayjs(invoice_data.end_date).format("DD MMM YYYY")}
               </p>
             </div>
           </div>
@@ -231,7 +231,7 @@ export default function invoicePdfTemplate({ invoice_data }) {
                             {parseInt(data.Ins_Amount).toLocaleString()}
                           </td>
                           <td className="border-2 border-black px-1 font-semibold">
-                            {dayjs(data.Due_Date).format("DD/MM/YYYY")}
+                            {dayjs(data.Due_Date).format("DD MMM YYYY")}
                           </td>
                         </tr>
                       );

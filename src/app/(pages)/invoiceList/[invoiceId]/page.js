@@ -338,7 +338,7 @@ export default function invoiceDetail({ params }) {
                             {parseInt(data.Ins_Amount).toLocaleString()}
                           </td>
                           <td className="border-2 border-black px-1 font-semibold">
-                            {dayjs(data.Due_Date).format("DD/MM/YYYY")}
+                            {dayjs(data.Due_Date).format("DD MMM YYYY")}
                           </td>
                         </tr>
                       );

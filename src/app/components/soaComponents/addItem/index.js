@@ -39,7 +39,7 @@ export default function AddItem({
   // };
   const handleStartPeriod = (data) => {
     if (data != null) {
-      const start = dayjs(data.slice(0, 10)).format("DD/MM/YYYY");
+      const start = dayjs(data.slice(0, 10)).format("DD MMM YYYY");
       return start;
     }
     return;
@@ -47,7 +47,7 @@ export default function AddItem({
 
   const handleEndPeriod = (data) => {
     if (data != null) {
-      const end = dayjs(data.slice(13, 23)).format("DD/MM/YYYY");
+      const end = dayjs(data.slice(13, 23)).format("DD/MMM/YYYY");
       return end;
     }
     return;
@@ -86,7 +86,7 @@ export default function AddItem({
                 </TableCell>
                 <TableCell align="left">{row.Recipient}</TableCell>
                 <TableCell align="left">
-                  {dayjs(row.Created_At).format("DD/MM/YYYY")}
+                  {dayjs(row.Created_At).format("DD MMM YYYY")}
                 </TableCell>
                 <TableCell align="left">
                   {handleStartPeriod(row.Period)} -{" "}

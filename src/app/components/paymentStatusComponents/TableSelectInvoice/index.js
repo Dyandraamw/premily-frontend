@@ -43,63 +43,66 @@ export default function AddInvoice({
   //   setSelectedValue(event.target.value);
   // };
   const handleStartPeriod = (data) => {
-    if (data!=null) {
-      const start = dayjs(data.slice(0,10)).format('DD/MM/YYYY')
-      return start
+    if (data != null) {
+      const start = dayjs(data.slice(0, 10)).format("DD MMM YYYY");
+      return start;
     }
-    return
+    return;
   };
 
   const handleEndPeriod = (data) => {
-    if (data!=null) {
-      const end = dayjs(data.slice(13,23)).format('DD/MM/YYYY')
-      return end
+    if (data != null) {
+      const end = dayjs(data.slice(13, 23)).format("DD MMM YYYY");
+      return end;
     }
-    return
+    return;
   };
 
   console.log(selectedValue);
   return (
     <ThemeProvider theme={theme}>
-    <TableContainer>
-      <Table aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="left"></TableCell>
-            <TableCell align="left">Invoice Number</TableCell>
-            <TableCell align="left">Recipient</TableCell>
-            <TableCell align="left">Issued Date</TableCell>
-            <TableCell align="left">Policy Period</TableCell>
-            <TableCell align="left">Amount</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {tableData.map((row) => (
-            <TableRow
-              key={row.Invoice_ID}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell align="left">
-                <Radio
-                  checked={row.Invoice_ID == selectedValue}
-                  onChange={handleRadioChange}
-                  value={row.Invoice_ID}
-                />
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {row.Invoice_ID}
-              </TableCell>
-              <TableCell align="left">{row.Recipient}</TableCell>
-              <TableCell align="left">{dayjs(row.Created_At).format('DD/MM/YYYY')}</TableCell>
-              <TableCell align="left">
-                {handleStartPeriod(row.Period)} - {handleEndPeriod(row.Period)}
-              </TableCell>
-              <TableCell align="left">{row.Total_Premium_Due}</TableCell>
+      <TableContainer>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="left"></TableCell>
+              <TableCell align="left">Invoice Number</TableCell>
+              <TableCell align="left">Recipient</TableCell>
+              <TableCell align="left">Issued Date</TableCell>
+              <TableCell align="left">Policy Period</TableCell>
+              <TableCell align="left">Amount</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  </ThemeProvider>
-);
+          </TableHead>
+          <TableBody>
+            {tableData.map((row) => (
+              <TableRow
+                key={row.Invoice_ID}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell align="left">
+                  <Radio
+                    checked={row.Invoice_ID == selectedValue}
+                    onChange={handleRadioChange}
+                    value={row.Invoice_ID}
+                  />
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {row.Invoice_ID}
+                </TableCell>
+                <TableCell align="left">{row.Recipient}</TableCell>
+                <TableCell align="left">
+                  {dayjs(row.Created_At).format("DD MMM YYYY")}
+                </TableCell>
+                <TableCell align="left">
+                  {handleStartPeriod(row.Period)} -{" "}
+                  {handleEndPeriod(row.Period)}
+                </TableCell>
+                <TableCell align="left">{row.Total_Premium_Due}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </ThemeProvider>
+  );
 }
