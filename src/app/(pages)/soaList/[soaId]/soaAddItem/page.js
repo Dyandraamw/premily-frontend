@@ -6,10 +6,11 @@ import Link from "next/link";
 import AddItemModal from "../../../../components/soaComponents/addItemModal";
 import { fetchInvoiceDetail, fetchInvoiceList } from "@/app/utils/api/invApi";
 import { fetchSoaDetails } from "@/app/utils/api/soaApi";
-
+import LoadingModal from "@/app/components/loadingModal";
 
 
 export default function soaAddItem({ params }) {
+  const [spinner,setSpinner] = useState(true)
   const [invoiceList, setInvoiceList] = useState([]);
   const [insDetail, setInsDetail] = useState([{
     Installment_ID: "",
@@ -33,6 +34,7 @@ export default function soaAddItem({ params }) {
   useEffect(() => {
     const fetchinv = async () => {
       const invList = await fetchInvoiceList();
+      setSpinner(false)
       setInvoiceList(invList);
 
     };
@@ -83,6 +85,7 @@ export default function soaAddItem({ params }) {
     console.log(statementOfAccount)
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
+      <LoadingModal modalState={spinner} />
       <AddItemModal
         modalState={modalState}
         handleCloseModal={handleCloseModal}

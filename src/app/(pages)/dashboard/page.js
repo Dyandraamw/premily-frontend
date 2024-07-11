@@ -4,10 +4,12 @@ import Link from "next/link";
 import { fetchPaymentStatusList } from "@/app/utils/api/psApi";
 import Cookies from "js-cookie";
 import useMounted from "@/app/utils/hooks/useMounted";
+import LoadingModal from "@/app/components/loadingModal";
 
 const userRole = Cookies.get("userRole");
 export default function Dashboard() {
-  const mounted = useMounted()
+  const mounted = useMounted();
+  const [spinner, setSpinner] = useState(true);
   const [creditSummary, setCreditSummary] = useState([
     {
       paid: 0,
@@ -62,16 +64,15 @@ export default function Dashboard() {
         overdue: dnOverdueSum,
       });
     };
-    
+
     const fetchList = async () => {
       const psList = await fetchPaymentStatusList();
+      setSpinner(false);
       // setPaymentStatusList(psList);
       //console.log(psList)
       calcData(psList);
     };
     fetchList();
-
-    
   }, []);
 
   const handleFilter = (query, psList) => {
@@ -87,27 +88,28 @@ export default function Dashboard() {
   console.log(Cookies.get("userRole"));
   return (
     <div className="flex flex-grow flex-col px-10 py-5 min-h-screen w-full">
+      <LoadingModal modalState={spinner} />
       <div className="mb-5">
         <h1 className="text-4xl text-green-800 font-bold">Dashboard</h1>
         <p className="font-medium text-gray-500">
           View your total summary of transaction
         </p>
       </div>
-       {mounted && userRole == "staff" ? null : (
-         <div className="flex mt-5">
-           <Link href={"/creditNote"}>
-             <button className="justify-center py-3 border-[3px] drop-shadow-lg font-semibold w-64 text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700 mr-5">
-               Create New Credit Note
-             </button>
-           </Link>
+      {mounted && userRole == "staff" ? null : (
+        <div className="flex mt-5">
+          <Link href={"/creditNote"}>
+            <button className="justify-center py-3 border-[3px] drop-shadow-lg font-semibold w-64 text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700 mr-5">
+              Create New Credit Note
+            </button>
+          </Link>
 
-           <Link href={"/debitNote"}>
-             <button className="justify-center py-3 border-[3px] drop-shadow-lg font-semibold w-64 text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700 mr-5">
-               Create New Debit Note
-             </button>
-           </Link>
-         </div>
-       )}
+          <Link href={"/debitNote"}>
+            <button className="justify-center py-3 border-[3px] drop-shadow-lg font-semibold w-64 text-white hover:bg-white hover:text-black rounded-lg bg-green-700 border-green-700 mr-5">
+              Create New Debit Note
+            </button>
+          </Link>
+        </div>
+      )}
 
       <div className="bg-white mt-10 p-5 rounded-xl drop-shadow-lg">
         {/* Insured Data */}

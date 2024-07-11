@@ -6,45 +6,45 @@ import DeleteInvoiceModal from "../../components/invoiceComponents/deleteInvoice
 import { FaSearch } from "react-icons/fa";
 import { fetchInvoiceList } from "../../utils/api/invApi";
 import dayjs from "dayjs";
+import LoadingModal from "@/app/components/loadingModal";
 
 export default function invoiceList() {
+  const [spinner, setSpinner] = useState(true);
   // fetch data ////////////////////////////////////////////
   const [invoiceList, setInvoiceList] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
-
     const fetchinv = async () => {
-      const invList = await fetchInvoiceList()
-      setInvoiceList(invList)
-      setFilteredData(invList)
+      const invList = await fetchInvoiceList();
+      setSpinner(false);
+      setInvoiceList(invList);
+      setFilteredData(invList);
       // console.log(invList)
     };
-    fetchinv()
-
+    fetchinv();
   }, []);
-
 
   ///////////////////////////////////////////////////
   // filters ///////////////////////////////////////////////
   const [query, setQuery] = useState("");
-  
+
   const [sortQuery, setSortQuery] = useState("");
 
   const handleStartPeriod = (data) => {
-    if (data!=null) {
-      const start = dayjs(data.slice(0,10)).format('DD/MM/YYYY')
-      return start
+    if (data != null) {
+      const start = dayjs(data.slice(0, 10)).format("DD/MM/YYYY");
+      return start;
     }
-    return
+    return;
   };
 
   const handleEndPeriod = (data) => {
-    if (data!=null) {
-      const end = dayjs(data.slice(13,23)).format('DD/MM/YYYY')
-      return end
+    if (data != null) {
+      const end = dayjs(data.slice(13, 23)).format("DD/MM/YYYY");
+      return end;
     }
-    return
+    return;
   };
 
   const handleSearch = (e) => {
@@ -57,8 +57,12 @@ export default function invoiceList() {
         data.Invoice_ID.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
         data.Recipient.toLowerCase().includes(searchQuery.toLowerCase()) ||
         data.Created_At.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        handleStartPeriod(data.Period).toLowerCase().includes(searchQuery.toLowerCase()) ||
-        handleEndPeriod(data.Period).toLowerCase().includes(searchQuery.toLowerCase()) ||
+        handleStartPeriod(data.Period)
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
+        handleEndPeriod(data.Period)
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
         data.Total_Premium_Due.toLowerCase().includes(searchQuery.toLowerCase())
     );
     //console.log(filteredInvoice)
@@ -93,9 +97,16 @@ export default function invoiceList() {
     } else if (sortQuery == "old_issued") {
       data.sort((a, b) => a.Created_At.localeCompare(b.Created_At));
     } else if (sortQuery == "new_start") {
-      data.sort((a, b) => -handleStartPeriod(a.Period).localeCompare(handleStartPeriod(b.Period)));
+      data.sort(
+        (a, b) =>
+          -handleStartPeriod(a.Period).localeCompare(
+            handleStartPeriod(b.Period)
+          )
+      );
     } else if (sortQuery == "old_start") {
-      data.sort((a, b) => handleStartPeriod(a.Period).localeCompare(handleStartPeriod(b.Period)));
+      data.sort((a, b) =>
+        handleStartPeriod(a.Period).localeCompare(handleStartPeriod(b.Period))
+      );
     }
   };
   handleSort(filteredData);
@@ -113,6 +124,7 @@ export default function invoiceList() {
   ///////////////////////////////////////////////////
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
+      <LoadingModal modalState={spinner} />
       <DeleteInvoiceModal
         modalState={modalState}
         delInvoice={delInvoice}
@@ -142,7 +154,7 @@ export default function invoiceList() {
             onChange={handleSortQuery}
             defaultValue="sortHeader"
           >
-            <option value="sortHeader"  disabled>
+            <option value="sortHeader" disabled>
               Sort
             </option>
             <option value="asc_id">Ascending Invoice Number</option>
