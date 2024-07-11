@@ -44,16 +44,14 @@ const theme = createTheme({
   },
 });
 
-
 export default function editAdjustmentModal({
   psID,
   modalState,
   handleCloseModal,
   instalment_data,
   editAdjustment,
-  setEditAdjustment
+  setEditAdjustment,
 }) {
-
   const handleTextfield = (e) => {
     setEditAdjustment({
       ...editAdjustment,
@@ -71,24 +69,26 @@ export default function editAdjustmentModal({
   };
 
   const handleSubmit = async (title, amount, id) => {
-
     // editAdjustment.adjustment_id.map((adj,i)=>{
-      let adjForm = new FormData();
-      adjForm.append("title", title)
-      adjForm.append("amount",amount)
-      await editAdjustmentApi(adjForm, id,psID)
+    let adjForm = new FormData();
+    // adjForm.append("title", title);
+    adjForm.append("amount", amount);
+    await editAdjustmentApi(adjForm, id, psID);
     // })
   };
 
-  const handleClickSubmit =  (e) => {
+  const handleClickSubmit = (e) => {
     e.preventDefault();
-    const adjLen = editAdjustment.adjustment_id.length
-    const adj = editAdjustment
+    const adjLen = editAdjustment.adjustment_id.length;
+    const adj = editAdjustment;
 
     for (let i = 0; i < adjLen; i++) {
-      handleSubmit(adj.adjustment_title, adj.adjustment_amount[i], adj.adjustment_id[i])
+      handleSubmit(
+        // adj.adjustment_title,
+        adj.adjustment_amount[i],
+        adj.adjustment_id[i]
+      );
     }
-    
   };
 
   //console.log(editAdjustment);
@@ -103,7 +103,7 @@ export default function editAdjustmentModal({
         <Box sx={style}>
           <form onSubmit={handleClickSubmit}>
             <button
-            type="button"
+              type="button"
               onClick={handleCloseModal}
               className="flex justify-end w-full text-xl font-bold  hover:text-green-700"
             >
@@ -112,7 +112,8 @@ export default function editAdjustmentModal({
             <div className="">
               <div>
                 <h1 className="flex w-full justify-center text-2xl  font-semibold">
-                  Edit {editAdjustment.adjustment_title}
+                  Edit adjustment
+                  {/* Edit adjustment {editAdjustment.adjustment_title} */}
                 </h1>
                 <p className="flex w-full justify-center font-medium text-md text-gray-500">
                   Input adjustment details into statement of account
@@ -124,7 +125,7 @@ export default function editAdjustmentModal({
                   id={"adjustment_title"}
                   placeholder={"Insert adjustment title..."}
                   onChange={handleTextfield}
-                  value={editAdjustment.adjustment_title}
+                  // value={editAdjustment.adjustment_title}
                 />
                 <p className="text-xl font-bold mt-5">Instalment</p>
                 <div className="  border-2 rounded-lg mt-5 mb-3">
@@ -148,7 +149,7 @@ export default function editAdjustmentModal({
                               }}
                             >
                               <TableCell component="th" scope="row">
-                                {i+1}
+                                {i + 1}
                               </TableCell>
                               <TableCell align="left">
                                 <Textfield

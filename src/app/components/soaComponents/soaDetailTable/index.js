@@ -28,7 +28,7 @@ const theme = createTheme({
 });
 const userRole = Cookies.get("userRole");
 export default function tableMUI({ tableData, handleOpenModal, calcValues }) {
-  const mounted = useMounted()
+  const mounted = useMounted();
   const handleAging = (data, bal) => {
     if (bal >= 0) {
       return "-";
@@ -75,23 +75,31 @@ export default function tableMUI({ tableData, handleOpenModal, calcValues }) {
                 <TableCell align="left">{row.Recipient}</TableCell>
                 <TableCell align="left">{row.Installment_Standing}</TableCell>
                 <TableCell align="left">
-                  {dayjs(row.Due_Date).format("DD/MM/YYYY")}
+                  {dayjs(row.Due_Date).format("DD MMM YYYY")}
                 </TableCell>
                 <TableCell align="left">IDR</TableCell>
-                <TableCell align="left">{row.SOA_Amount}</TableCell>
+                <TableCell align="left">
+                  {parseInt(row.SOA_Amount).toLocaleString()}
+                </TableCell>
                 <TableCell sx={{ color: "#757575" }} align="center">
                   |
                 </TableCell>
                 <TableCell align="left">
-                  {dayjs(row.Payment_Date).format("DD/MM/YYYY")}
+                  {dayjs(row.Payment_Date).format("DD MMM YYYY")}
                 </TableCell>
                 <TableCell align="left">IDR</TableCell>
-                <TableCell align="left">{row.Payment_Amount}</TableCell>
                 <TableCell align="left">
-                  {calcValues.length != 0 ? calcValues[i].alocation : null}
+                  {parseInt(row.Payment_Amount).toLocaleString()}
                 </TableCell>
                 <TableCell align="left">
-                  {calcValues.length != 0 ? calcValues[i].balance : null}
+                  {parseInt(
+                    calcValues.length != 0 ? calcValues[i].alocation : null
+                  ).toLocaleString()}
+                </TableCell>
+                <TableCell align="left">
+                  {parseInt(
+                    calcValues.length != 0 ? calcValues[i].balance : null
+                  ).toLocaleString()}
                 </TableCell>
                 <TableCell align="left">
                   <div

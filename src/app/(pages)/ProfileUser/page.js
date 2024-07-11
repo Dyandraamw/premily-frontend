@@ -8,10 +8,12 @@ import useMounted from "@/app/utils/hooks/useMounted";
 import Cookies from "js-cookie";
 import { fetchUserApi, updateUserPic } from "@/app/utils/api/AuthToken/refreshToken";
 import { FaCircleUser } from "react-icons/fa6";
+import LoadingModal from "@/app/components/loadingModal";
 const userid = Cookies.get("userID");
 
 function Profile({ value, onChange, defaultSrc, click }) {
   const mounted = useMounted();
+  const [spinner,setSpinner] = useState(true)
   const [profile, setProfile] = useState([
     {
       Username: "",
@@ -24,6 +26,7 @@ function Profile({ value, onChange, defaultSrc, click }) {
   useEffect(() => {
     const fetchProfile = async () => {
       const res = await fetchUserApi(userid);
+      setSpinner(false)
       setProfile({
         ...profile,
         Username: res.username,
@@ -75,21 +78,11 @@ function Profile({ value, onChange, defaultSrc, click }) {
     // onChange(null);
   };
 
-  // const [profile, setProfile] = useState({
-  //   username: "John William",
-  //   Email: "J.William1293@gmail.com",
-  //   PhoneNumber: "0812432132",
-  //   Role: "Admin",
-  // });
 
-  // const handleChange = (e) => {
-  //   if (e.target.files[0]) {
-  //     setFile(e.target.files[0]);
-  //   }
-  // };
 
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
+      <LoadingModal modalState={spinner} />
       <div className="mb-2">
         <h1 className="text-4xl outline0greee text-green-700 font-bold">
           Profile
@@ -97,7 +90,7 @@ function Profile({ value, onChange, defaultSrc, click }) {
         <p className="ml-1 font-medium text-gray-600">
           View and edit your profile
         </p>
-        <div className="flex flex-col justify-center items-center  bg-white w-8/12 h-1/2 text-white mx-auto rounded-lg drop-shadow-xl mt-28 p-10">
+        <div className="flex flex-col justify-center items-center  bg-white w-8/12 h-1/2 mx-auto rounded-lg drop-shadow-xl mt-28 p-10">
           <div className="">
             {/* <ProfileDragDrop
               className={"w-[250px]  h-[260px] rounded-full mb-3 "}
@@ -108,18 +101,19 @@ function Profile({ value, onChange, defaultSrc, click }) {
               ref={fileInputRef}
               accept="image/*"
               onChange={handleChange}
-              class="hidden"
+              className="hidden"
             ></input>
             {/* <FaUserCircle className="size-32 mt-12 mb-6 text-black "></FaUserCircle> */}
-            {mounted && profile.Image == "" ? (
-              <FaCircleUser className="size-28" />
-            ) : (
+            {mounted && profile.Image == '' ? 
+              (<FaCircleUser className="size-28" /> )
+             : (
               <img
                 className="w-[112px] h-[112px] rounded-full"
                 src={profile.Image}
                 alt="profile pic"
               />
             )}
+            
             <div className="pl-[32px] pr-[35px] mt-2">
               <button
                 onClick={browse}
@@ -138,7 +132,7 @@ function Profile({ value, onChange, defaultSrc, click }) {
           </div>
           <div className="flex justify-evenly w-5/6 mb-14 ">
             <div className="mb-3 text-black font-semibold">
-              <p className="mt-3 mb-3">Username</p>
+              <p className="mt-3 mb-3">Username </p>
               <p className="mt-3 mb-3">Email</p>
               <p className="mt-3 mb-3">PhoneNumber</p>
               <p className="mt-3 mb-3">Role</p>

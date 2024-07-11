@@ -6,14 +6,18 @@ import TableSelectInvoice from "@/app/components/paymentStatusComponents/TableSe
 import AddInvoice from "@/app/components/paymentStatusComponents/TableSelectInvoice/index";
 import { createPaymentStatusApi } from "@/app/utils/api/psApi";
 import { fetchInvoiceList } from "@/app/utils/api/invApi";
+import LoadingModal from "@/app/components/loadingModal";
+
 
 export default function PaymentStatusDetail() {
+  const [spinner,setSpinner] = useState(true)
   const [selectedInvoice, setSelectedInvoice] = useState("");
   const [invoiceList, setInvoiceList] = useState([]);
   const [selectedValue, setSelectedValue] = useState("");
   useEffect(() => {
     const fetchinv = async () => {
       const invList = await fetchInvoiceList();
+      setSpinner(false)
       setInvoiceList(invList);
 
     };
@@ -46,6 +50,7 @@ export default function PaymentStatusDetail() {
 
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
+      <LoadingModal modalState={spinner} />
       <div className="mb-2 flex">
         <div className="justify-end">
           <h1 className="text-4xl text-green-800 font-bold">

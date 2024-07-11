@@ -30,11 +30,11 @@ const theme = createTheme({
 const userRole = Cookies.get("userRole");
 
 export default function tableMUI({ tableData, handleOpenModal }) {
-  const mounted = useMounted()
+  const mounted = useMounted();
   const currency = "IDR";
   const handleStartPeriod = (data) => {
     if (data != null) {
-      const start = dayjs(data.slice(0, 10)).format("DD/MM/YYYY");
+      const start = dayjs(data.slice(0, 10)).format("DD MMM YYYY");
       return start;
     }
     return;
@@ -42,11 +42,13 @@ export default function tableMUI({ tableData, handleOpenModal }) {
 
   const handleEndPeriod = (data) => {
     if (data != null) {
-      const end = dayjs(data.slice(13, 23)).format("DD/MM/YYYY");
+      const end = dayjs(data.slice(13, 23)).format("DD MMM YYYY");
       return end;
     }
     return;
+    console.log(handleEndPeriod(data));
   };
+
   return (
     <ThemeProvider theme={theme}>
       <TableContainer>
@@ -76,10 +78,11 @@ export default function tableMUI({ tableData, handleOpenModal }) {
                 </TableCell>
                 <TableCell align="left">{row.Recipient}</TableCell>
                 <TableCell align="left">
-                  {dayjs(row.Created_At).format("DD/MM/YYYY")}
+                  {dayjs(row.Created_At).format("DD MMM YYYY")}
                 </TableCell>
                 <TableCell align="left">
-                  {handleStartPeriod(row.Period)}-{handleEndPeriod(row.Period)}
+                  {handleStartPeriod(row.Period)} -{" "}
+                  {handleEndPeriod(row.Period)}
                 </TableCell>
                 {/* <TableCell align="left">{dayjs(row.period_start).format('DD/MM/YYYY')}-{dayjs(row.period_end).format('DD/MM/YYYY')}</TableCell> */}
                 <TableCell align="left">

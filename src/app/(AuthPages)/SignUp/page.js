@@ -15,9 +15,10 @@ import { FetchSignUp } from "@/app/utils/api/AuthToken/refreshToken";
 import ImgDragDrop from "../../components/imgDragDrop/index";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { FormHelperText } from "@mui/material";
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
-const PASS_REGEX = /^(?=.*[a-z])(?=.*[A-Z)(?=.*[0-9])(?=.*[!@#%]).{8,24}$/;
+const PASS_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#%]).{8,24}$/;
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -29,11 +30,18 @@ export default function SignUp() {
   const [user, setUser] = useState("");
   const [validName, setValidName] = useState(false);
 
-  const [email, setEmail] = useState();
-  const [name, setName] = useState();
-  const [phoneNumber, setPhoneNumber] = useState();
-  const [password, setPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [emailValid, setEmailValid] = useState(false);
+
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+
+  const [password, setPassword] = useState("");
+  const [validPassword, setValidPassword] = useState(false);
+
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordsMatch, setPasswordsMatch] = useState(false);
+
   const [image, setImageValue] = useState(null);
   const [errMsg, setErrMsg] = useState("");
 
@@ -42,10 +50,37 @@ export default function SignUp() {
       userRef.current.focus();
     }
   }, []);
-  const router = useRouter()
+
+  useEffect(() => {
+    setValidName(USER_REGEX.test(user));
+  }, [user]);
+
+  useEffect(() => {
+    setEmailValid(email.includes("@") && email.includes("."));
+  }, [email]);
+
+  useEffect(() => {
+    setValidPassword(PASS_REGEX.test(password));
+    setPasswordsMatch(password === confirmPassword);
+  }, [password, confirmPassword]);
+
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!user || !email || !password || !confirmPassword) {
+      setErrMsg("All fields are required");
+      return;
+    }
+    if (!validName || !emailValid || !validPassword || !passwordsMatch) {
+      setErrMsg("Invalid Entry");
+      return;
+    }
+
+    if (!validName || !emailValid || !validPassword || !passwordsMatch) {
+      setErrMsg("Invalid Entry");
+      return;
+    }
     let data = new FormData();
     data.append("username", user);
     data.append("email", email);
@@ -57,7 +92,7 @@ export default function SignUp() {
     data.append("image", image);
 
     const response = await FetchSignUp(data);
-    router.push("/SignIn")
+    router.push("/SignIn");
     console.log("api ada", response.data);
   };
 
@@ -82,9 +117,6 @@ export default function SignUp() {
       >
         {errMsg}
       </p>
-      {/* <Alert className="mb-5 w-96 rounded-md tracking-widest font-semibold hidden">
-        Your Account Already Sign Up!
-      </Alert> */}
       <div className="w-96 p-6 shadow-lg border-2 border-green-800 bg-white rounded-md">
         <img
           src="/Premily-Logo.png"
@@ -103,6 +135,12 @@ export default function SignUp() {
             color="success"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
+            error={!emailValid && email.length > 0}
+            helperText={
+              !emailValid && email.length > 0
+                ? "Email should contains symbols @ and (.)"
+                : ""
+            }
             className="w-full mt-3 mb-5"
           />
           <TextField
@@ -115,6 +153,12 @@ export default function SignUp() {
             onChange={(e) => setUser(e.target.value)}
             value={user}
             aria-invalid={validName ? "false" : "true"}
+            error={!validName && user.length > 0}
+            helperText={
+              !validName && user.length > 0
+                ? "Username atleast contains 4 characters"
+                : ""
+            }
             className="w-full mb-5 border-green-500"
           />
           <TextField
@@ -139,16 +183,17 @@ export default function SignUp() {
             required
             autoComplete="off"
             color="success"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
+            error={!validPassword && password.length > 0}
             className="w-full mb-5"
           >
             <InputLabel htmlFor="outlined-adornment-password">
-              &emsp;&emsp;&emsp;Password
+              Password
             </InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"
               type={showPassword ? "text" : "password"}
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -163,6 +208,11 @@ export default function SignUp() {
               }
               label="Password"
             />
+            <FormHelperText>
+              {!validPassword && password.length > 0
+                ? "password must be contains 8 characters uppercase and lowercase, having a number and symbol(!@#)"
+                : ""}
+            </FormHelperText>
           </FormControl>
           <FormControl
             sx={{ width: "25ch" }}
@@ -170,16 +220,17 @@ export default function SignUp() {
             required
             autoComplete="off"
             color="success"
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            value={confirmPassword}
+            error={!passwordsMatch && confirmPassword.length > 0}
             className="w-full mb-5"
           >
             <InputLabel htmlFor="outlined-adornment-password">
-            &emsp;&emsp;&emsp;Confirm Password
+              Confirm Password
             </InputLabel>
             <OutlinedInput
               id="outlined-adornment-confirm-password"
-              type={showConfirmPassword ? "text" : "ConfirmPassword"}
+              type={showConfirmPassword ? "text" : "password"}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={confirmPassword}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -194,6 +245,11 @@ export default function SignUp() {
               }
               label="Confirm Password"
             />
+            <FormHelperText>
+              {!passwordsMatch && confirmPassword.length > 0
+                ? "Passwords didn't match"
+                : ""}
+            </FormHelperText>
           </FormControl>
           <div className="mt-3">
             <p className="flex justify-center text-black text-sm">
@@ -208,11 +264,10 @@ export default function SignUp() {
           </div>
           <div className="mt-8 mb-3">
             <button
-              href="/SignIn"
               type="submit"
               className="border-2 p-2 border-green-700 bg-green-700 text-white py-1 w-full rounded-md hover:bg-transparent hover:text-green-700 font-semibold"
             >
-              <Link href="/SignIn">Sign Up</Link>
+              Sign Up
             </button>
           </div>
         </form>

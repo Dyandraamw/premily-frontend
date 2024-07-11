@@ -12,22 +12,25 @@ import axios from "axios";
 import { fetchSoaDetails, fetchSoaList } from "@/app/utils/api/soaApi";
 import Cookies from "js-cookie";
 import useMounted from "@/app/utils/hooks/useMounted";
+import LoadingModal from "@/app/components/loadingModal";
 
 const userRole = Cookies.get("userRole");
 export default function statementOfAccount({ params }) {
-  const mounted = useMounted()
+  const [spinner,setSpinner] = useState(true)
+  const mounted = useMounted();
   const [query, setQuery] = useState("");
   const [soaDetails, setSoaDetails] = useState([]);
   const [soaData, setSoaData] = useState({
     Name_Of_Insured: "",
-    Period: ""
-  })
+    Period: "",
+  });
   const [filteredData, setFilteredData] = useState([]);
   const [calcValues, setCalcValues] = useState([]);
 
   useEffect(() => {
     const fetchSoa = async () => {
       const response = await fetchSoaDetails(params.soaId);
+      setSpinner(false)
       setSoaDetails(response);
       setFilteredData(response);
       //console.log(response);
@@ -37,15 +40,13 @@ export default function statementOfAccount({ params }) {
     const fetchSoaData = async () => {
       const soaArr = await fetchSoaList();
       const filteredSoa = soaArr.filter(
-        (data) =>
-          data.SOA_ID.toLowerCase().includes(params.soaId.toLowerCase()) 
+        (data) => data.SOA_ID.toLowerCase().includes(params.soaId.toLowerCase())
         // data.period_end.toLowerCase().includes(searchQuery.toLowerCase())
       );
-      console.log(filteredSoa)
+      console.log(filteredSoa);
       setSoaData(filteredSoa[0]);
     };
     fetchSoaData();
-
   }, []);
 
   const handleSearch = (e) => {
@@ -181,6 +182,24 @@ export default function statementOfAccount({ params }) {
     setCalcValues(arr);
   };
 
+  const handleStartPeriod = (soaData) => {
+    if (soaData != null) {
+      const start = dayjs(soaData.slice(0, 10)).format("DD MMM YYYY");
+      return start;
+    }
+    console.log(handleEndPeriod(soaData));
+    return;
+  };
+
+  const handleEndPeriod = (soaData) => {
+    if (soaData != null) {
+      const end = dayjs(soaData.slice(13, 23)).format("DD MMM YYYY");
+      return end;
+    }
+    console.log(handleEndPeriod(soaData));
+    return;
+  };
+
   // }, []);
 
   useEffect(() => {
@@ -209,6 +228,7 @@ export default function statementOfAccount({ params }) {
   const handleCloseModal = () => setModalState(false);
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
+      <LoadingModal modalState={spinner} />
       <EditItemModal
         modalState={modalState}
         handleCloseModal={handleCloseModal}
@@ -250,16 +270,18 @@ export default function statementOfAccount({ params }) {
         <div className="ml-3 my-5">
           <div className="flex">
             <p className="font-semibold">Name of Insured&nbsp;</p>
-            <p>:&emsp;{soaData.Name_Of_Insured
-            }</p>
+            <p>:&emsp;{soaData.Name_Of_Insured}</p>
           </div>
           <div className="flex">
             <p className="font-semibold">Policy Period&nbsp;</p>
-            <p>:&emsp;{soaData.Period}</p>
+            <p>
+              :&emsp;{handleStartPeriod(soaData.Period)} -{" "}
+              {handleEndPeriod(soaData.Period)}
+            </p>
           </div>
           <div className="flex">
             <p className="font-semibold">Current Date&nbsp;</p>
-            <p>:&emsp;{dayjs().format("DD/MM/YYYY")}</p>
+            <p>:&emsp;{dayjs().format("DD MMM YYYY")}</p>
           </div>
         </div>
         <TableMUI

@@ -12,11 +12,13 @@ import DeletePsModal from "@/app/components/paymentStatusComponents/modalDelete"
 import { fetchPaymentStatusList } from "@/app/utils/api/psApi";
 import Cookies from "js-cookie";
 import useMounted from "@/app/utils/hooks/useMounted";
+import LoadingModal from "@/app/components/loadingModal";
 
 const userRole = Cookies.get("userRole");
 
 export default function PaymentStatus() {
-  const mounted = useMounted()
+  const [spinner,setSpinner] = useState(true)
+  const mounted = useMounted();
   const [query, setQuery] = useState("");
   const [paymentStatusList, setPaymentStatusList] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -25,6 +27,7 @@ export default function PaymentStatus() {
   useEffect(() => {
     const fetchList = async () => {
       const psList = await fetchPaymentStatusList();
+      setSpinner(false)
       setPaymentStatusList(psList);
       setFilteredData(psList);
       // console.log(invList)
@@ -122,6 +125,7 @@ export default function PaymentStatus() {
   const handleCloseDetailPsModal = () => setDetailPsModal(false);
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
+      <LoadingModal modalState={spinner} />
       <DeletePsModal
         detailPsModal={detailPsModal}
         handleCloseModal={handleCloseDetailPsModal}
@@ -152,7 +156,9 @@ export default function PaymentStatus() {
         <div className="w-1/3">
           <Textfield
             id={"search_bar"}
-            placeholder={"search Status Number..."}
+            placeholder={
+              "search payment status number, invoice number, invoice recipient, policy period..."
+            }
             onChange={handleSearch}
             icon={<FaSearch />}
           />

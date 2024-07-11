@@ -7,6 +7,7 @@ import AddPaymentModal from "../../../components/paymentStatusComponents/addPaym
 import AddAdjustmentModal from "../../../components/paymentStatusComponents/addAdjustmentModal";
 import EditPaymentModal from "../../../components/paymentStatusComponents/editPaymentModal";
 import EditAdjustmentModal from "../../../components/paymentStatusComponents/editAdjustmentModal";
+import LoadingModal from "../../../components/loadingModal";
 import { fetchPaymentStatusDetail } from "@/app/utils/api/psApi";
 import Cookies from "js-cookie";
 import useMounted from "@/app/utils/hooks/useMounted";
@@ -14,15 +15,17 @@ import useMounted from "@/app/utils/hooks/useMounted";
 const userRole = Cookies.get("userRole");
 
 export default function paymentStatusDetail({ params }) {
-  const mounted = useMounted()
+  const mounted = useMounted();
   const [paymentStatus, setPaymentStatus] = useState([]);
   const [adjustmentData, setAdjustmentData] = useState([]);
   const [invoiceDet, setInvoiceDet] = useState([]);
   const [payments, setPayments] = useState([]);
   const [instalments, setInstalments] = useState([]);
+  const [spinner,setSpinner] = useState(true)
   useEffect(() => {
     const fetchList = async () => {
       const ps = await fetchPaymentStatusDetail(params.psId);
+      setSpinner(false)
       setPaymentStatus(ps);
       // setAdjustmentData(ps.adjustment_detail)
       setInvoiceDet(ps.invoice);
@@ -108,6 +111,9 @@ export default function paymentStatusDetail({ params }) {
   const handleCloseEditAdjustmentModal = () => setEditAdjustmentModal(false);
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
+      <LoadingModal
+        modalState={spinner}
+      />
       <AddPaymentModal
         psId={params.psId}
         modalState={paymentModalState}
@@ -174,13 +180,13 @@ export default function paymentStatusDetail({ params }) {
             <p className="font-semibold">Policy Period&nbsp;</p>
             <p>
               :&emsp;
-              {dayjs(invoiceDet.period_start).format("DD/MM/YYYY")} -
-              {dayjs(invoiceDet.period_end).format("DD/MM/YYYY")}
+              {dayjs(invoiceDet.period_start).format("DD MMM YYYY")} -{" "}
+              {dayjs(invoiceDet.period_end).format("DD MMM YYYY")}
             </p>
           </div>
           <div className="flex">
             <p className="font-semibold">Current Date&nbsp;</p>
-            <p>:&emsp;{dayjs().format("DD/MM/YYYY")}</p>
+            <p>:&emsp;{dayjs().format("DD MMM YYYY")}</p>
           </div>
         </div>
         <p className="text-xl font-semibold mb-5">Billed Payment Terms</p>
@@ -202,7 +208,7 @@ export default function paymentStatusDetail({ params }) {
               Premium Inception Sum (IDR)
             </h3>
             <p className="flex justify-center text-center text-gray-500 mt-1 ">
-              Sum of the premium inception
+              Sum of the premium at inception
             </p>
             <p className="flex justify-center mb-2 text-3xl font-semibold mt-5">
               {parseInt(paymentStatus.inception_sum).toLocaleString()}

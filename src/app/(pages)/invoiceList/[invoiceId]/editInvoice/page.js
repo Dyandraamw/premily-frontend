@@ -7,8 +7,10 @@ import SumInsuredForm from "../../../../components/invoiceComponents/editSumInsu
 import InvInstallmentForm from "../../../../components/invoiceComponents/editInvInstallmentForm";
 import dayjs from "dayjs";
 import { fetchInvoiceDetail, updateInvoiceApi } from "@/app/utils/api/invApi";
+import LoadingModal from "@/app/components/loadingModal";
 
 export default function editInvoice({ params }) {
+  const [spinner,setSpinner] = useState(true)
   const [invoiceData, setinvoiceData] = useState({
     recipient_address: "",
     address_of_insured: "",
@@ -60,6 +62,8 @@ export default function editInvoice({ params }) {
   useEffect(() => {
     const fetchinv = async () => {
       const invList = await fetchInvoiceDetail(params.invoiceId);
+      setSpinner(false)
+
       setinvoiceData({
         ...invoiceData,
         recipient_address: invList.Address,
@@ -104,7 +108,7 @@ export default function editInvoice({ params }) {
     setinvoiceData({ ...invoiceData, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let invForm = new FormData();
     // invForm.append("typeInvoice", "credit");
@@ -122,8 +126,14 @@ export default function editInvoice({ params }) {
     invForm.append("address_of_insured", invoiceData.address_of_insured);
     invForm.append("type_of_insurance", invoiceData.insurance_type);
 
-    invForm.append("periode_start", dayjs(invoiceData.start_date).format("YYYY-MM-DD"));
-    invForm.append("periode_end", dayjs(invoiceData.end_date).format("YYYY-MM-DD"));
+    invForm.append(
+      "periode_start",
+      dayjs(invoiceData.start_date).format("YYYY-MM-DD")
+    );
+    invForm.append(
+      "periode_end",
+      dayjs(invoiceData.end_date).format("YYYY-MM-DD")
+    );
 
     invForm.append("terms_of_period", invoiceData.terms_of_payment);
     invForm.append("remarks", invoiceData.remarks);
@@ -142,8 +152,8 @@ export default function editInvoice({ params }) {
       invForm.append("sum_ins_amount", data.Sum_Insured_Amount);
       invForm.append("notes", data.Notes);
     });
-    
-    await updateInvoiceApi(invForm,params.invoiceId)
+
+    await updateInvoiceApi(invForm, params.invoiceId);
   };
 
   const handleStartDate = (e) => {
@@ -155,16 +165,16 @@ export default function editInvoice({ params }) {
     const dateformat = dayjs(e.$d).format("YYYY-MM-DD");
     setinvoiceData({ ...invoiceData, end_date: dateformat });
   };
-  
 
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
+      <LoadingModal modalState={spinner} />
       <div className="mb-2">
         <h1 className="text-4xl text-green-700 font-bold">
-          {params.invoiceId.startsWith("CN")?"Credit":"Debit"} Note
+          {params.invoiceId.startsWith("CN") ? "Credit" : "Debit"} Note
         </h1>
         <p className="ml-1 font-medium text-gray-600">
-          Create a new Credit Note
+          Edit a {params.invoiceId.startsWith("CN") ? "Credit" : "Debit"} Note
         </p>
       </div>
       <div className="bg-white rounded-lg w-min-[1500px] w-max-full mt-5 p-2 h-min-[1700px]">
