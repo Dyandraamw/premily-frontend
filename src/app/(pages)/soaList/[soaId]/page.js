@@ -12,9 +12,11 @@ import axios from "axios";
 import { fetchSoaDetails, fetchSoaList } from "@/app/utils/api/soaApi";
 import Cookies from "js-cookie";
 import useMounted from "@/app/utils/hooks/useMounted";
+import LoadingModal from "@/app/components/loadingModal";
 
 const userRole = Cookies.get("userRole");
 export default function statementOfAccount({ params }) {
+  const [spinner,setSpinner] = useState(true)
   const mounted = useMounted();
   const [query, setQuery] = useState("");
   const [soaDetails, setSoaDetails] = useState([]);
@@ -28,6 +30,7 @@ export default function statementOfAccount({ params }) {
   useEffect(() => {
     const fetchSoa = async () => {
       const response = await fetchSoaDetails(params.soaId);
+      setSpinner(false)
       setSoaDetails(response);
       setFilteredData(response);
       //console.log(response);
@@ -225,6 +228,7 @@ export default function statementOfAccount({ params }) {
   const handleCloseModal = () => setModalState(false);
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
+      <LoadingModal modalState={spinner} />
       <EditItemModal
         modalState={modalState}
         handleCloseModal={handleCloseModal}

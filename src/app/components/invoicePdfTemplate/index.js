@@ -2,7 +2,7 @@
 import dayjs from "dayjs";
 import React from "react";
 
-export default function invoicePdfTemplate({ invoice_data }) {
+export default function invoicePdfTemplate({ invoice_data, descData }) {
   return (
     <div className="bg-white w-full h-full p-0">
       <div className="bg-white ">
@@ -51,16 +51,13 @@ export default function invoicePdfTemplate({ invoice_data }) {
           </div>
 
           {/* description */}
-          <div class="rounded-t-lg mt-2 grid grid-cols-7 divide-x-[2.5px] border-[3px] border-black divide-black">
+          <div class="rounded-t-lg mt-5 grid grid-cols-7 divide-x-[2.5px] border-[3px] border-black divide-black">
             <div class="grid grid-cols-1 divide-y-[2.5px]  divide-black">
               <div className="flex justify-center font-bold py-2">NO</div>
               <div className="flex flex-col items-center">
-                <p>1</p>
-                <p>2</p>
-                <p>3</p>
-                <p>4</p>
-                <p>5</p>
-                <p>6</p>
+                {descData.map((data,idx)=>(
+                  <p>{idx+1}</p>
+                ))}
               </div>
             </div>
             <div class="col-span-4 grid grid-cols-1 divide-y-[2.5px]  divide-black">
@@ -68,43 +65,27 @@ export default function invoicePdfTemplate({ invoice_data }) {
                 DESCRIPTION
               </div>
               <div className="px-3">
-                <p>Net Premium</p>
-                <p>Brokerage</p>
-                <p>Discount</p>
-                <p>PPH</p>
-                <p>Risk Management</p>
-                <p>Admin Cost</p>
+              {descData.map((data)=>(
+                  <p>{data.title}</p>
+                ))}
               </div>
             </div>
             <div class="col-span-2 grid grid-cols-1 divide-y-[2.5px] divide-black">
               <div className="flex justify-center font-bold py-2">AMOUNT</div>
               <div className="px-3">
-                <div className="flex items-center">
+              {descData.map((data)=>(
+                  <div>
+                    {data.title=='Premium'? <div className="flex items-center">
                   <b>{invoice_data.currency}</b>
                   <p className="text-right">
-                    &emsp;{parseInt(invoice_data.net_premium).toLocaleString()}
+                    &emsp;{parseInt(data.value).toLocaleString()}
                   </p>
-                </div>
-                <p>
+                </div> :<p>
                   {invoice_data.currency} &emsp;
-                  {parseInt(invoice_data.brokerage).toLocaleString()}
-                </p>
-                <p>
-                  {invoice_data.currency} &emsp;
-                  {parseInt(invoice_data.discount).toLocaleString()}
-                </p>
-                <p>
-                  {invoice_data.currency} &emsp;
-                  {parseInt(invoice_data.pph).toLocaleString()}
-                </p>
-                <p>
-                  {invoice_data.currency} &emsp;
-                  {parseInt(invoice_data.risk_management).toLocaleString()}
-                </p>
-                <p>
-                  {invoice_data.currency} &emsp;
-                  {parseInt(invoice_data.admin_cost).toLocaleString()}
-                </p>
+                  {parseInt(data.value).toLocaleString()}
+                </p>}
+                  </div>
+                ))}
               </div>
             </div>
           </div>

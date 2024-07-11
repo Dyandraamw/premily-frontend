@@ -7,9 +7,12 @@ import { fetchInvoiceDetail } from "../../../utils/api/invApi";
 import Image from "next/image";
 import Cookies from "js-cookie";
 import useMounted from "@/app/utils/hooks/useMounted";
+import LoadingModal from "@/app/components/loadingModal";
+
 
 const userRole = Cookies.get("userRole");
 export default function invoiceDetail({ params }) {
+  const [spinner,setSpinner] = useState(true)
   const mounted = useMounted();
   const [invoice_data, setInvDetail] = useState({
     recipient_address: "",
@@ -59,9 +62,12 @@ export default function invoiceDetail({ params }) {
     currency: "",
   });
 
+  const [descData,setDescData] = useState([])
+
   useEffect(() => {
     const fetchinv = async () => {
       const invList = await fetchInvoiceDetail(params.invoiceId);
+      setSpinner(false)
       setInvDetail({
         ...invoice_data,
         recipient_address: invList.Address,
@@ -94,10 +100,33 @@ export default function invoiceDetail({ params }) {
         instalments_detail: invList.Installment,
         currency: invList.Currency,
       });
-      console.log(invList);
+      let descArr = []
+      if (invList.Net_Premium !='0') {
+        descArr.push({title:'Premium', value : invList.Net_Premium})
+      }
+      if (invList.Desc_Brokage !='0') {
+        descArr.push({title:'Brokerage', value : invList.Desc_Brokage})
+      }
+      if (invList.Desc_Discount !='0') {
+        descArr.push({title:'Discount', value : invList.Desc_Discount})
+      }
+      if (invList.Desc_PPH !='0') {
+        descArr.push({title:'PPH', value : invList.Desc_PPH})
+      }
+      if (invList.Desc_Risk_Management !='0') {
+        descArr.push({title:'Risk Management', value : invList.Desc_Risk_Management})
+      }
+      if (invList.Desc_Admin_Cost !='0') {
+        descArr.push({title:'Admin Cost', value : invList.Desc_Admin_Cost})
+      }
+
+      setDescData(descArr)
+
+      console.log(descArr);
     };
     fetchinv();
   }, []);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -106,6 +135,7 @@ export default function invoiceDetail({ params }) {
 
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
+      <LoadingModal modalState={spinner} />
       {/* <PdfTemplate data={invoice_data} ref={pdfRef} /> */}
       <div className="mb-2">
         <h1 className="text-4xl text-green-700 font-bold">Invoice Detail</h1>
@@ -163,12 +193,9 @@ export default function invoiceDetail({ params }) {
             <div class="grid grid-cols-1 divide-y-[2.5px]  divide-black">
               <div className="flex justify-center font-bold py-2">NO</div>
               <div className="flex flex-col items-center">
-                <p>1</p>
-                <p>2</p>
-                <p>3</p>
-                <p>4</p>
-                <p>5</p>
-                <p>6</p>
+                {descData.map((data,idx)=>(
+                  <p>{idx+1}</p>
+                ))}
               </div>
             </div>
             <div class="col-span-4 grid grid-cols-1 divide-y-[2.5px]  divide-black">
@@ -176,43 +203,27 @@ export default function invoiceDetail({ params }) {
                 DESCRIPTION
               </div>
               <div className="px-3">
-                <p>Net Premium</p>
-                <p>Brokerage</p>
-                <p>Discount</p>
-                <p>PPH</p>
-                <p>Risk Management</p>
-                <p>Admin Cost</p>
+              {descData.map((data)=>(
+                  <p>{data.title}</p>
+                ))}
               </div>
             </div>
             <div class="col-span-2 grid grid-cols-1 divide-y-[2.5px] divide-black">
               <div className="flex justify-center font-bold py-2">AMOUNT</div>
               <div className="px-3">
-                <div className="flex items-center">
+              {descData.map((data)=>(
+                  <div>
+                    {data.title=='Premium'? <div className="flex items-center">
                   <b>{invoice_data.currency}</b>
                   <p className="text-right">
-                    &emsp;{parseInt(invoice_data.net_premium).toLocaleString()}
+                    &emsp;{parseInt(data.value).toLocaleString()}
                   </p>
-                </div>
-                <p>
+                </div> :<p>
                   {invoice_data.currency} &emsp;
-                  {parseInt(invoice_data.brokerage).toLocaleString()}
-                </p>
-                <p>
-                  {invoice_data.currency} &emsp;
-                  {parseInt(invoice_data.discount).toLocaleString()}
-                </p>
-                <p>
-                  {invoice_data.currency} &emsp;
-                  {parseInt(invoice_data.pph).toLocaleString()}
-                </p>
-                <p>
-                  {invoice_data.currency} &emsp;
-                  {parseInt(invoice_data.risk_management).toLocaleString()}
-                </p>
-                <p>
-                  {invoice_data.currency} &emsp;
-                  {parseInt(invoice_data.admin_cost).toLocaleString()}
-                </p>
+                  {parseInt(data.value).toLocaleString()}
+                </p>}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -376,7 +387,7 @@ export default function invoiceDetail({ params }) {
           )}
 
           <div className="w-[130px]">
-            <PdfButton invoice_data={invoice_data} />
+            <PdfButton invoice_data={invoice_data} descData={descData} />
           </div>
         </div>
       </div>

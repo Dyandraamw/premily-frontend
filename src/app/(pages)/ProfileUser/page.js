@@ -8,10 +8,12 @@ import useMounted from "@/app/utils/hooks/useMounted";
 import Cookies from "js-cookie";
 import { fetchUserApi, updateUserPic } from "@/app/utils/api/AuthToken/refreshToken";
 import { FaCircleUser } from "react-icons/fa6";
+import LoadingModal from "@/app/components/loadingModal";
 const userid = Cookies.get("userID");
 
 function Profile({ value, onChange, defaultSrc, click }) {
   const mounted = useMounted();
+  const [spinner,setSpinner] = useState(true)
   const [profile, setProfile] = useState([
     {
       Username: "",
@@ -24,6 +26,7 @@ function Profile({ value, onChange, defaultSrc, click }) {
   useEffect(() => {
     const fetchProfile = async () => {
       const res = await fetchUserApi(userid);
+      setSpinner(false)
       setProfile({
         ...profile,
         Username: res.username,
@@ -75,21 +78,11 @@ function Profile({ value, onChange, defaultSrc, click }) {
     // onChange(null);
   };
 
-  // const [profile, setProfile] = useState({
-  //   username: "John William",
-  //   Email: "J.William1293@gmail.com",
-  //   PhoneNumber: "0812432132",
-  //   Role: "Admin",
-  // });
 
-  // const handleChange = (e) => {
-  //   if (e.target.files[0]) {
-  //     setFile(e.target.files[0]);
-  //   }
-  // };
 
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
+      <LoadingModal modalState={spinner} />
       <div className="mb-2">
         <h1 className="text-4xl outline0greee text-green-700 font-bold">
           Profile

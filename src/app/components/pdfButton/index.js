@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { PdfTemplate } from "../pdfTemplate";
 
-export default function pdfButton({ invoice_data }) {
+export default function pdfButton({ invoice_data, descData }) {
   const pdfRef = useRef();
   const handleGeneratePdf = useReactToPrint({
     content: () => pdfRef.current,
@@ -29,7 +29,7 @@ export default function pdfButton({ invoice_data }) {
       >
         {invoice_data.invoice_id == "" ? "Loading..." : "Generate PDF"}
       </button>
-      <PdfTemplate ref={pdfRef} invoice_data={invoice_data}></PdfTemplate>
+      <PdfTemplate ref={pdfRef} invoice_data={invoice_data} descData={descData} ></PdfTemplate>
     </div>
   );
 }

@@ -7,8 +7,10 @@ import SumInsuredForm from "../../../../components/invoiceComponents/editSumInsu
 import InvInstallmentForm from "../../../../components/invoiceComponents/editInvInstallmentForm";
 import dayjs from "dayjs";
 import { fetchInvoiceDetail, updateInvoiceApi } from "@/app/utils/api/invApi";
+import LoadingModal from "@/app/components/loadingModal";
 
 export default function editInvoice({ params }) {
+  const [spinner,setSpinner] = useState(true)
   const [invoiceData, setinvoiceData] = useState({
     recipient_address: "",
     address_of_insured: "",
@@ -60,6 +62,8 @@ export default function editInvoice({ params }) {
   useEffect(() => {
     const fetchinv = async () => {
       const invList = await fetchInvoiceDetail(params.invoiceId);
+      setSpinner(false)
+
       setinvoiceData({
         ...invoiceData,
         recipient_address: invList.Address,
@@ -159,6 +163,7 @@ export default function editInvoice({ params }) {
 
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
+      <LoadingModal modalState={spinner} />
       <div className="mb-2">
         <h1 className="text-4xl text-green-700 font-bold">
           {params.invoiceId.startsWith("CN")?"Credit":"Debit"} Note

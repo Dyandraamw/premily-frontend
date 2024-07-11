@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 
 import TableMUI from "../../components/soaComponents/soaListTable";
 import Textfield from "../../components/textfield";
-import SideTextfield from "../../components/sideTextfield";
-import DatePickerMUI from "../../components/datePickerMUI";
 import { FaSearch } from "react-icons/fa";
 import dayjs from "dayjs";
 import Link from "next/link";
@@ -14,9 +12,11 @@ import axios from "axios";
 import { fetchSoaList } from "@/app/utils/api/soaApi";
 import Cookies from "js-cookie";
 import useMounted from "@/app/utils/hooks/useMounted";
+import LoadingModal from "@/app/components/loadingModal";
 
 const userRole = Cookies.get("userRole");
 export default function soaList() {
+  const [spinner,setSpinner] = useState(true)
   const mounted = useMounted()
   //fetch data ////////////////////////////////////////////////////////////
   const [soaListData, setSoaListData] = useState([]);
@@ -25,6 +25,7 @@ export default function soaList() {
   useEffect(() => {
     const fetchSoa = async () => {
       const soaArr = await fetchSoaList();
+      setSpinner(false)
       setSoaListData(soaArr);
       setFilteredData(soaArr);
     };
@@ -125,6 +126,7 @@ export default function soaList() {
   //console.log(filteredData);
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
+      <LoadingModal modalState={spinner} />
       <CreateSoaModal
         modalState={modalState}
         handleCloseModal={handleCloseModal}

@@ -7,6 +7,7 @@ import AddPaymentModal from "../../../components/paymentStatusComponents/addPaym
 import AddAdjustmentModal from "../../../components/paymentStatusComponents/addAdjustmentModal";
 import EditPaymentModal from "../../../components/paymentStatusComponents/editPaymentModal";
 import EditAdjustmentModal from "../../../components/paymentStatusComponents/editAdjustmentModal";
+import LoadingModal from "../../../components/loadingModal";
 import { fetchPaymentStatusDetail } from "@/app/utils/api/psApi";
 import Cookies from "js-cookie";
 import useMounted from "@/app/utils/hooks/useMounted";
@@ -20,9 +21,11 @@ export default function paymentStatusDetail({ params }) {
   const [invoiceDet, setInvoiceDet] = useState([]);
   const [payments, setPayments] = useState([]);
   const [instalments, setInstalments] = useState([]);
+  const [spinner,setSpinner] = useState(true)
   useEffect(() => {
     const fetchList = async () => {
       const ps = await fetchPaymentStatusDetail(params.psId);
+      setSpinner(false)
       setPaymentStatus(ps);
       // setAdjustmentData(ps.adjustment_detail)
       setInvoiceDet(ps.invoice);
@@ -108,6 +111,9 @@ export default function paymentStatusDetail({ params }) {
   const handleCloseEditAdjustmentModal = () => setEditAdjustmentModal(false);
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
+      <LoadingModal
+        modalState={spinner}
+      />
       <AddPaymentModal
         psId={params.psId}
         modalState={paymentModalState}

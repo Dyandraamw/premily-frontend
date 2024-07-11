@@ -9,9 +9,11 @@ import {
   fetchUnverifyUser,
 } from "@/app/utils/api/roleApi/role";
 import { verifyUserApi } from "@/app/utils/api/AuthToken/refreshToken";
+import LoadingModal from "@/app/components/loadingModal";
 // import DeleteChangeRoleModal from "@/app/components/StaffAccessComponents/RoleModal";
 
 export default function StaffAcces() {
+  const [spinner,setSpinner] = useState(true)
   const [showModal, setShowModal] = useState(false);
   const [unrole, setUnrole] = useState([]);
   const [unverifyUser, setUnverifyUser] = useState([]);
@@ -26,6 +28,7 @@ export default function StaffAcces() {
 
     const fetchunverify = async () => {
       const fetchUnverif = await fetchUnverifyUser();
+      setSpinner(false)
       // console.log(fetchUnverif);
       setUnverifyUser(fetchUnverif);
     };
@@ -89,6 +92,7 @@ export default function StaffAcces() {
   };
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
+      <LoadingModal modalState={spinner} />
       <DeleteStaffAccessModal
         detailSAModal={detailSAModal}
         handleCloseModal={handleCloseDetailSAModal}
