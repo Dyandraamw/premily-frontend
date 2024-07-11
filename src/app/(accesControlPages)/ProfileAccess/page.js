@@ -97,7 +97,7 @@ function Profile({ value, onChange, defaultSrc, click }) {
         <p className="ml-1 font-medium text-gray-600">
           View and edit your profile
         </p>
-        <div className="flex flex-col justify-center items-center  bg-white w-8/12 h-1/2 text-white mx-auto rounded-lg drop-shadow-xl mt-28 p-10">
+        <div className="flex flex-col justify-center items-center  bg-white w-8/12 h-1/2 mx-auto rounded-lg drop-shadow-xl mt-28 p-10">
           <div className="">
             {/* <ProfileDragDrop
               className={"w-[250px]  h-[260px] rounded-full mb-3 "}
