@@ -67,28 +67,25 @@ export default function invoiceDetail({ params }) {
   useEffect(() => {
     const fetchinv = async () => {
       const invList = await fetchInvoiceDetail(params.invoiceId);
+      console.log(invList)
       setSpinner(false)
+      let picUrl = ""
       if (
         invList.Company_Picture != "" &&
         !invList.Company_Picture.startsWith(
           "https://experimental-biddie-premily-6e515ebf.koyeb.app/"
         )
       ) {
-        setInvDetail({
-          ...invoice_data,
-          company_pict: "",
-        });
+        picUrl = ""
       }else{
-        setInvDetail({
-          ...invoice_data,
-          company_pict: invList.company_pict,
-        });
+        picUrl= invList.Company_Picture
       }
 
       setInvDetail({
         ...invoice_data,
         recipient_address: invList.Address,
         address_of_insured: invList.Address_Of_Insured,
+        company_pict: picUrl,
         company_address: invList.Company_Address,
         company_number: invList.Company_Contact,
         company_name: invList.Company_Name,
@@ -147,7 +144,7 @@ export default function invoiceDetail({ params }) {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
-  //console.log(invoice_data.company_pict);
+  
 
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
@@ -205,8 +202,8 @@ export default function invoiceDetail({ params }) {
           </div>
 
           {/* description */}
-          <div class="rounded-t-lg mt-5 grid grid-cols-7 divide-x-[2.5px] border-[3px] border-black divide-black">
-            <div class="grid grid-cols-1 divide-y-[2.5px]  divide-black">
+          <div className="rounded-t-lg mt-5 grid grid-cols-7 divide-x-[2.5px] border-[3px] border-black divide-black">
+            <div className="grid grid-cols-1 divide-y-[2.5px]  divide-black">
               <div className="flex justify-center font-bold py-2">NO</div>
               <div className="flex flex-col items-center">
                 {descData.map((data,idx)=>(
@@ -214,7 +211,7 @@ export default function invoiceDetail({ params }) {
                 ))}
               </div>
             </div>
-            <div class="col-span-4 grid grid-cols-1 divide-y-[2.5px]  divide-black">
+            <div className="col-span-4 grid grid-cols-1 divide-y-[2.5px]  divide-black">
               <div className="flex justify-center font-bold py-2">
                 DESCRIPTION
               </div>
@@ -224,7 +221,7 @@ export default function invoiceDetail({ params }) {
                 ))}
               </div>
             </div>
-            <div class="col-span-2 grid grid-cols-1 divide-y-[2.5px] divide-black">
+            <div className="col-span-2 grid grid-cols-1 divide-y-[2.5px] divide-black">
               <div className="flex justify-center font-bold py-2">AMOUNT</div>
               <div className="px-3">
               {descData.map((data)=>(
@@ -245,15 +242,15 @@ export default function invoiceDetail({ params }) {
           </div>
 
           {/* premium due */}
-          <div class="grid grid-cols-7 divide-x-[2.5px] rounded-b-lg mb-2 border-t-0 border-[3px] border-black divide-black">
-            <div class="col-span-5 grid grid-cols-1 divide-y-[2.5px]  divide-black">
+          <div className="grid grid-cols-7 divide-x-[2.5px] rounded-b-lg mb-2 border-t-0 border-[3px] border-black divide-black">
+            <div className="col-span-5 grid grid-cols-1 divide-y-[2.5px]  divide-black">
               <div className="flex justify-center font-bold py-2">
                 {invoice_data.invoice_type == "credit"
                   ? "TOTAL PREMIUM DUE TO YOU"
                   : "TOTAL PREMIUM DUE TO US"}
               </div>
             </div>
-            <div class="col-span-2 grid grid-cols-1 divide-y-[2.5px] divide-black">
+            <div className="col-span-2 grid grid-cols-1 divide-y-[2.5px] divide-black">
               <div className="font-bold py-2 px-3">
                 <b>
                   {invoice_data.currency} &emsp;
