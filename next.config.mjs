@@ -4,7 +4,8 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://premily-premily-d67f7a97.koyeb.app/:path*",
+        destination: "https://experimental-biddie-premily-6e515ebf.koyeb.app/:path*",
+        // destination: "http://localhost:2024/:path*",
       },
     ];
   },
@@ -17,6 +18,7 @@ const nextConfig = {
       },
     ]
   },
+  reactStrictMode: false,
 };
 
 export default nextConfig;

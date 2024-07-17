@@ -106,8 +106,9 @@ export default function addPayment({
                       name="instalment_id"
                       className="drop-shadow-md  focus:border-green-700 focus:border-[3px]  border-[2.5px] border-gray-500 rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       onChange={handleSelect}
+                      defaultValue="header"
                     >
-                      <option value="" selected disabled>
+                      <option value="header"  disabled>
                         select installment
                       </option>
                       {instalment_data.map((opt, i) => (

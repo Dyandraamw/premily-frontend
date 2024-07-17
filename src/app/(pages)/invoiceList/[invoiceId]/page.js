@@ -68,6 +68,23 @@ export default function invoiceDetail({ params }) {
     const fetchinv = async () => {
       const invList = await fetchInvoiceDetail(params.invoiceId);
       setSpinner(false)
+      if (
+        invList.Company_Picture != "" &&
+        !invList.Company_Picture.startsWith(
+          "https://experimental-biddie-premily-6e515ebf.koyeb.app/"
+        )
+      ) {
+        setInvDetail({
+          ...invoice_data,
+          company_pict: "",
+        });
+      }else{
+        setInvDetail({
+          ...invoice_data,
+          company_pict: invList.company_pict,
+        });
+      }
+
       setInvDetail({
         ...invoice_data,
         recipient_address: invList.Address,
@@ -75,7 +92,6 @@ export default function invoiceDetail({ params }) {
         company_address: invList.Company_Address,
         company_number: invList.Company_Contact,
         company_name: invList.Company_Name,
-        company_pict: invList.Company_Picture,
         created_at: invList.Created_At,
         admin_cost: invList.Desc_Admin_Cost,
         brokerage: invList.Desc_Brokage,

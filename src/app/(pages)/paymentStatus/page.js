@@ -172,8 +172,9 @@ export default function PaymentStatus() {
             className="drop-shadow-md focus:border-green-700 focus:border-[3px] border-[2.5px] border-gray-500 rounded-lg  h-[40px]  text-gray-700  focus:outline-none focus:shadow-outline mt-2"
             placeholder="sort"
             onChange={handleSortQuery}
+            defaultValue="header"
           >
-            <option value="" selected disabled>
+            <option value="header" disabled>
               Sort
             </option>
             <option value="asc_ps_id">Ascending Payment Status Number</option>

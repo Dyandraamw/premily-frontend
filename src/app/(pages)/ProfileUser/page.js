@@ -27,14 +27,30 @@ function Profile({ value, onChange, defaultSrc, click }) {
     const fetchProfile = async () => {
       const res = await fetchUserApi(userid);
       setSpinner(false)
-      setProfile({
-        ...profile,
-        Username: res.username,
-        Email: res.email,
-        PhoneNumber: res.phone,
-        Role: res.role,
-        Image: res.Image
-      });
+      if (
+        res.Image != "" &&
+        !res.Image.startsWith(
+          "https://experimental-biddie-premily-6e515ebf.koyeb.app/"
+        )
+      ) {
+        setProfile({
+          ...profile,
+          Username: res.username,
+          Email: res.email,
+          PhoneNumber: res.phone,
+          Role: res.role,
+          Image: "",
+        });
+      }else{
+        setProfile({
+          ...profile,
+          Username: res.username,
+          Email: res.email,
+          PhoneNumber: res.phone,
+          Role: res.role,
+          Image: res.Image,
+        });
+      }
       // setInvoiceList(invList)
       // setFilteredData(invList)
       console.log(res);

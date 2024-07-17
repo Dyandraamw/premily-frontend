@@ -9,9 +9,11 @@ import ImgDragDrop from "../../components/imgDragDrop";
 import axios from "axios";
 import dayjs from "dayjs";
 import { createInvoiceApi } from "@/app/utils/api/invApi";
+import LoadingModal from "@/app/components/loadingModal";
 
 export default function debitNote() {
   const [imgValue, setImgValue] = useState(null);
+  const [spinner,setSpinner] = useState(false)
   const [siData, setSiData] = useState([
     { item: "", sum_insured: "", notes: "" },
   ]);
@@ -85,8 +87,8 @@ export default function debitNote() {
       invForm.append("sum_ins_amount", data.sum_insured);
       invForm.append("notes", data.notes);
     });
-
-    await createInvoiceApi(invForm);
+    setSpinner(true)
+    await createInvoiceApi(invForm,setSpinner);
   };
   ///////////////////////////////////////////////////
 
@@ -108,6 +110,7 @@ export default function debitNote() {
   console.log(debitNote);
   return (
     <div className="flex flex-grow flex-col px-10 py-5">
+      <LoadingModal modalState={spinner} />
       <div className="mb-2">
         <h1 className="text-4xl text-green-700 font-bold">Debit Note</h1>
         <p className="ml-1 font-medium text-gray-600">

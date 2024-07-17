@@ -12,11 +12,31 @@ import useMounted from "@/app/utils/hooks/useMounted";
 export default function sidebar() {
   const userid = Cookies.get("userID");
   const mounted =useMounted()
-  const [sidebar, setSidebar] = useState([]);
+  const [sidebar, setSidebar] = useState({
+    Username: "",
+    Image: "",
+  });
   useEffect(() => {
     const fetchsidebar = async () => {
       const res = await fetchUserApi(userid);
-      setSidebar(res);
+      if (
+        res.Image != "" &&
+        !res.Image.startsWith(
+          "https://experimental-biddie-premily-6e515ebf.koyeb.app/"
+        )
+      ) {
+        setSidebar({
+          ...sidebar,
+          Username: res.username,
+          Image: "",
+        });
+      }else{
+        setSidebar({
+          ...sidebar,
+          Username: res.username,
+          Image: res.Image,
+        });
+      }
       // setInvoiceList(invList)
       // setFilteredData(invList)
       console.log(res);
@@ -52,7 +72,7 @@ export default function sidebar() {
           }
           
           <p className="font-semibold mt-3">Welcome,</p>
-          {sidebar.username}
+          {sidebar.Username}
         </div>
         <ListMenu />
       </div>
