@@ -160,7 +160,7 @@ export default function invoiceDetail({ params }) {
         {/* top half */}
         <div>
           <h1 className="text-3xl text-black font-bold mb-2">
-            {invoice_data.invoice_type == "credit" ? "Credit " : "Debit "}Note
+            {params.invoiceId.startsWith("CN") ? "Credit " : "Debit "}Note
           </h1>
           {/* company details */}
           <div className="flex justify-between">
