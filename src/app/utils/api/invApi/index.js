@@ -42,7 +42,7 @@ export const fetchInvoiceDetail = async (invoice_id) => {
   }
 };
 
-export const createInvoiceApi =  async(invForm) => {
+export const createInvoiceApi =  async(invForm,setSpinner) => {
   const url = "/api/create-invoices"
   try {
     const response = await axios.post(url, invForm, {
@@ -50,7 +50,7 @@ export const createInvoiceApi =  async(invForm) => {
         Authorization: authToken,
       },
     });
-
+    setSpinner(false)
     alert("Invoice Sucessfully Created!");
     window.location.replace("/invoiceList")
 
@@ -58,6 +58,7 @@ export const createInvoiceApi =  async(invForm) => {
     return response.data;
   } catch (error) {
     console.log(error);
+    setSpinner(false)
     alert("Invoice failed to be created");
     throw error;
   }
@@ -82,7 +83,7 @@ export const deleteInvoice = async (invoice_id) => {
 };
 
 
-export const updateInvoiceApi = async (invForm,invoice_id) => {
+export const updateInvoiceApi = async (invForm,invoice_id,setSpinner) => {
   const url = "/api/update-invoices/";
   try {
     const response = await axios.put(url + `${invoice_id}`,invForm, {
@@ -90,12 +91,14 @@ export const updateInvoiceApi = async (invForm,invoice_id) => {
         Authorization: authToken,
       },
     });
+    setSpinner(false)
     alert('invoice successfully updated!')
     window.location.replace("/invoiceList/"+invoice_id)
 
     return response.data;
   } catch (error) {
     console.log(error);
+    setSpinner(false)
     throw error;
   }
 };

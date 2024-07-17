@@ -6,13 +6,16 @@ import ImgDragDrop from "../../components/imgDragDrop";
 import ProfileDragDrop from "@/app/components/uploadPhoto/page";
 import useMounted from "@/app/utils/hooks/useMounted";
 import Cookies from "js-cookie";
-import { fetchUserApi, updateUserPic } from "@/app/utils/api/AuthToken/refreshToken";
+import {
+  fetchUserApi,
+  updateUserPic,
+} from "@/app/utils/api/AuthToken/refreshToken";
 import { FaCircleUser } from "react-icons/fa6";
 import LoadingModal from "@/app/components/loadingModal";
 const userid = Cookies.get("userID");
 
 function Profile({ value, onChange, defaultSrc, click }) {
-  const [spinner,setSpinner] = useState(true)
+  const [spinner, setSpinner] = useState(true);
   const mounted = useMounted();
   const [profile, setProfile] = useState([
     {
@@ -20,21 +23,38 @@ function Profile({ value, onChange, defaultSrc, click }) {
       Email: "",
       PhoneNumber: "",
       Role: "",
-      Image: ""
+      Image: "",
     },
   ]);
   useEffect(() => {
     const fetchProfile = async () => {
       const res = await fetchUserApi(userid);
-      setSpinner(false)
-      setProfile({
-        ...profile,
-        Username: res.username,
-        Email: res.email,
-        PhoneNumber: res.phone,
-        Role: res.role,
-        Image: res.Image
-      });
+      setSpinner(false);
+      if (
+        res.Image != "" &&
+        !res.Image.startsWith(
+          "https://experimental-biddie-premily-6e515ebf.koyeb.app/"
+        )
+      ) {
+        setProfile({
+          ...profile,
+          Username: res.username,
+          Email: res.email,
+          PhoneNumber: res.phone,
+          Role: res.role,
+          Image: "",
+        });
+      }else{
+        setProfile({
+          ...profile,
+          Username: res.username,
+          Email: res.email,
+          PhoneNumber: res.phone,
+          Role: res.role,
+          Image: res.Image,
+        });
+      }
+      
       // setInvoiceList(invList)
       // setFilteredData(invList)
       console.log(res);
@@ -53,7 +73,7 @@ function Profile({ value, onChange, defaultSrc, click }) {
       fileInputRef.current.click();
     }
   };
-  const handleChange = async(e) => {
+  const handleChange = async (e) => {
     const file = e.target.files[0];
     // console.log(file.name)
     if (file) {
@@ -64,13 +84,12 @@ function Profile({ value, onChange, defaultSrc, click }) {
       // reader.onload = (e) => {
       //   setSrc(e.target.result);
       // };
-      const picForm = new FormData()
-      picForm.append("image",file)
-      await updateUserPic(userid,picForm)
-      location.reload("/ProfileUser")
+      const picForm = new FormData();
+      picForm.append("image", file);
+      await updateUserPic(userid, picForm);
+      location.reload("/ProfileUser");
     }
   };
-
 
   const handleRemove = () => {
     setFile(null);

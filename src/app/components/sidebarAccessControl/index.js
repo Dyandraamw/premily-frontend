@@ -9,15 +9,31 @@ import useMounted from "@/app/utils/hooks/useMounted";
 const userid = Cookies.get("userID");
 export default function sidebar() {
   const mounted = useMounted();
-  const [sidebarImage, setSidebarImage] = useState("");
-  const [sidebarName, setSidebarName] = useState(""); 
+  const [sidebar, setSidebar] = useState({
+    Username: "",
+    Image: "",
+  });
   useEffect(() => {
-    
     const fetchsidebar = async () => {
-
       const res = await fetchUserApi(userid);
-      setSidebarImage(res.Image);
-      setSidebarName(res.username)
+      if (
+        res.Image != "" &&
+        !res.Image.startsWith(
+          "https://experimental-biddie-premily-6e515ebf.koyeb.app/"
+        )
+      ) {
+        setSidebar({
+          ...sidebar,
+          Username: res.username,
+          Image: "",
+        });
+      } else {
+        setSidebar({
+          ...sidebar,
+          Username: res.username,
+          Image: res.Image,
+        });
+      }
       // setInvoiceList(invList)
       // setFilteredData(invList)
       console.log(res);
@@ -31,7 +47,7 @@ export default function sidebar() {
     //   location.reload("/StaffAccess")
     // }
   }, [userid]);
-  console.log(sidebar)
+  console.log(sidebar);
   return (
     <div className="w-96 drop-shadow-xl ">
       <div className="flex flex-col bg-white h-screen p-5 w-full items-center">
@@ -44,18 +60,18 @@ export default function sidebar() {
         ></Image>
 
         <div className="flex flex-col items-center my-5">
-          {mounted && sidebarImage == "" ? (
+          {mounted && sidebar.Image == "" ? (
             <FaCircleUser className="size-24" />
           ) : (
             <img
               className="w-[100px] h-[100px] rounded-full"
-              src={sidebarImage}
+              src={sidebar.Image}
               alt="profile pic"
             />
           )}
 
           <p className="font-semibold mt-3">Welcome,</p>
-          {sidebarName}
+          {sidebar.Username}
         </div>
         <ListMenu />
       </div>

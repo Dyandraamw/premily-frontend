@@ -71,7 +71,7 @@ export default function editAdjustmentModal({
   const handleSubmit = async (title, amount, id) => {
     // editAdjustment.adjustment_id.map((adj,i)=>{
     let adjForm = new FormData();
-    // adjForm.append("title", title);
+    adjForm.append("title", title);
     adjForm.append("amount", amount);
     await editAdjustmentApi(adjForm, id, psID);
     // })
@@ -84,7 +84,7 @@ export default function editAdjustmentModal({
 
     for (let i = 0; i < adjLen; i++) {
       handleSubmit(
-        // adj.adjustment_title,
+        adj.adjustment_title,
         adj.adjustment_amount[i],
         adj.adjustment_id[i]
       );
@@ -125,7 +125,7 @@ export default function editAdjustmentModal({
                   id={"adjustment_title"}
                   placeholder={"Insert adjustment title..."}
                   onChange={handleTextfield}
-                  // value={editAdjustment.adjustment_title}
+                  value={editAdjustment.adjustment_title}
                 />
                 <p className="text-xl font-bold mt-5">Instalment</p>
                 <div className="  border-2 rounded-lg mt-5 mb-3">

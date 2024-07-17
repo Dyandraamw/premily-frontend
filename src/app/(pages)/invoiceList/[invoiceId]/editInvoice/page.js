@@ -153,7 +153,8 @@ export default function editInvoice({ params }) {
       invForm.append("notes", data.Notes);
     });
 
-    await updateInvoiceApi(invForm, params.invoiceId);
+    setSpinner(true)
+    await updateInvoiceApi(invForm, params.invoiceId,setSpinner);
   };
 
   const handleStartDate = (e) => {
