@@ -7,7 +7,7 @@ export default function middleware(req) {
   let roleValid = req.cookies.get("userRole");
 
   let url = req.url;
-  const baseUrl = "https://premily-app.vercel.app/";
+  const baseUrl = "https://localhost:3000/";
 
   //console.log(token)
   if (

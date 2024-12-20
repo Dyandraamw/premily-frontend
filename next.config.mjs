@@ -4,8 +4,8 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://experimental-biddie-premily-6e515ebf.koyeb.app/:path*",
-        // destination: "http://localhost:2024/:path*",
+        //destination: "https://experimental-biddie-premily-6e515ebf.koyeb.app/:path*",
+         destination: "http://localhost:2024/:path*",
       },
     ];
   },
@@ -14,7 +14,7 @@ const nextConfig = {
       {
         source: '/',
         destination: '/SignIn',
-        permanent: true,
+        permanent: false,
       },
     ]
   },
